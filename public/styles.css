@@ -10,3 +10,11 @@ body {
     margin: 0px;
     background: linear-gradient(0deg, rgb(97, 98, 99) 0%, rgba(0, 0, 0, 0) 100%);
 }
+
+#dealer {
+    border: 2px solid red;
+}
+
+#player {
+    border: 2px solid blue;
+}
