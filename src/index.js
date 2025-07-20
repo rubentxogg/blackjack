@@ -1,19 +1,12 @@
-import { Card } from "./card/card.js";
-import { Rank } from "./card/rank.enum.js";
-import { Suit } from "./card/suit.enum.js";
-const DEALER = document.getElementById('dealer');
-const PLAYER = document.getElementById('player');
+import { Role as RoleEnum } from "./role/role.enum.js";
+import { Role } from "./role/role.js";
 startGame();
 function startGame() {
     console.log("Game starts");
-    let card = new Card(Suit.CLUBS, Rank.TWO);
-    let img = document.createElement('img');
-    img.alt = card.face;
-    img.src = `./assets/${card.face}.svg`;
-    PLAYER === null || PLAYER === void 0 ? void 0 : PLAYER.appendChild(img);
-    card = new Card(Suit.DIAMONDS, Rank.ACE);
-    img = document.createElement('img');
-    img.alt = card.face;
-    img.src = `./assets/${card.face}.svg`;
-    PLAYER === null || PLAYER === void 0 ? void 0 : PLAYER.appendChild(img);
+    const dealer = new Role(RoleEnum.DEALER);
+    const player = new Role(RoleEnum.PLAYER);
+    dealer.addCard();
+    player.addCard();
+    player.addCard();
+    console.log(player.score);
 }
