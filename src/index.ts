@@ -1,17 +1,48 @@
-import { Role as RoleEnum } from "./role/role.enum.js";
+import { Game } from "./game.constants.js";
+import { Role as RoleType } from "./role/role.enum.js";
 import { Role } from "./role/role.js";
+
+let player: Role;
+let dealer: Role;
 
 startGame();
 
 function startGame(): void {
-    console.log("Game starts");
+    dealer = new Role(RoleType.DEALER);
+    player = new Role(RoleType.PLAYER);
 
-    const dealer = new Role(RoleEnum.DEALER);
-    const player = new Role(RoleEnum.PLAYER);
-    
-    dealer.addCard();
-    player.addCard();
-    player.addCard();
+    initActions();
+}
 
-    console.log(player.score);
+function hit(): void {
+    player.addCard();
+    checkScore();
+}
+
+function checkScore(): void {
+    // TODO
+    if (player.score > Game.BLACK_JACK) {
+        console.log("Player loses");
+    }
+}
+
+function stand(): void {
+    // TODO
+}
+
+function doubleDown(): void {
+    // TODO
+}
+
+function split(): void {
+    // TODO
+}
+
+function initActions(): void {
+    const EVENT = {
+        CLICK: 'click'
+    };
+
+    document.getElementById('hit')?.addEventListener(EVENT.CLICK, () => hit());
+    document.getElementById('stand')?.addEventListener(EVENT.CLICK, () => hit());
 }
