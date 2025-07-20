@@ -18,3 +18,7 @@ body {
 #player {
     border: 2px solid blue;
 }
+
+img {
+    margin: 1.3em;
+}

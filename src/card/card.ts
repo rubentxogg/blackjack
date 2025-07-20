@@ -2,8 +2,8 @@ import { Rank } from "./rank.enum.js";
 import { Suit } from "./suit.enum.js";
 
 export class Card {
-    readonly rank: Rank;
     readonly suit: Suit;
+    readonly rank: Rank;
     readonly face: string;
 
     private readonly dictionary = new Map([
@@ -22,13 +22,13 @@ export class Card {
         [Rank.TWO, 2],
     ]);
 
-    constructor(rank: number, suit: Suit) {
-        this.rank = rank;
+    constructor(suit: Suit, rank: Rank) {
         this.suit = suit;
-        this.face = `${rank}-${suit}.svg`;
+        this.rank = rank;
+        this.face = `${Suit[this.suit]}-${Rank[this.rank]}`;
     }
 
-    protected getValue(): number {
+    get value(): number {
         return this.dictionary.get(this.rank) ?? 0;
     }
 }
