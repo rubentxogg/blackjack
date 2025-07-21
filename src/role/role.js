@@ -7,6 +7,7 @@ export class Role {
         this.score = 0;
         this.hand = [];
         this.id = document.getElementById(role);
+        this.scoreBox = document.getElementById(`${role}-score`);
     }
     addCard(cardsDealt) {
         const suit = this.getRandomEnum(Suit);
@@ -14,7 +15,7 @@ export class Role {
         if (cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
             return this.addCard(cardsDealt);
         }
-        const card = new Card(this.getRandomEnum(Suit), this.getRandomEnum(Rank));
+        const card = new Card(suit, rank);
         cardsDealt.push(card);
         this.hand.push(card);
         this.drawCard(card);
@@ -24,6 +25,9 @@ export class Role {
         this.score += card.value;
         if ((Rank.ACE === card.rank) && (this.score > Game.BLACK_JACK)) {
             this.score -= 10;
+        }
+        if (this.scoreBox) {
+            this.scoreBox.innerText = this.score.toString();
         }
     }
     drawCard(card) {
@@ -37,5 +41,8 @@ export class Role {
         const keys = Object.keys(enumeration).filter(key => Number.isNaN(Number.parseInt(key)));
         const enumKey = keys[Math.floor(Math.random() * keys.length)];
         return enumeration[enumKey];
+    }
+    hasBlackjack() {
+        return (this.hand.length === 2) && (Game.BLACK_JACK === this.score);
     }
 }

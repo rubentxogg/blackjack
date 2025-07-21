@@ -6,9 +6,16 @@ let dealer;
 let cardsDealt = [];
 startGame();
 function startGame() {
+    dealCards();
+    initActions();
+}
+function dealCards() {
     dealer = new Role(RoleType.DEALER);
     player = new Role(RoleType.PLAYER);
-    initActions();
+    [...Array(2)].forEach(() => {
+        dealer.addCard(cardsDealt);
+        player.addCard(cardsDealt);
+    });
 }
 function hit() {
     player.addCard(cardsDealt);
@@ -16,16 +23,24 @@ function hit() {
 }
 function checkScore() {
     // TODO
-    if (player.score === Game.BLACK_JACK) {
-        console.log("BLACK JACK");
-        stand();
+    if (player.score > Game.BLACK_JACK) {
+        console.log("The player loses");
     }
-    else if (player.score > Game.BLACK_JACK) {
-        console.log("Player loses");
+    else if (player.score === Game.BLACK_JACK) {
+        console.log("BLACK JACK");
+    }
+    else if ((dealer.score <= Game.BLACK_JACK) && (dealer.score > player.score)) {
+        console.log("The player loses");
+    }
+    else {
+        console.log("The player wins");
     }
 }
 function stand() {
-    // TODO
+    while (Game.DEALER_HIT_LIMIT > dealer.score) {
+        dealer.addCard(cardsDealt);
+    }
+    checkScore();
 }
 function doubleDown() {
     // TODO

@@ -6,11 +6,13 @@ import { Role as RoleType } from "./role.enum.js";
 
 export class Role {
     private readonly id: HTMLElement | null;
+    private readonly scoreBox: HTMLElement | null;
     score = 0;
     hand: Card[] = [];
 
     constructor(role: RoleType) {
         this.id = document.getElementById(role);
+        this.scoreBox = document.getElementById(`${role}-score`);
     }
 
     addCard(cardsDealt: Card[]): void {
@@ -21,7 +23,7 @@ export class Role {
             return this.addCard(cardsDealt);
         }
 
-        const card = new Card(this.getRandomEnum(Suit), this.getRandomEnum(Rank));
+        const card = new Card(suit, rank);
 
         cardsDealt.push(card);
         this.hand.push(card);
@@ -34,6 +36,10 @@ export class Role {
 
         if ((Rank.ACE === card.rank) && (this.score > Game.BLACK_JACK)) {
             this.score -= 10;
+        }
+
+        if (this.scoreBox) {
+            this.scoreBox.innerText = this.score.toString();
         }
     }
 
@@ -51,5 +57,9 @@ export class Role {
         const enumKey = keys[Math.floor(Math.random() * keys.length)];
 
         return enumeration[enumKey];
+    }
+
+    hasBlackjack(): boolean {
+        return (this.hand.length === 2) && (Game.BLACK_JACK === this.score);
     }
 }
