@@ -3,6 +3,7 @@ import { Role as RoleType } from "./role/role.enum.js";
 import { Role } from "./role/role.js";
 let player;
 let dealer;
+let cardsDealt = [];
 startGame();
 function startGame() {
     dealer = new Role(RoleType.DEALER);
@@ -10,12 +11,16 @@ function startGame() {
     initActions();
 }
 function hit() {
-    player.addCard();
+    player.addCard(cardsDealt);
     checkScore();
 }
 function checkScore() {
     // TODO
-    if (player.score > Game.BLACK_JACK) {
+    if (player.score === Game.BLACK_JACK) {
+        console.log("BLACK JACK");
+        stand();
+    }
+    else if (player.score > Game.BLACK_JACK) {
         console.log("Player loses");
     }
 }
@@ -33,6 +38,6 @@ function initActions() {
     const EVENT = {
         CLICK: 'click'
     };
-    (_a = document.getElementById('hit')) === null || _a === void 0 ? void 0 : _a.addEventListener(EVENT.CLICK, () => hit());
-    (_b = document.getElementById('stand')) === null || _b === void 0 ? void 0 : _b.addEventListener(EVENT.CLICK, () => hit());
+    (_a = document.getElementById(hit.name)) === null || _a === void 0 ? void 0 : _a.addEventListener(EVENT.CLICK, () => hit());
+    (_b = document.getElementById(stand.name)) === null || _b === void 0 ? void 0 : _b.addEventListener(EVENT.CLICK, () => stand());
 }
