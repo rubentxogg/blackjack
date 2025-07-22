@@ -4,14 +4,17 @@ import { Suit } from "../card/suit.enum.js";
 import { Game as Rules } from "../game/game.constants.js";
 
 export abstract class Role {
-    private readonly id: HTMLElement | null;
+    private readonly role: HTMLElement | null;
     private readonly scoreBox: HTMLElement | null;
-    score = 0;
-    hand: Card[] = [];
+    private hand: Card[] = [];
 
     constructor(role: string) {
-        this.id = document.getElementById(role);
+        this.role = document.getElementById(role);
         this.scoreBox = document.getElementById(`${role}-score`);
+    }
+
+    get score() {
+        return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0)
     }
 
     addCard(cardsDealt: Card[]): void {
@@ -27,16 +30,10 @@ export abstract class Role {
         cardsDealt.push(card);
         this.hand.push(card);
         this.drawCard(card);
-        this.computeScore(card);
+        this.drawScore();
     }
 
-    private computeScore(card: Card) {
-        this.score += card.value;
-
-        if ((Rank.ACE === card.rank) && (this.score > Rules.BLACK_JACK)) {
-            this.score -= 10;
-        }
-
+    public drawScore() {
         if (this.scoreBox) {
             this.scoreBox.innerText = this.score.toString();
         }
@@ -47,8 +44,9 @@ export abstract class Role {
         
         img.alt = card.face;
         img.src = `./assets/${card.face}.svg`;
+        img.className = `${this.role?.id}-card`;
 
-        this.id?.appendChild(img);
+        this.role?.appendChild(img);
     }
 
     private getRandomEnum(enumeration: any): any {
@@ -60,5 +58,11 @@ export abstract class Role {
 
     hasBlackjack(): boolean {
         return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+    }
+
+    clearHand(): void {
+        this.hand = [];
+        this.drawScore();
+        document.querySelectorAll(`.${this.role?.id}-card`).forEach(card => card.remove());
     }
 }

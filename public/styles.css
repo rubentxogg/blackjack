@@ -30,7 +30,7 @@ body {
     border: 2px solid yellow;
 }
 
-img {
+img[class$='card'] {
     margin: 1.3em;
     max-width: 175px;
     min-width: 100px;

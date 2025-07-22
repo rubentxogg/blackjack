@@ -9,13 +9,12 @@ export class Game {
     }
     start() {
         this.player.drawMoney();
-        this.newRound();
         this.initActions();
     }
     newRound() {
         this.cardsDealt = [];
-        this.dealer.hand = [];
-        this.player.hand = [];
+        this.dealer.clearHand();
+        this.player.clearHand();
     }
     dealCards() {
         [...Array(2)].forEach(() => {

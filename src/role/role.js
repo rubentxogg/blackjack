@@ -4,10 +4,12 @@ import { Suit } from "../card/suit.enum.js";
 import { Game as Rules } from "../game/game.constants.js";
 export class Role {
     constructor(role) {
-        this.score = 0;
         this.hand = [];
-        this.id = document.getElementById(role);
+        this.role = document.getElementById(role);
         this.scoreBox = document.getElementById(`${role}-score`);
+    }
+    get score() {
+        return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0);
     }
     addCard(cardsDealt) {
         const suit = this.getRandomEnum(Suit);
@@ -19,23 +21,20 @@ export class Role {
         cardsDealt.push(card);
         this.hand.push(card);
         this.drawCard(card);
-        this.computeScore(card);
+        this.drawScore();
     }
-    computeScore(card) {
-        this.score += card.value;
-        if ((Rank.ACE === card.rank) && (this.score > Rules.BLACK_JACK)) {
-            this.score -= 10;
-        }
+    drawScore() {
         if (this.scoreBox) {
             this.scoreBox.innerText = this.score.toString();
         }
     }
     drawCard(card) {
-        var _a;
+        var _a, _b;
         const img = document.createElement('img');
         img.alt = card.face;
         img.src = `./assets/${card.face}.svg`;
-        (_a = this.id) === null || _a === void 0 ? void 0 : _a.appendChild(img);
+        img.className = `${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`;
+        (_b = this.role) === null || _b === void 0 ? void 0 : _b.appendChild(img);
     }
     getRandomEnum(enumeration) {
         const keys = Object.keys(enumeration).filter(key => Number.isNaN(Number.parseInt(key)));
@@ -44,5 +43,11 @@ export class Role {
     }
     hasBlackjack() {
         return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+    }
+    clearHand() {
+        var _a;
+        this.hand = [];
+        this.drawScore();
+        document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.remove());
     }
 }

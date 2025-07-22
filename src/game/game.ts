@@ -15,14 +15,13 @@ export class Game {
 
     start() {
         this.player.drawMoney();
-        this.newRound();
         this.initActions();
     }
 
     private newRound(): void {
         this.cardsDealt = [];
-        this.dealer.hand = [];
-        this.player.hand = [];
+        this.dealer.clearHand();
+        this.player.clearHand();
     }
 
     private dealCards(): void {
