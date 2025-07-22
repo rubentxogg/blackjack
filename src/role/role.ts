@@ -2,6 +2,7 @@ import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Suit } from "../card/suit.enum.js";
 import { Game as Rules } from "../game/game.constants.js";
+import { Game } from "../game/game.js";
 
 export abstract class Role {
     private readonly role: HTMLElement | null;
@@ -17,17 +18,17 @@ export abstract class Role {
         return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0)
     }
 
-    addCard(cardsDealt: Card[]): void {
+    addCard(): void {
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
 
-        if (cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
-            return this.addCard(cardsDealt);
+        if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
+            return this.addCard();
         }
 
         const card = new Card(suit, rank);
 
-        cardsDealt.push(card);
+        Game.cardsDealt.push(card);
         this.hand.push(card);
         this.drawCard(card);
         this.drawScore();

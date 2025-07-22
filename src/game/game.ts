@@ -6,7 +6,7 @@ import { Game as Rules } from "./game.constants.js";
 export class Game {
     private readonly dealer: Dealer;
     private readonly player: Player;
-    private cardsDealt: Card[] = [];
+    static readonly cardsDealt: Card[] = [];
 
     constructor() {
         this.dealer = new Dealer();
@@ -19,20 +19,20 @@ export class Game {
     }
 
     private newRound(): void {
-        this.cardsDealt = [];
+        Game.cardsDealt.length = 0;
         this.dealer.clearHand();
         this.player.clearHand();
     }
 
     private dealCards(): void {
         [...Array(2)].forEach(() => {
-            this.dealer.addCard(this.cardsDealt);
-            this.player.addCard(this.cardsDealt);
+            this.dealer.addCard();
+            this.player.addCard();
         });
     }
 
     private hit(): void {
-        this.player.addCard(this.cardsDealt);
+        this.player.addCard();
         
         if ((this.player.score > Rules.BLACK_JACK)) {
             this.player.lose();
@@ -53,8 +53,8 @@ export class Game {
     }
 
     private stand(): void {
-        while (Rules.DEALER_HIT_LIMIT > this.dealer.score) {
-            this.dealer.addCard(this.cardsDealt);
+        while (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
+            this.dealer.addCard();
         }
 
         this.endRound();

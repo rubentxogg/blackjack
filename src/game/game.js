@@ -3,7 +3,6 @@ import { Player } from "../player/player.js";
 import { Game as Rules } from "./game.constants.js";
 export class Game {
     constructor() {
-        this.cardsDealt = [];
         this.dealer = new Dealer();
         this.player = new Player();
     }
@@ -12,18 +11,18 @@ export class Game {
         this.initActions();
     }
     newRound() {
-        this.cardsDealt = [];
+        Game.cardsDealt.length = 0;
         this.dealer.clearHand();
         this.player.clearHand();
     }
     dealCards() {
         [...Array(2)].forEach(() => {
-            this.dealer.addCard(this.cardsDealt);
-            this.player.addCard(this.cardsDealt);
+            this.dealer.addCard();
+            this.player.addCard();
         });
     }
     hit() {
-        this.player.addCard(this.cardsDealt);
+        this.player.addCard();
         if ((this.player.score > Rules.BLACK_JACK)) {
             this.player.lose();
             this.newRound();
@@ -43,7 +42,7 @@ export class Game {
     }
     stand() {
         while (Rules.DEALER_HIT_LIMIT > this.dealer.score) {
-            this.dealer.addCard(this.cardsDealt);
+            this.dealer.addCard();
         }
         this.endRound();
     }
@@ -72,3 +71,4 @@ export class Game {
         });
     }
 }
+Game.cardsDealt = [];
