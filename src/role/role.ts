@@ -1,16 +1,15 @@
 import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Suit } from "../card/suit.enum.js";
-import { Game } from "../game.constants.js";
-import { Role as RoleType } from "./role.enum.js";
+import { Game as Rules } from "../game/game.constants.js";
 
-export class Role {
+export abstract class Role {
     private readonly id: HTMLElement | null;
     private readonly scoreBox: HTMLElement | null;
     score = 0;
     hand: Card[] = [];
 
-    constructor(role: RoleType) {
+    constructor(role: string) {
         this.id = document.getElementById(role);
         this.scoreBox = document.getElementById(`${role}-score`);
     }
@@ -34,7 +33,7 @@ export class Role {
     private computeScore(card: Card) {
         this.score += card.value;
 
-        if ((Rank.ACE === card.rank) && (this.score > Game.BLACK_JACK)) {
+        if ((Rank.ACE === card.rank) && (this.score > Rules.BLACK_JACK)) {
             this.score -= 10;
         }
 
@@ -60,6 +59,6 @@ export class Role {
     }
 
     hasBlackjack(): boolean {
-        return (this.hand.length === 2) && (Game.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
     }
 }

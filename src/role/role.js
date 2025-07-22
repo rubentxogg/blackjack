@@ -1,7 +1,7 @@
 import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Suit } from "../card/suit.enum.js";
-import { Game } from "../game.constants.js";
+import { Game as Rules } from "../game/game.constants.js";
 export class Role {
     constructor(role) {
         this.score = 0;
@@ -23,7 +23,7 @@ export class Role {
     }
     computeScore(card) {
         this.score += card.value;
-        if ((Rank.ACE === card.rank) && (this.score > Game.BLACK_JACK)) {
+        if ((Rank.ACE === card.rank) && (this.score > Rules.BLACK_JACK)) {
             this.score -= 10;
         }
         if (this.scoreBox) {
@@ -43,6 +43,6 @@ export class Role {
         return enumeration[enumKey];
     }
     hasBlackjack() {
-        return (this.hand.length === 2) && (Game.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
     }
 }
