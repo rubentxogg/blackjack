@@ -14,6 +14,7 @@ export class Game {
     }
 
     start() {
+        this.player.drawMoney();
         this.newRound();
         this.initActions();
     }
@@ -33,21 +34,23 @@ export class Game {
 
     private hit(): void {
         this.player.addCard(this.cardsDealt);
-        this.checkScore();
+        
+        if ((this.player.score > Rules.BLACK_JACK)) {
+            this.player.lose();
+            this.newRound();
+        }
     }
 
-    private checkScore(): void {
-        // TODO
-        if (this.player.score > Rules.BLACK_JACK) {
-            console.log("The player loses");
-        } else if (this.player.score === Rules.BLACK_JACK) {
-            console.log("BLACK JACK");
-            this.player.money = this.player.bet * Rules.ODDS;
-        } else if ((this.dealer.score <= Rules.BLACK_JACK) && (this.dealer.score > this.player.score)) {
-            console.log("The player loses");
+    private endRound(): void {
+        if((this.dealer.score > Rules.BLACK_JACK) || (this.player.score > this.dealer.score)) {
+            this.player.win();
+        } else if(this.dealer.score === this.player.score) {
+            this.player.draw();
         } else {
-            console.log("The player wins");
+            this.player.lose();
         }
+
+        this.newRound();
     }
 
     private stand(): void {
@@ -55,13 +58,11 @@ export class Game {
             this.dealer.addCard(this.cardsDealt);
         }
 
-        this.checkScore();
+        this.endRound();
     }
 
     private bet(): void {
-        const bet = (document.getElementById('bet') as HTMLInputElement).value;
-
-        this.player.placeBet(Number.parseInt(bet)).then(() => this.dealCards());
+        this.player.placeBet().then(() => this.dealCards());
     }
 
     private doubleDown(): void {
@@ -74,16 +75,18 @@ export class Game {
 
     private initActions(): void {
         const EVENT = {
-            CLICK: 'click'
+            CLICK: 'click',
         };
 
-        const hitElement = document.getElementById(this.hit.name) as HTMLInputElement;
-        const standElement = document.getElementById(this.stand.name) as HTMLInputElement;
-        const betElement = document.getElementById(`place-${this.bet.name}`) as HTMLInputElement;
+        const hit = document.getElementById(this.hit.name) as HTMLInputElement;
+        const stand = document.getElementById(this.stand.name) as HTMLInputElement;
 
-        hitElement?.addEventListener(EVENT.CLICK, () => this.hit());
-        standElement?.addEventListener(EVENT.CLICK, () => this.stand());
-        betElement?.addEventListener(EVENT.CLICK, (event) => {
+        hit.addEventListener(EVENT.CLICK, () => this.hit());
+        stand.addEventListener(EVENT.CLICK, () => this.stand());
+
+        const bet = document.getElementById(`place-${this.bet.name}`) as HTMLInputElement;
+
+        bet.addEventListener(EVENT.CLICK, (event) => {
             if (event.currentTarget === event.target) {
                 this.bet();
             }
