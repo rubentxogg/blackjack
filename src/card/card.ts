@@ -5,7 +5,7 @@ export class Card {
     readonly suit: Suit;
     readonly rank: Rank;
 
-    private readonly dictionary = new Map([
+    readonly dictionary = new Map([
         [Rank.ACE, 11],
         [Rank.KING, 10],
         [Rank.QUEEN, 10],

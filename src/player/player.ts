@@ -11,40 +11,41 @@ export class Player extends Role {
         super(PLAYER);
 
         this.moneyBox = document.getElementById(`${PLAYER}-money`);
+        this.refreshMoney();
     }
 
-    placeBet(): Promise<any> {
+    placeBet(): void {
         const bet = (document.getElementById('bet') as HTMLInputElement).value;
 
         this.bet = Number.parseInt(bet);
         this.money -= this.bet;
 
-        this.drawMoney();
-
-        return Promise.resolve();
+        this.refreshMoney();
     }
 
-    drawMoney(): void {
+    refreshMoney(): void {
         if (this.moneyBox) {
             this.moneyBox.innerText = `$${this.money.toString()}`;
         }
     }
 
+    refreshMoneyAfterResult(resultFunc: Function) {
+        resultFunc.call(this);
+        this.refreshMoney();
+    }
+
     lose(): void {
         this.money -= this.bet;
-        this.drawMoney();
         alert("Player loses");
     }
 
     win(): void {
         this.money += (this.bet * Rules.ODDS);
-        this.drawMoney();
         alert("Player wins");
     }
 
     draw(): void {
         this.money += this.bet;
-        this.drawMoney();
         alert("DRAW!");
     }
 }

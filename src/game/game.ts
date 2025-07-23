@@ -14,7 +14,7 @@ export class Game {
     }
 
     start() {
-        this.player.drawMoney();
+        this.player.refreshMoney();
         this.initActions();
     }
 
@@ -33,7 +33,7 @@ export class Game {
 
     private hit(): void {
         this.player.addCard();
-        
+
         if ((this.player.score > Rules.BLACK_JACK)) {
             this.player.lose();
             this.newRound();
@@ -41,13 +41,17 @@ export class Game {
     }
 
     private endRound(): void {
-        if((this.dealer.score > Rules.BLACK_JACK) || (this.player.score > this.dealer.score)) {
-            this.player.win();
-        } else if(this.dealer.score === this.player.score) {
-            this.player.draw();
+        let playerResult = null;
+
+        if ((this.dealer.score > Rules.BLACK_JACK) || (this.player.score > this.dealer.score)) {
+            playerResult = this.player.win;
+        } else if (this.dealer.score === this.player.score) {
+            playerResult = this.player.draw;
         } else {
-            this.player.lose();
+            playerResult = this.player.lose;
         }
+
+        this.player.refreshMoneyAfterResult(playerResult);
     }
 
     private stand(): void {
@@ -59,15 +63,13 @@ export class Game {
 
         setTimeout(() => {
             this.endRound();
-        }, 3e3);
-
-        setTimeout(() => {
-            this.newRound();
-        }, 3e3);
+            setTimeout(() => this.newRound(), 3e2)
+        }, 3e2);
     }
 
     private bet(): void {
-        this.player.placeBet().then(() => this.dealCards());
+        this.player.placeBet();
+        this.dealCards()
     }
 
     private doubleDown(): void {
@@ -86,7 +88,7 @@ export class Game {
         const hit = document.getElementById(this.hit.name) as HTMLInputElement;
         const stand = document.getElementById(this.stand.name) as HTMLInputElement;
 
-        hit.addEventListener(EVENT.CLICK, () => this.hit());
+        hit.addEventListener(EVENT.CLICK, () => setTimeout(() => this.hit(), 3e2));
         stand.addEventListener(EVENT.CLICK, () => this.stand());
 
         const bet = document.getElementById(`place-${this.bet.name}`) as HTMLInputElement;
