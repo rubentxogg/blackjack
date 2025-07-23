@@ -24,16 +24,17 @@ export class Role {
         this.drawCard(card);
         this.drawScore();
     }
-    drawScore() {
+    drawScore(score) {
         if (this.scoreBox) {
-            this.scoreBox.innerText = this.score.toString();
+            this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
         }
     }
-    drawCard(card) {
+    drawCard(card, isHidden) {
         var _a, _b;
         const img = document.createElement('img');
-        img.alt = card.face;
-        img.src = `./assets/${card.face}.svg`;
+        img.alt = !isHidden ? card.face : `${card.face}-hidden`;
+        img.id = img.alt;
+        img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;
         img.className = `${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`;
         (_b = this.role) === null || _b === void 0 ? void 0 : _b.appendChild(img);
     }

@@ -19,10 +19,12 @@ export class Card {
         ]);
         this.suit = suit;
         this.rank = rank;
-        this.face = `${Suit[this.suit]}-${Rank[this.rank]}`;
     }
     get value() {
         var _a;
         return (_a = this.dictionary.get(this.rank)) !== null && _a !== void 0 ? _a : 0;
+    }
+    get face() {
+        return `${Suit[this.suit]}-${Rank[this.rank]}`;
     }
 }

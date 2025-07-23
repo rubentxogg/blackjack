@@ -38,13 +38,13 @@ export class Game {
         else {
             this.player.lose();
         }
-        this.newRound();
     }
     stand() {
-        while (Rules.DEALER_HIT_LIMIT > this.dealer.score) {
+        while (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
             this.dealer.addCard();
         }
         this.endRound();
+        this.newRound();
     }
     bet() {
         this.player.placeBet().then(() => this.dealCards());

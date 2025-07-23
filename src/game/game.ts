@@ -48,8 +48,6 @@ export class Game {
         } else {
             this.player.lose();
         }
-
-        this.newRound();
     }
 
     private stand(): void {
@@ -58,6 +56,7 @@ export class Game {
         }
 
         this.endRound();
+        this.newRound();
     }
 
     private bet(): void {

@@ -21,15 +21,18 @@ export class Player extends Role {
         }
     }
     lose() {
-        console.log("Player loses");
         this.money -= this.bet;
+        this.drawMoney();
+        alert("Player loses");
     }
     win() {
-        console.log("Player wins");
-        this.bet *= Rules.ODDS;
+        this.money += (this.bet * Rules.ODDS);
+        this.drawMoney();
+        alert("Player wins");
     }
     draw() {
-        console.log("DRAW!");
         this.money += this.bet;
+        this.drawMoney();
+        alert("DRAW!");
     }
 }

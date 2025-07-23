@@ -7,7 +7,7 @@ import { Game } from "../game/game.js";
 export abstract class Role {
     private readonly role: HTMLElement | null;
     private readonly scoreBox: HTMLElement | null;
-    private hand: Card[] = [];
+    protected hand: Card[] = [];
 
     constructor(role: string) {
         this.role = document.getElementById(role);
@@ -34,17 +34,18 @@ export abstract class Role {
         this.drawScore();
     }
 
-    public drawScore() {
+    protected drawScore(score?: string) {
         if (this.scoreBox) {
-            this.scoreBox.innerText = this.score.toString();
+            this.scoreBox.innerText = score ?? this.score.toString();
         }
     }
 
-    private drawCard(card: Card): void {
+    protected drawCard(card: Card, isHidden?: boolean): void {
         const img = document.createElement('img');
         
-        img.alt = card.face;
-        img.src = `./assets/${card.face}.svg`;
+        img.alt = !isHidden ? card.face : `${card.face}-hidden`;
+        img.id = img.alt;
+        img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;
         img.className = `${this.role?.id}-card`;
 
         this.role?.appendChild(img);

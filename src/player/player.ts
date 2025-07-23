@@ -31,17 +31,20 @@ export class Player extends Role {
     }
 
     lose(): void {
-        console.log("Player loses");
         this.money -= this.bet;
+        this.drawMoney();
+        alert("Player loses");
     }
 
     win(): void {
-        console.log("Player wins");
-        this.bet *= Rules.ODDS;
+        this.money += (this.bet * Rules.ODDS);
+        this.drawMoney();
+        alert("Player wins");
     }
 
     draw(): void {
-        console.log("DRAW!");
         this.money += this.bet;
+        this.drawMoney();
+        alert("DRAW!");
     }
 }
