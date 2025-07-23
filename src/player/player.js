@@ -7,32 +7,33 @@ export class Player extends Role {
         this.money = 100;
         this.bet = 0;
         this.moneyBox = document.getElementById(`${PLAYER}-money`);
+        this.refreshMoney();
     }
     placeBet() {
         const bet = document.getElementById('bet').value;
         this.bet = Number.parseInt(bet);
         this.money -= this.bet;
-        this.drawMoney();
-        return Promise.resolve();
+        this.refreshMoney();
     }
-    drawMoney() {
+    refreshMoney() {
         if (this.moneyBox) {
             this.moneyBox.innerText = `$${this.money.toString()}`;
         }
     }
+    refreshMoneyAfterResult(resultFunc) {
+        resultFunc.call(this);
+        this.refreshMoney();
+    }
     lose() {
         this.money -= this.bet;
-        this.drawMoney();
         alert("Player loses");
     }
     win() {
         this.money += (this.bet * Rules.ODDS);
-        this.drawMoney();
         alert("Player wins");
     }
     draw() {
         this.money += this.bet;
-        this.drawMoney();
         alert("DRAW!");
     }
 }

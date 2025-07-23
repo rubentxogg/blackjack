@@ -7,7 +7,7 @@ export class Game {
         this.player = new Player();
     }
     start() {
-        this.player.drawMoney();
+        this.player.refreshMoney();
         this.initActions();
     }
     newRound() {
@@ -29,15 +29,17 @@ export class Game {
         }
     }
     endRound() {
+        let playerResult = null;
         if ((this.dealer.score > Rules.BLACK_JACK) || (this.player.score > this.dealer.score)) {
-            this.player.win();
+            playerResult = this.player.win;
         }
         else if (this.dealer.score === this.player.score) {
-            this.player.draw();
+            playerResult = this.player.draw;
         }
         else {
-            this.player.lose();
+            playerResult = this.player.lose;
         }
+        this.player.refreshMoneyAfterResult(playerResult);
     }
     stand() {
         this.dealer.flipCard();
@@ -46,13 +48,12 @@ export class Game {
         }
         setTimeout(() => {
             this.endRound();
-        }, 3e3);
-        setTimeout(() => {
-            this.newRound();
-        }, 3e3);
+            setTimeout(() => this.newRound(), 3e2);
+        }, 3e2);
     }
     bet() {
-        this.player.placeBet().then(() => this.dealCards());
+        this.player.placeBet();
+        this.dealCards();
     }
     doubleDown() {
         // TODO
@@ -66,7 +67,7 @@ export class Game {
         };
         const hit = document.getElementById(this.hit.name);
         const stand = document.getElementById(this.stand.name);
-        hit.addEventListener(EVENT.CLICK, () => this.hit());
+        hit.addEventListener(EVENT.CLICK, () => setTimeout(() => this.hit(), 3e2));
         stand.addEventListener(EVENT.CLICK, () => this.stand());
         const bet = document.getElementById(`place-${this.bet.name}`);
         bet.addEventListener(EVENT.CLICK, (event) => {

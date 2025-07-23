@@ -19,6 +19,9 @@ export class Role {
             return this.addCard();
         }
         const card = new Card(suit, rank);
+        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACK_JACK)) {
+            card.dictionary.set(Rank.ACE, 1);
+        }
         Game.cardsDealt.push(card);
         this.hand.push(card);
         this.writeCard(card);

@@ -15,7 +15,7 @@ export abstract class Role {
     }
 
     get score() {
-        return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0)
+        return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0);
     }
 
     addCard(): void {
@@ -27,6 +27,10 @@ export abstract class Role {
         }
 
         const card = new Card(suit, rank);
+
+        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACK_JACK)) {
+            card.dictionary.set(Rank.ACE, 1);
+        }
 
         Game.cardsDealt.push(card);
         this.hand.push(card);
@@ -42,7 +46,7 @@ export abstract class Role {
 
     protected writeCard(card: Card, isHidden?: boolean): void {
         const img = document.createElement('img');
-        
+
         img.alt = !isHidden ? card.face : `${card.face}-hidden`;
         img.id = img.alt;
         img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;

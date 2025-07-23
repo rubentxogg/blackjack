@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 23/07/2025
 
+### Fixex
+- Dynamic ACE value, it could be 11 or 1.
+
 ### Modified
 - Alerts instead console logs for debugging.
 - Role inheritance for player and dealer.
