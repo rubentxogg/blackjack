@@ -40,11 +40,16 @@ export class Game {
         }
     }
     stand() {
+        this.dealer.flipCard();
         while (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
             this.dealer.addCard();
         }
-        this.endRound();
-        this.newRound();
+        setTimeout(() => {
+            this.endRound();
+        }, 3e3);
+        setTimeout(() => {
+            this.newRound();
+        }, 3e3);
     }
     bet() {
         this.player.placeBet().then(() => this.dealCards());

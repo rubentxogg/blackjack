@@ -51,12 +51,19 @@ export class Game {
     }
 
     private stand(): void {
+        this.dealer.flipCard();
+
         while (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
             this.dealer.addCard();
         }
 
-        this.endRound();
-        this.newRound();
+        setTimeout(() => {
+            this.endRound();
+        }, 3e3);
+
+        setTimeout(() => {
+            this.newRound();
+        }, 3e3);
     }
 
     private bet(): void {

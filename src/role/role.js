@@ -21,15 +21,15 @@ export class Role {
         const card = new Card(suit, rank);
         Game.cardsDealt.push(card);
         this.hand.push(card);
-        this.drawCard(card);
-        this.drawScore();
+        this.writeCard(card);
+        this.writeScore();
     }
-    drawScore(score) {
+    writeScore(score) {
         if (this.scoreBox) {
             this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
         }
     }
-    drawCard(card, isHidden) {
+    writeCard(card, isHidden) {
         var _a, _b;
         const img = document.createElement('img');
         img.alt = !isHidden ? card.face : `${card.face}-hidden`;
@@ -49,7 +49,7 @@ export class Role {
     clearHand() {
         var _a;
         this.hand = [];
-        this.drawScore();
+        this.writeScore();
         document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.remove());
     }
 }

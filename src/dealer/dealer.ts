@@ -8,37 +8,34 @@ export class Dealer extends Role {
         super(Dealer.name.toLocaleLowerCase());
     }
 
-    protected drawCard(card: Card): void {
+    protected writeCard(card: Card): void {
         const isHidden = (this.hand.length === 2);
 
-        super.drawCard(card, isHidden);
+        super.writeCard(card, isHidden);
     }
 
-    protected drawScore(): void {
-        let score = undefined;
+    protected writeScore(): void {
+        const score = !this.isInitialHand ? undefined : '?';
 
-        if (this.hand.length === 2) {
-            score = '?';
+        super.writeScore(score);
+    }
+
+    flipCard(): void {
+        if (!this.isInitialHand) {
+            return;
         }
 
-        super.drawScore(score);
-    }
-
-    addCard(): void {
-        if (this.hand.length === 2) {
-            this.flipCard();
-        }
-        super.addCard();
-    }
-
-    private flipCard(): void {
         const secondCard = this.hand[1];
         const hiddenCard = document.getElementById(`${secondCard.face}-hidden`) as HTMLImageElement;
 
-        if(hiddenCard) {
+        if (hiddenCard) {
             hiddenCard.src = `./assets/${secondCard.face}.svg`;
             hiddenCard.alt = secondCard.face;
             hiddenCard.id = hiddenCard.alt;
         }
+    }
+
+    get isInitialHand(): boolean {
+        return this.hand.length === 2;
     }
 }

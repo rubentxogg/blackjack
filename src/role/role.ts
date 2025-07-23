@@ -30,17 +30,17 @@ export abstract class Role {
 
         Game.cardsDealt.push(card);
         this.hand.push(card);
-        this.drawCard(card);
-        this.drawScore();
+        this.writeCard(card);
+        this.writeScore();
     }
 
-    protected drawScore(score?: string) {
+    protected writeScore(score?: string) {
         if (this.scoreBox) {
             this.scoreBox.innerText = score ?? this.score.toString();
         }
     }
 
-    protected drawCard(card: Card, isHidden?: boolean): void {
+    protected writeCard(card: Card, isHidden?: boolean): void {
         const img = document.createElement('img');
         
         img.alt = !isHidden ? card.face : `${card.face}-hidden`;
@@ -64,7 +64,7 @@ export abstract class Role {
 
     clearHand(): void {
         this.hand = [];
-        this.drawScore();
+        this.writeScore();
         document.querySelectorAll(`.${this.role?.id}-card`).forEach(card => card.remove());
     }
 }
