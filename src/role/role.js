@@ -1,41 +1,42 @@
 import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Suit } from "../card/suit.enum.js";
-import { Game } from "../game.constants.js";
+import { Game as Rules } from "../game/game.constants.js";
+import { Game } from "../game/game.js";
 export class Role {
     constructor(role) {
-        this.score = 0;
         this.hand = [];
-        this.id = document.getElementById(role);
+        this.role = document.getElementById(role);
         this.scoreBox = document.getElementById(`${role}-score`);
     }
-    addCard(cardsDealt) {
+    get score() {
+        return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0);
+    }
+    addCard() {
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
-        if (cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
-            return this.addCard(cardsDealt);
+        if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
+            return this.addCard();
         }
         const card = new Card(suit, rank);
-        cardsDealt.push(card);
+        Game.cardsDealt.push(card);
         this.hand.push(card);
-        this.drawCard(card);
-        this.computeScore(card);
+        this.writeCard(card);
+        this.writeScore();
     }
-    computeScore(card) {
-        this.score += card.value;
-        if ((Rank.ACE === card.rank) && (this.score > Game.BLACK_JACK)) {
-            this.score -= 10;
-        }
+    writeScore(score) {
         if (this.scoreBox) {
-            this.scoreBox.innerText = this.score.toString();
+            this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
         }
     }
-    drawCard(card) {
-        var _a;
+    writeCard(card, isHidden) {
+        var _a, _b;
         const img = document.createElement('img');
-        img.alt = card.face;
-        img.src = `./assets/${card.face}.svg`;
-        (_a = this.id) === null || _a === void 0 ? void 0 : _a.appendChild(img);
+        img.alt = !isHidden ? card.face : `${card.face}-hidden`;
+        img.id = img.alt;
+        img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;
+        img.className = `${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`;
+        (_b = this.role) === null || _b === void 0 ? void 0 : _b.appendChild(img);
     }
     getRandomEnum(enumeration) {
         const keys = Object.keys(enumeration).filter(key => Number.isNaN(Number.parseInt(key)));
@@ -43,6 +44,12 @@ export class Role {
         return enumeration[enumKey];
     }
     hasBlackjack() {
-        return (this.hand.length === 2) && (Game.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+    }
+    clearHand() {
+        var _a;
+        this.hand = [];
+        this.writeScore();
+        document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.remove());
     }
 }

@@ -1,55 +1,54 @@
 import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Suit } from "../card/suit.enum.js";
-import { Game } from "../game.constants.js";
-import { Role as RoleType } from "./role.enum.js";
+import { Game as Rules } from "../game/game.constants.js";
+import { Game } from "../game/game.js";
 
-export class Role {
-    private readonly id: HTMLElement | null;
+export abstract class Role {
+    private readonly role: HTMLElement | null;
     private readonly scoreBox: HTMLElement | null;
-    score = 0;
-    hand: Card[] = [];
+    protected hand: Card[] = [];
 
-    constructor(role: RoleType) {
-        this.id = document.getElementById(role);
+    constructor(role: string) {
+        this.role = document.getElementById(role);
         this.scoreBox = document.getElementById(`${role}-score`);
     }
 
-    addCard(cardsDealt: Card[]): void {
+    get score() {
+        return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0)
+    }
+
+    addCard(): void {
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
 
-        if (cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
-            return this.addCard(cardsDealt);
+        if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
+            return this.addCard();
         }
 
         const card = new Card(suit, rank);
 
-        cardsDealt.push(card);
+        Game.cardsDealt.push(card);
         this.hand.push(card);
-        this.drawCard(card);
-        this.computeScore(card);
+        this.writeCard(card);
+        this.writeScore();
     }
 
-    private computeScore(card: Card) {
-        this.score += card.value;
-
-        if ((Rank.ACE === card.rank) && (this.score > Game.BLACK_JACK)) {
-            this.score -= 10;
-        }
-
+    protected writeScore(score?: string) {
         if (this.scoreBox) {
-            this.scoreBox.innerText = this.score.toString();
+            this.scoreBox.innerText = score ?? this.score.toString();
         }
     }
 
-    private drawCard(card: Card): void {
+    protected writeCard(card: Card, isHidden?: boolean): void {
         const img = document.createElement('img');
         
-        img.alt = card.face;
-        img.src = `./assets/${card.face}.svg`;
+        img.alt = !isHidden ? card.face : `${card.face}-hidden`;
+        img.id = img.alt;
+        img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;
+        img.className = `${this.role?.id}-card`;
 
-        this.id?.appendChild(img);
+        this.role?.appendChild(img);
     }
 
     private getRandomEnum(enumeration: any): any {
@@ -60,6 +59,12 @@ export class Role {
     }
 
     hasBlackjack(): boolean {
-        return (this.hand.length === 2) && (Game.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+    }
+
+    clearHand(): void {
+        this.hand = [];
+        this.writeScore();
+        document.querySelectorAll(`.${this.role?.id}-card`).forEach(card => card.remove());
     }
 }
