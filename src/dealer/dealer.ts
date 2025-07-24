@@ -32,6 +32,7 @@ export class Dealer extends Role {
             hiddenCard.src = `./assets/${secondCard.face}.svg`;
             hiddenCard.alt = secondCard.face;
             hiddenCard.id = hiddenCard.alt;
+            super.writeScore(this.score.toString());
         }
     }
 

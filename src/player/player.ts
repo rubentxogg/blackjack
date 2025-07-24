@@ -35,8 +35,10 @@ export class Player extends Role {
     }
 
     lose(): void {
-        this.money -= this.bet;
         alert("Player loses");
+        if(this.money <= 0) {
+            location.reload();
+        }
     }
 
     win(): void {
