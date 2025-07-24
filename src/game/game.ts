@@ -7,6 +7,11 @@ export class Game {
     private readonly dealer: Dealer;
     private readonly player: Player;
     static readonly cardsDealt: Card[] = [];
+    private readonly betInput = document.getElementById(this.bet.name) as HTMLInputElement;
+    private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
+    private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
+    private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
+    private readonly TIME_MS = 3e2;
 
     constructor() {
         this.dealer = new Dealer();
@@ -14,14 +19,19 @@ export class Game {
     }
 
     start() {
-        this.player.refreshMoney();
+        this.newRound();
         this.initActions();
     }
 
     private newRound(): void {
         Game.cardsDealt.length = 0;
+        this.betInput.value = String(2);
+        this.betInput.max = this.player.money.toString();
         this.dealer.clearHand();
         this.player.clearHand();
+        this.hitButton.style.display = 'none';
+        this.standButton.style.display = 'none';
+        this.placeBetButton.style.display = '';
     }
 
     private dealCards(): void {
@@ -32,44 +42,61 @@ export class Game {
     }
 
     private hit(): void {
+        this.hitButton.disabled = true;
+        this.standButton.disabled = true;
         this.player.addCard();
 
-        if ((this.player.score > Rules.BLACK_JACK)) {
-            this.player.lose();
-            this.newRound();
-        }
+        setTimeout(() => {
+            if (this.player.score > Rules.BLACK_JACK) {
+                this.player.refreshMoneyAfterResult(this.player.lose);
+                this.newRound();
+            } else if (this.player.score === Rules.BLACK_JACK) {
+                this.stand();
+            } else {
+                this.hitButton.disabled = false;
+                this.standButton.disabled = false;
+            }
+        }, this.TIME_MS);
     }
 
     private endRound(): void {
         let playerResult = null;
 
-        if ((this.dealer.score > Rules.BLACK_JACK) || (this.player.score > this.dealer.score)) {
+        if ((this.player.score <= Rules.BLACK_JACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACK_JACK))) {
             playerResult = this.player.win;
-        } else if (this.dealer.score === this.player.score) {
-            playerResult = this.player.draw;
-        } else {
+        } else if (this.player.score < this.dealer.score) {
             playerResult = this.player.lose;
+        } else {
+            playerResult = this.player.draw;
         }
 
         this.player.refreshMoneyAfterResult(playerResult);
     }
 
     private stand(): void {
+        this.hitButton.disabled = true;
+        this.standButton.disabled = true;
         this.dealer.flipCard();
+        this.checkDealersTurn();
+    }
 
-        while (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
-            this.dealer.addCard();
-        }
-
+    private checkDealersTurn() {
         setTimeout(() => {
-            this.endRound();
-            setTimeout(() => this.newRound(), 3e2)
-        }, 3e2);
+            if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
+                this.dealer.addCard();
+                this.checkDealersTurn();
+            } else {
+                setTimeout(() => {
+                    this.endRound();
+                    setTimeout(() => this.newRound(), this.TIME_MS);
+                }, this.TIME_MS);
+            }
+        }, this.TIME_MS);
     }
 
     private bet(): void {
         this.player.placeBet();
-        this.dealCards()
+        this.dealCards();
     }
 
     private doubleDown(): void {
@@ -81,22 +108,24 @@ export class Game {
     }
 
     private initActions(): void {
-        const EVENT = {
-            CLICK: 'click',
-        };
+        this.betInput.addEventListener('keypress', (event) => event.preventDefault());
+        this.hitButton.style.display = 'none';
+        this.standButton.style.display = 'none';
 
-        const hit = document.getElementById(this.hit.name) as HTMLInputElement;
-        const stand = document.getElementById(this.stand.name) as HTMLInputElement;
-
-        hit.addEventListener(EVENT.CLICK, () => setTimeout(() => this.hit(), 3e2));
-        stand.addEventListener(EVENT.CLICK, () => this.stand());
-
-        const bet = document.getElementById(`place-${this.bet.name}`) as HTMLInputElement;
-
-        bet.addEventListener(EVENT.CLICK, (event) => {
-            if (event.currentTarget === event.target) {
-                this.bet();
+        this.placeBetButton.addEventListener('click', (event) => {
+            if (event.currentTarget !== event.target) {
+                return;
             }
+
+            this.bet();
+            this.placeBetButton.style.display = 'none';
+            this.hitButton.style.display = '';
+            this.hitButton.disabled = false;
+            this.standButton.style.display = '';
+            this.standButton.disabled = false;
         });
+
+        this.hitButton.addEventListener('click', () => this.hit());
+        this.standButton.addEventListener('click', () => this.stand());
     }
 }

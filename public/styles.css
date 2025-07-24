@@ -1,5 +1,15 @@
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
 html {
     height: 100%;
+    box-sizing: border-box;
 }
 
 body {
@@ -34,6 +44,8 @@ img[class$='card'] {
     margin: 1.3em;
     max-width: 175px;
     min-width: 100px;
+	animation-name: fade-in;
+	animation-duration: 1.5s;
 }
 
 footer {

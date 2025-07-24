@@ -25,8 +25,10 @@ export class Player extends Role {
         this.refreshMoney();
     }
     lose() {
-        this.money -= this.bet;
         alert("Player loses");
+        if (this.money <= 0) {
+            location.reload();
+        }
     }
     win() {
         this.money += (this.bet * Rules.ODDS);
