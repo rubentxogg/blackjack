@@ -11,7 +11,7 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
-    private readonly TIME_MS = 3e2;
+    private readonly DELAY_MS = 3e2;
 
     constructor() {
         this.dealer = new Dealer();
@@ -27,11 +27,11 @@ export class Game {
         Game.cardsDealt.length = 0;
         this.betInput.value = String(2);
         this.betInput.max = this.player.money.toString();
+
         this.dealer.clearHand();
         this.player.clearHand();
-        this.hitButton.style.display = 'none';
-        this.standButton.style.display = 'none';
-        this.placeBetButton.style.display = '';
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, true, [this.placeBetButton]);
     }
 
     private dealCards(): void {
@@ -42,21 +42,25 @@ export class Game {
     }
 
     private hit(): void {
-        this.hitButton.disabled = true;
-        this.standButton.disabled = true;
+        const buttons = [this.hitButton, this.standButton];
+
+        this.updateButtons(true, false, buttons);
         this.player.addCard();
 
         setTimeout(() => {
             if (this.player.score > Rules.BLACK_JACK) {
                 this.player.refreshMoneyAfterResult(this.player.lose);
                 this.newRound();
-            } else if (this.player.score === Rules.BLACK_JACK) {
-                this.stand();
-            } else {
-                this.hitButton.disabled = false;
-                this.standButton.disabled = false;
+                return;
             }
-        }, this.TIME_MS);
+
+            if (this.player.score === Rules.BLACK_JACK) {
+                this.stand();
+                return;
+            }
+
+            this.updateButtons(true, true, buttons);
+        }, this.DELAY_MS);
     }
 
     private endRound(): void {
@@ -74,24 +78,24 @@ export class Game {
     }
 
     private stand(): void {
-        this.hitButton.disabled = true;
-        this.standButton.disabled = true;
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
         this.dealer.flipCard();
-        this.checkDealersTurn();
+        this.startDealersTurn();
     }
 
-    private checkDealersTurn() {
+    private startDealersTurn(): void {
         setTimeout(() => {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
                 this.dealer.addCard();
-                this.checkDealersTurn();
-            } else {
-                setTimeout(() => {
-                    this.endRound();
-                    setTimeout(() => this.newRound(), this.TIME_MS);
-                }, this.TIME_MS);
+                this.startDealersTurn();
+                return;
             }
-        }, this.TIME_MS);
+
+            setTimeout(() => {
+                this.endRound();
+                setTimeout(() => this.newRound(), this.DELAY_MS);
+            }, this.DELAY_MS);
+        }, this.DELAY_MS);
     }
 
     private bet(): void {
@@ -108,9 +112,12 @@ export class Game {
     }
 
     private initActions(): void {
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+
+        this.hitButton.addEventListener('click', () => this.hit());
+        this.standButton.addEventListener('click', () => this.stand());
         this.betInput.addEventListener('keypress', (event) => event.preventDefault());
-        this.hitButton.style.display = 'none';
-        this.standButton.style.display = 'none';
+        this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
 
         this.placeBetButton.addEventListener('click', (event) => {
             if (event.currentTarget !== event.target) {
@@ -119,13 +126,14 @@ export class Game {
 
             this.bet();
             this.placeBetButton.style.display = 'none';
-            this.hitButton.style.display = '';
-            this.hitButton.disabled = false;
-            this.standButton.style.display = '';
-            this.standButton.disabled = false;
+            this.updateButtons(true, true, [this.hitButton, this.standButton]);
         });
+    }
 
-        this.hitButton.addEventListener('click', () => this.hit());
-        this.standButton.addEventListener('click', () => this.stand());
+    private updateButtons(setVisible: boolean, setEnabled: boolean, buttons: HTMLButtonElement[]): void {
+        buttons.forEach(button => {
+            button.style.display = setVisible ? '' : 'none';
+            button.disabled = !setEnabled;
+        });
     }
 }
