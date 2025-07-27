@@ -4,11 +4,10 @@ export class Dealer extends Role {
         super(Dealer.name.toLocaleLowerCase());
     }
     writeCard(card) {
-        const isHidden = (this.hand.length === 2);
-        super.writeCard(card, isHidden);
+        super.writeCard(card, this.isInitialHand);
     }
     writeScore() {
-        const score = !this.isInitialHand ? undefined : '?';
+        const score = (this.hand.length <= 2) ? '?' : undefined;
         super.writeScore(score);
     }
     flipCard() {

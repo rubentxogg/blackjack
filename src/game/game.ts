@@ -32,6 +32,7 @@ export class Game {
         this.player.clearHand();
         this.updateButtons(false, false, [this.hitButton, this.standButton]);
         this.updateButtons(true, true, [this.placeBetButton]);
+        this.betInput.focus();
     }
 
     private dealCards(): void {
@@ -78,7 +79,7 @@ export class Game {
     }
 
     private stand(): void {
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, false, [this.hitButton, this.standButton]);
         this.dealer.flipCard();
         this.startDealersTurn();
     }
@@ -116,18 +117,48 @@ export class Game {
 
         this.hitButton.addEventListener('click', () => this.hit());
         this.standButton.addEventListener('click', () => this.stand());
-        this.betInput.addEventListener('keypress', (event) => event.preventDefault());
-        this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
 
-        this.placeBetButton.addEventListener('click', (event) => {
-            if (event.currentTarget !== event.target) {
+        this.betInput.addEventListener('keypress', (event) => {
+            event.preventDefault();
+
+            if (event.key === 'Enter') {
+                this.betInput.click();
                 return;
             }
 
+            if (event.key.toLocaleLowerCase() === 'w') {
+                this.betInput.stepUp();
+                return;
+            }
+
+            if (event.key.toLocaleLowerCase() === 's') {
+                this.betInput.stepDown();
+            }
+        });
+
+        this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
+        this.betInput.addEventListener('blur', () => this.betInput.focus());
+
+        this.placeBetButton.addEventListener('click', (event) => {
             this.bet();
             this.placeBetButton.style.display = 'none';
             this.updateButtons(true, true, [this.hitButton, this.standButton]);
         });
+
+        // document.addEventListener('keypress', (event) => {
+        //     if ((this.hitButton.style.display !== 'none') && (this.standButton.style.display !== 'none')) {
+        //         return;
+        //     }
+
+        //     if (event.key === 'Enter') {
+        //         this.hit();
+        //         return;
+        //     }
+
+        //     if (event.key === 'Space') {
+        //         this.stand();
+        //     }
+        // });
     }
 
     private updateButtons(setVisible: boolean, setEnabled: boolean, buttons: HTMLButtonElement[]): void {
