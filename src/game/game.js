@@ -109,22 +109,10 @@ export class Game {
         });
         this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
         this.betInput.addEventListener('blur', () => this.betInput.focus());
-        this.placeBetButton.addEventListener('click', (event) => {
+        this.placeBetButton.addEventListener('click', () => {
             this.bet();
             this.placeBetButton.style.display = 'none';
             this.updateButtons(true, true, [this.hitButton, this.standButton]);
-        });
-        document.addEventListener('keypress', (event) => {
-            if ((this.hitButton.style.display !== 'none') && (this.standButton.style.display !== 'none')) {
-                return;
-            }
-            if (event.key === 'Enter') {
-                this.hit();
-                return;
-            }
-            if (event.key === 'Space') {
-                this.stand();
-            }
         });
     }
     updateButtons(setVisible, setEnabled, buttons) {

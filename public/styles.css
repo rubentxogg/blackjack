@@ -23,41 +23,42 @@ html {
     height: 100%;
 }
 
-/* LAYOUT START */
 body {
     min-height: 100%;
-    background: linear-gradient(0deg, rgb(97, 98, 99) 0%, rgba(0, 0, 0, 0) 100%);
+    background: var(--raisin-black);
     display: flex;
     flex-wrap: wrap;
     font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
     font-weight: 600;
     line-height: normal;
+    color: var(--baby-powder);
+}
+
+header,
+footer {
+    width: 100%;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
 }
 
 header {
-    text-align: center;
-    width: 100%;
-    padding: 5px;
-    font-size: 10px
+    margin: auto;
 }
 
 main {
+    background-image: url(./assets/green-background.jpg);
+    border-radius: 5px;
     margin: auto;
     width: 90%;
-    height: 750px;
+    height: calc(100vh - 150px);
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
-
-footer {
-    width: 100%;
-    margin: 20px;
-    text-align: center;
-}
-
-/* LAYOUT END */
 
 h2 {
     text-align: center;
@@ -72,10 +73,10 @@ section {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    gap: 25px;
 }
 
 img[class$='card'] {
-    margin: 1.3em;
     max-width: 150px;
     min-width: 75px;
     animation-name: fade-in;
@@ -120,6 +121,7 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 #hit {
