@@ -36,6 +36,20 @@
     }
 }
 
+@keyframes money-push {
+    0% {
+        color: var(--baby-powder);
+    }
+
+    50% {
+        color: var(--maize);
+    }
+
+    100% {
+        color: var(--baby-powder);
+    }
+}
+
 @font-face {
     font-family: nata-regular;
     src: url(./fonts/NataSans-Regular.ttf);
@@ -186,9 +200,26 @@ input[type=number] {
     animation-duration: 1.5s;
 }
 
+.money-lose::after {
+    content: '-';
+}
+
 .money-win {
     animation-name: money-win;
     animation-duration: 1.5s;
+}
+
+.money-win::after {
+    content: '+';
+}
+
+.money-push {
+    animation-name: money-push;
+    animation-duration: 1.5s;
+}
+
+.money-push::after {
+    content: '=';
 }
 
 button {

@@ -11,7 +11,8 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
-    private readonly DELAY_MS = 3e2;
+    private readonly DELAY_MS = 4e2;
+    private readonly NEW_ROUND_DELAY_MS = 15e2;
 
     constructor() {
         this.dealer = new Dealer();
@@ -51,7 +52,7 @@ export class Game {
         setTimeout(() => {
             if (this.player.score > Rules.BLACK_JACK) {
                 this.player.refreshMoneyAfterResult(this.player.lose);
-                this.newRound();
+                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
                 return;
             }
 
@@ -72,7 +73,7 @@ export class Game {
         } else if (this.player.score < this.dealer.score) {
             playerResult = this.player.lose;
         } else {
-            playerResult = this.player.draw;
+            playerResult = this.player.push;
         }
 
         this.player.refreshMoneyAfterResult(playerResult);
@@ -95,7 +96,7 @@ export class Game {
 
             setTimeout(() => {
                 this.endRound();
-                setTimeout(() => this.newRound(), 15e2);
+                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             }, this.DELAY_MS);
         }, this.DELAY_MS);
     }

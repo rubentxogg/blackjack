@@ -38,8 +38,12 @@ export class Player extends Role {
             this.moneyDisplay.className = '';
         }, 15e2);
     }
-    draw() {
+    /**
+     * Occurs when the player and the dealer have the same total value for their hands at the end of a round.
+     * When this happens, the player neither wins nor loses the bet; instead, the player’s original bet is returned.
+     */
+    push() {
         this.money += this.bet;
-        alert("DRAW!");
+        alert("It's a PUSH!");
     }
 }
