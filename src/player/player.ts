@@ -58,6 +58,5 @@ export class Player extends Role {
      */
     push(): void {
         this.money += this.bet;
-        alert("It's a PUSH!");
     }
 }

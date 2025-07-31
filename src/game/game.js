@@ -36,18 +36,16 @@ export class Game {
         const buttons = [this.hitButton, this.standButton];
         this.updateButtons(true, false, buttons);
         this.player.addCard();
-        setTimeout(() => {
-            if (this.player.score > Rules.BLACK_JACK) {
-                this.player.refreshMoneyAfterResult(this.player.lose);
-                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-                return;
-            }
-            if (this.player.score === Rules.BLACK_JACK) {
-                this.stand();
-                return;
-            }
-            this.updateButtons(true, true, buttons);
-        }, this.DELAY_MS);
+        if (this.player.score > Rules.BLACK_JACK) {
+            this.player.refreshMoneyAfterResult(this.player.lose);
+            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+            return;
+        }
+        if (this.player.score === Rules.BLACK_JACK) {
+            this.stand();
+            return;
+        }
+        this.updateButtons(true, true, buttons);
     }
     endRound() {
         let playerResult = null;
