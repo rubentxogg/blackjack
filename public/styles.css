@@ -8,6 +8,34 @@
     }
 }
 
+@keyframes money-win {
+    0% {
+        color: var(--baby-powder);
+    }
+
+    50% {
+        color: var(--sea-green);
+    }
+
+    100% {
+        color: var(--baby-powder);
+    }
+}
+
+@keyframes money-lose {
+    0% {
+        color: var(--baby-powder);
+    }
+
+    50% {
+        color: var(--red-ncs);
+    }
+
+    100% {
+        color: var(--baby-powder);
+    }
+}
+
 @font-face {
     font-family: nata-regular;
     src: url(./fonts/NataSans-Regular.ttf);
@@ -154,11 +182,13 @@ input[type=number] {
 }
 
 .money-lose {
-    color: var(--red-ncs);
+    animation-name: money-lose;
+    animation-duration: 1.5s;
 }
 
 .money-win {
-    color: var(--sea-green);
+    animation-name: money-win;
+    animation-duration: 1.5s;
 }
 
 button {

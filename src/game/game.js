@@ -75,7 +75,7 @@ export class Game {
             }
             setTimeout(() => {
                 this.endRound();
-                setTimeout(() => this.newRound(), this.DELAY_MS);
+                setTimeout(() => this.newRound(), 15e2);
             }, this.DELAY_MS);
         }, this.DELAY_MS);
     }

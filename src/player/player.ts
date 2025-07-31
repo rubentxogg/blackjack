@@ -2,7 +2,7 @@ import { Game as Rules } from "../game/game.constants.js";
 import { Role } from "../role/role.js";
 
 export class Player extends Role {
-    private readonly moneyBox: HTMLElement | null;
+    private readonly moneyDisplay: HTMLSpanElement;
     money = 100;
     bet = 0;
 
@@ -10,7 +10,7 @@ export class Player extends Role {
         const PLAYER = Player.name.toLocaleLowerCase();
         super(PLAYER);
 
-        this.moneyBox = document.getElementById(`${PLAYER}-money`);
+        this.moneyDisplay = document.getElementById(`${PLAYER}-money`) as HTMLSpanElement;
         this.refreshMoney();
     }
 
@@ -24,26 +24,32 @@ export class Player extends Role {
     }
 
     refreshMoney(): void {
-        if (this.moneyBox) {
-            this.moneyBox.innerText = `$${this.money.toString()}`;
-        }
+        this.moneyDisplay.innerText = `$${this.money.toString()}`;
     }
 
     refreshMoneyAfterResult(resultFunc: Function) {
         resultFunc.call(this);
         this.refreshMoney();
+        this.setResultClass(resultFunc.name);
     }
 
     lose(): void {
-        alert("Player loses");
-        if(this.money <= 0) {
+        if (this.money <= 0) {
+            alert("No money left, game will restart");
             location.reload();
         }
     }
 
     win(): void {
         this.money += (this.bet * Rules.ODDS);
-        alert("Player wins");
+    }
+
+    private setResultClass(result: string): void {
+        this.moneyDisplay.className = `money-${result}`;
+
+        setTimeout(() => {
+            this.moneyDisplay.className = '';
+        }, 15e2);
     }
 
     draw(): void {
