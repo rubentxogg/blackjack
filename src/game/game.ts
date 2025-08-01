@@ -11,6 +11,7 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
+    private readonly resultMessage = document.getElementById('result-message') as HTMLSpanElement;
     private readonly DELAY_MS = 4e2;
     private readonly NEW_ROUND_DELAY_MS = 15e2;
 
@@ -50,7 +51,8 @@ export class Game {
         this.player.addCard();
 
         if (this.player.score > Rules.BLACK_JACK) {
-            this.player.refreshMoneyAfterResult(this.player.lose);
+            this.player.refreshMoneyAfterResult(this.player.bust);
+            this.setResultMessage(this.player.bust);
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
         }
@@ -69,13 +71,22 @@ export class Game {
         if ((this.player.score <= Rules.BLACK_JACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACK_JACK))) {
             playerResult = this.player.win;
         } else if (this.player.score < this.dealer.score) {
-            playerResult = this.player.lose;
+            playerResult = this.player.bust;
         } else {
             playerResult = this.player.push;
         }
 
         this.player.refreshMoneyAfterResult(playerResult);
-        // TODO show to player who win
+        this.setResultMessage(playerResult);
+    }
+
+    private setResultMessage(resultFunc: Function): void {
+        this.resultMessage.innerText = `${resultFunc.name}!`;
+        this.resultMessage.className = `result-message-${resultFunc.name}`;
+
+        setTimeout(() => {
+            this.resultMessage.className = '';
+        }, 15e2);
     }
 
     private stand(): void {
@@ -89,7 +100,6 @@ export class Game {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
                 this.dealer.addCard();
                 this.startDealersTurn();
-                return;
             }
 
             setTimeout(() => {

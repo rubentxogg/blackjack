@@ -23,7 +23,7 @@ export class Player extends Role {
         this.refreshMoney();
         this.setResultClass(resultFunc.name);
     }
-    lose() {
+    bust() {
         if (this.money <= 0) {
             alert("No money left, game will restart");
             location.reload();

@@ -7,6 +7,7 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
+        this.resultMessage = document.getElementById('result-message');
         this.DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 15e2;
         this.dealer = new Dealer();
@@ -37,7 +38,8 @@ export class Game {
         this.updateButtons(true, false, buttons);
         this.player.addCard();
         if (this.player.score > Rules.BLACK_JACK) {
-            this.player.refreshMoneyAfterResult(this.player.lose);
+            this.player.refreshMoneyAfterResult(this.player.bust);
+            this.setResultMessage(this.player.bust);
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
         }
@@ -53,13 +55,20 @@ export class Game {
             playerResult = this.player.win;
         }
         else if (this.player.score < this.dealer.score) {
-            playerResult = this.player.lose;
+            playerResult = this.player.bust;
         }
         else {
             playerResult = this.player.push;
         }
         this.player.refreshMoneyAfterResult(playerResult);
-        // TODO show to player who win
+        this.setResultMessage(playerResult);
+    }
+    setResultMessage(resultFunc) {
+        this.resultMessage.innerText = `${resultFunc.name}!`;
+        this.resultMessage.className = `result-message-${resultFunc.name}`;
+        setTimeout(() => {
+            this.resultMessage.className = '';
+        }, 15e2);
     }
     stand() {
         this.updateButtons(true, false, [this.hitButton, this.standButton]);
@@ -71,7 +80,6 @@ export class Game {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
                 this.dealer.addCard();
                 this.startDealersTurn();
-                return;
             }
             setTimeout(() => {
                 this.endRound();

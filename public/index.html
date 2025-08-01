@@ -7,18 +7,20 @@
     <link rel="stylesheet" href="palette.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="./assets/icon.svg">
-    <title>Blackjack</title>
+    <title>Blackjack 3:2</title>
 </head>
 
 <body>
     <header>Blackjack 3:2</header>
 
     <main>
-        <h2>Dealer <span id="dealer-score"></span></h2>
+        <h2>Dealer <span id="dealer-score" class="score"></span></h2>
         <section id="dealer" class="hand"></section>
         <hr>
-        <h2>Player <span id="player-score"></span></h2>
+        <h2>Player <span id="player-score" class="score"></span></h2>
         <section id="player" class="hand"></section>
+
+        <span id="result-message"></span>
 
         <div class="actions">
             <button id="hit">Hit</button>
