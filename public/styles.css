@@ -106,12 +106,6 @@
     src: url(./fonts/NataSans-Regular.ttf);
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -193,18 +187,15 @@ input[type="number"] {
     border: none;
     outline: none;
     overflow: hidden;
-    background: url(./assets/arrow-sort.png) no-repeat;
-    background-size: contain;
-    background-position-y: center;
-    background-position-x: right;
+    background: transparent;
     font-size: 20px;
     font-weight: 600;
     cursor: pointer;
-    padding-right: 20px;
-    margin-right: 20px;
-    margin-left: 5px;
     color: var(--baby-powder);
     font-family: nata-regular, Arial, Helvetica, sans-serif;
+    margin-right: 65px;
+    padding-left: 2px;
+    appearance: textfield;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -212,12 +203,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-    -moz-appearance: textfield;
-    appearance: textfield;
 }
 
 #hit {
@@ -241,11 +226,10 @@ input[type=number] {
 }
 
 #place-bet {
-    background: url('./assets/enter.png') no-repeat;
-    background-position-y: center;
-    background-position-x: right;
+    background: url('./assets/arrow-sort.png') no-repeat, url('./assets/enter.png') no-repeat;
+    background-position-y: center, center;
+    background-position-x: 140px, right;
     background-size: contain;
-    padding-right: 30px;
     color: var(--baby-powder);
     background-color: rgba(255, 255, 255, 0.055);
 }
@@ -288,7 +272,6 @@ button {
     text-decoration: none;
     transition: 0.1s ease-in-out;
     cursor: pointer;
-    margin-bottom: 3px;
     border: none;
 }
 
