@@ -14,8 +14,8 @@ export class Game {
         this.player = new Player();
     }
     start() {
+        this.initEventListener();
         this.newRound();
-        this.initActions();
     }
     newRound() {
         Game.cardsDealt.length = 0;
@@ -95,10 +95,15 @@ export class Game {
     split() {
         // TODO
     }
-    initActions() {
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
-        this.hitButton.addEventListener('click', () => this.hit());
+    initEventListener() {
+        this.hitListener();
+        this.standListener();
+        this.betListener();
+    }
+    standListener() {
         this.standButton.addEventListener('click', () => this.stand());
+    }
+    betListener() {
         this.betInput.addEventListener('keypress', (event) => {
             event.preventDefault();
             if (event.key === 'Enter') {
@@ -115,11 +120,15 @@ export class Game {
         });
         this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
         this.betInput.addEventListener('blur', () => this.betInput.focus());
+        this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
         this.placeBetButton.addEventListener('click', () => {
             this.bet();
             this.placeBetButton.style.display = 'none';
             this.updateButtons(true, true, [this.hitButton, this.standButton]);
         });
+    }
+    hitListener() {
+        this.hitButton.addEventListener('click', () => this.hit());
     }
     updateButtons(setVisible, setEnabled, buttons) {
         buttons.forEach(button => {

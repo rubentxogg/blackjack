@@ -20,9 +20,9 @@ export class Game {
         this.player = new Player();
     }
 
-    start() {
+    start(): void {
+        this.initEventListener();
         this.newRound();
-        this.initActions();
     }
 
     private newRound(): void {
@@ -120,12 +120,17 @@ export class Game {
         // TODO
     }
 
-    private initActions(): void {
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+    private initEventListener(): void {
+        this.hitListener();
+        this.standListener();
+        this.betListener();
+    }
 
-        this.hitButton.addEventListener('click', () => this.hit());
+    private standListener(): void {
         this.standButton.addEventListener('click', () => this.stand());
+    }
 
+    private betListener(): void {
         this.betInput.addEventListener('keypress', (event) => {
             event.preventDefault();
 
@@ -146,12 +151,17 @@ export class Game {
 
         this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
         this.betInput.addEventListener('blur', () => this.betInput.focus());
+        this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
 
         this.placeBetButton.addEventListener('click', () => {
             this.bet();
             this.placeBetButton.style.display = 'none';
             this.updateButtons(true, true, [this.hitButton, this.standButton]);
         });
+    }
+
+    private hitListener(): void {
+        this.hitButton.addEventListener('click', () => this.hit());
     }
 
     private updateButtons(setVisible: boolean, setEnabled: boolean, buttons: HTMLButtonElement[]): void {
