@@ -9,13 +9,11 @@ export class Dealer extends Role {
     }
 
     protected writeCard(card: Card): void {
-        const isHidden = (this.hand.length === 2);
-
-        super.writeCard(card, isHidden);
+        super.writeCard(card, this.isInitialHand);
     }
 
     protected writeScore(): void {
-        const score = !this.isInitialHand ? undefined : '?';
+        const score = (this.hand.length <= 2) ? '?' : undefined;
 
         super.writeScore(score);
     }

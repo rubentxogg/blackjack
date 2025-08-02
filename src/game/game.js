@@ -7,7 +7,9 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
-        this.TIME_MS = 3e2;
+        this.resultMessage = document.getElementById('result-message');
+        this.DEALER_DELAY_MS = 4e2;
+        this.NEW_ROUND_DELAY_MS = 15e2;
         this.dealer = new Dealer();
         this.player = new Player();
     }
@@ -21,9 +23,9 @@ export class Game {
         this.betInput.max = this.player.money.toString();
         this.dealer.clearHand();
         this.player.clearHand();
-        this.hitButton.style.display = 'none';
-        this.standButton.style.display = 'none';
-        this.placeBetButton.style.display = '';
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, true, [this.placeBetButton]);
+        this.betInput.focus();
     }
     dealCards() {
         [...Array(2)].forEach(() => {
@@ -32,22 +34,20 @@ export class Game {
         });
     }
     hit() {
-        this.hitButton.disabled = true;
-        this.standButton.disabled = true;
+        const buttons = [this.hitButton, this.standButton];
+        this.updateButtons(true, false, buttons);
         this.player.addCard();
-        setTimeout(() => {
-            if (this.player.score > Rules.BLACK_JACK) {
-                this.player.refreshMoneyAfterResult(this.player.lose);
-                this.newRound();
-            }
-            else if (this.player.score === Rules.BLACK_JACK) {
-                this.stand();
-            }
-            else {
-                this.hitButton.disabled = false;
-                this.standButton.disabled = false;
-            }
-        }, this.TIME_MS);
+        if (this.player.score > Rules.BLACK_JACK) {
+            this.player.refreshMoneyAfterResult(this.player.bust);
+            this.setResultMessage(this.player.bust);
+            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+            return;
+        }
+        if (this.player.score === Rules.BLACK_JACK) {
+            this.stand();
+            return;
+        }
+        this.updateButtons(true, true, buttons);
     }
     endRound() {
         let playerResult = null;
@@ -55,32 +55,35 @@ export class Game {
             playerResult = this.player.win;
         }
         else if (this.player.score < this.dealer.score) {
-            playerResult = this.player.lose;
+            playerResult = this.player.bust;
         }
         else {
-            playerResult = this.player.draw;
+            playerResult = this.player.push;
         }
         this.player.refreshMoneyAfterResult(playerResult);
+        this.setResultMessage(playerResult);
+    }
+    setResultMessage(resultFunc) {
+        this.resultMessage.innerText = `${resultFunc.name}!`;
+        this.resultMessage.className = `result-message-${resultFunc.name}`;
+        setTimeout(() => {
+            this.resultMessage.className = '';
+        }, 15e2);
     }
     stand() {
-        this.hitButton.disabled = true;
-        this.standButton.disabled = true;
+        this.updateButtons(true, false, [this.hitButton, this.standButton]);
         this.dealer.flipCard();
-        this.checkDealersTurn();
+        this.startDealersTurn();
     }
-    checkDealersTurn() {
+    startDealersTurn() {
         setTimeout(() => {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
                 this.dealer.addCard();
-                this.checkDealersTurn();
+                return this.startDealersTurn();
             }
-            else {
-                setTimeout(() => {
-                    this.endRound();
-                    setTimeout(() => this.newRound(), this.TIME_MS);
-                }, this.TIME_MS);
-            }
-        }, this.TIME_MS);
+            this.endRound();
+            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+        }, this.DEALER_DELAY_MS);
     }
     bet() {
         this.player.placeBet();
@@ -93,22 +96,36 @@ export class Game {
         // TODO
     }
     initActions() {
-        this.betInput.addEventListener('keypress', (event) => event.preventDefault());
-        this.hitButton.style.display = 'none';
-        this.standButton.style.display = 'none';
-        this.placeBetButton.addEventListener('click', (event) => {
-            if (event.currentTarget !== event.target) {
-                return;
-            }
-            this.bet();
-            this.placeBetButton.style.display = 'none';
-            this.hitButton.style.display = '';
-            this.hitButton.disabled = false;
-            this.standButton.style.display = '';
-            this.standButton.disabled = false;
-        });
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
         this.hitButton.addEventListener('click', () => this.hit());
         this.standButton.addEventListener('click', () => this.stand());
+        this.betInput.addEventListener('keypress', (event) => {
+            event.preventDefault();
+            if (event.key === 'Enter') {
+                this.betInput.click();
+                return;
+            }
+            if (event.key.toLocaleLowerCase() === 'w') {
+                this.betInput.stepUp();
+                return;
+            }
+            if (event.key.toLocaleLowerCase() === 's') {
+                this.betInput.stepDown();
+            }
+        });
+        this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
+        this.betInput.addEventListener('blur', () => this.betInput.focus());
+        this.placeBetButton.addEventListener('click', () => {
+            this.bet();
+            this.placeBetButton.style.display = 'none';
+            this.updateButtons(true, true, [this.hitButton, this.standButton]);
+        });
+    }
+    updateButtons(setVisible, setEnabled, buttons) {
+        buttons.forEach(button => {
+            button.style.display = setVisible ? '' : 'none';
+            button.disabled = !setEnabled;
+        });
     }
 }
 Game.cardsDealt = [];

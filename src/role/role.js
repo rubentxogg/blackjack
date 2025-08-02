@@ -28,9 +28,7 @@ export class Role {
         this.writeScore();
     }
     writeScore(score) {
-        if (this.scoreBox) {
-            this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
-        }
+        this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
     }
     writeCard(card, isHidden) {
         var _a, _b;

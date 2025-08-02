@@ -5,13 +5,13 @@ import { Game as Rules } from "../game/game.constants.js";
 import { Game } from "../game/game.js";
 
 export abstract class Role {
-    private readonly role: HTMLElement | null;
-    private readonly scoreBox: HTMLElement | null;
+    private readonly role: HTMLDivElement;
+    private readonly scoreBox: HTMLSpanElement;
     protected hand: Card[] = [];
 
     constructor(role: string) {
-        this.role = document.getElementById(role);
-        this.scoreBox = document.getElementById(`${role}-score`);
+        this.role = document.getElementById(role) as HTMLDivElement;
+        this.scoreBox = document.getElementById(`${role}-score`) as HTMLSpanElement;
     }
 
     get score() {
@@ -39,9 +39,7 @@ export abstract class Role {
     }
 
     protected writeScore(score?: string) {
-        if (this.scoreBox) {
-            this.scoreBox.innerText = score ?? this.score.toString();
-        }
+        this.scoreBox.innerText = score ?? this.score.toString();
     }
 
     protected writeCard(card: Card, isHidden?: boolean): void {
