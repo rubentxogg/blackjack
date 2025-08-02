@@ -12,7 +12,7 @@ export class Game {
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
     private readonly resultMessage = document.getElementById('result-message') as HTMLSpanElement;
-    private readonly DELAY_MS = 4e2;
+    private readonly DEALER_DELAY_MS = 4e2;
     private readonly NEW_ROUND_DELAY_MS = 15e2;
 
     constructor() {
@@ -99,14 +99,12 @@ export class Game {
         setTimeout(() => {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
                 this.dealer.addCard();
-                this.startDealersTurn();
+                return this.startDealersTurn();
             }
 
-            setTimeout(() => {
-                this.endRound();
-                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-            }, this.DELAY_MS);
-        }, this.DELAY_MS);
+            this.endRound();
+            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+        }, this.DEALER_DELAY_MS);
     }
 
     private bet(): void {

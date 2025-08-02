@@ -302,7 +302,10 @@ hr {
     width: fit-content;
     font-size: 6rem;
     padding: 1rem 2.5rem;
-    border-radius: 6px;
+    border-radius: 50px;
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.300);
+    z-index: 10000 !important;
 }
 
 #result-message::first-letter {

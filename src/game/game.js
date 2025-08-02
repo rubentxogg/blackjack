@@ -8,7 +8,7 @@ export class Game {
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
         this.resultMessage = document.getElementById('result-message');
-        this.DELAY_MS = 4e2;
+        this.DEALER_DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 15e2;
         this.dealer = new Dealer();
         this.player = new Player();
@@ -79,13 +79,11 @@ export class Game {
         setTimeout(() => {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
                 this.dealer.addCard();
-                this.startDealersTurn();
+                return this.startDealersTurn();
             }
-            setTimeout(() => {
-                this.endRound();
-                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-            }, this.DELAY_MS);
-        }, this.DELAY_MS);
+            this.endRound();
+            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+        }, this.DEALER_DELAY_MS);
     }
     bet() {
         this.player.placeBet();
