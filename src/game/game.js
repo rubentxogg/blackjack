@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { Dealer } from "../dealer/dealer.js";
 import { Player } from "../player/player.js";
 import { Game as Rules } from "./game.constants.js";
@@ -9,23 +18,28 @@ export class Game {
         this.standButton = document.getElementById(this.stand.name);
         this.resultMessage = document.getElementById('result-message');
         this.DEALER_DELAY_MS = 4e2;
-        this.NEW_ROUND_DELAY_MS = 15e2;
+        this.NEW_ROUND_DELAY_MS = 1e3;
         this.dealer = new Dealer();
         this.player = new Player();
     }
     start() {
         this.initEventListener();
-        this.newRound();
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
     }
     newRound() {
-        Game.cardsDealt.length = 0;
-        this.betInput.value = String(2);
-        this.betInput.max = this.player.money.toString();
-        this.dealer.clearHand();
-        this.player.clearHand();
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
-        this.updateButtons(true, true, [this.placeBetButton]);
-        this.betInput.focus();
+        return __awaiter(this, void 0, void 0, function* () {
+            Game.cardsDealt.length = 0;
+            this.betInput.value = String(2);
+            this.betInput.max = this.player.money.toString();
+            this.updateButtons(false, false, [this.hitButton, this.standButton]);
+            this.updateButtons(true, false, [this.placeBetButton]);
+            yield Promise.all([
+                this.dealer.clearHand(),
+                this.player.clearHand()
+            ]);
+            this.updateButtons(true, true, [this.placeBetButton]);
+            this.betInput.focus();
+        });
     }
     dealCards() {
         [...Array(2)].forEach(() => {
@@ -138,16 +152,18 @@ export class Game {
      * Allow to use the 'Enter' key to hit after placing a bet
      */
     hitEnterKeyListener() {
-        setTimeout(() => {
-            document.addEventListener('keypress', (event) => {
-                if (!this.hitButton.disabled && (event.key === 'Enter')) {
-                    this.hitButton.click();
-                }
-            }, { once: true });
-        });
+        setTimeout(() => document.addEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true));
+    }
+    hitEnterKeyHandler(event) {
+        if (!this.hitButton.disabled && (event.key === 'Enter')) {
+            this.hit();
+        }
     }
     hitListener() {
-        this.hitButton.addEventListener('click', () => this.hit());
+        this.hitButton.addEventListener('click', () => {
+            document.removeEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true);
+            this.hit();
+        });
     }
     updateButtons(setVisible, setEnabled, buttons) {
         buttons.forEach(button => {

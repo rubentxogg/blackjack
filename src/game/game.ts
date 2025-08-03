@@ -13,7 +13,7 @@ export class Game {
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
     private readonly resultMessage = document.getElementById('result-message') as HTMLSpanElement;
     private readonly DEALER_DELAY_MS = 4e2;
-    private readonly NEW_ROUND_DELAY_MS = 15e2;
+    private readonly NEW_ROUND_DELAY_MS = 1e3;
 
     constructor() {
         this.dealer = new Dealer();
@@ -22,18 +22,22 @@ export class Game {
 
     start(): void {
         this.initEventListener();
-        this.newRound();
+        this.updateButtons(false, false, [this.hitButton, this.standButton]);
     }
 
-    private newRound(): void {
+    private async newRound(): Promise<void> {
         Game.cardsDealt.length = 0;
         this.betInput.value = String(2);
         this.betInput.max = this.player.money.toString();
 
-        this.dealer.clearHand();
-        this.player.clearHand();
-        
         this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, false, [this.placeBetButton]);
+
+        await Promise.all([
+            this.dealer.clearHand(),
+            this.player.clearHand()
+        ]);
+
         this.updateButtons(true, true, [this.placeBetButton]);
         this.betInput.focus();
     }
@@ -173,17 +177,20 @@ export class Game {
      * Allow to use the 'Enter' key to hit after placing a bet
      */
     private hitEnterKeyListener(): void {
-        setTimeout(() => {
-            document.addEventListener('keypress', (event) => {
-                if (!this.hitButton.disabled && (event.key === 'Enter')) {
-                    this.hitButton.click();
-                }
-            }, { once: true });
-        });
+        setTimeout(() => document.addEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true));
     }
 
-    private hitListener(): void {
-        this.hitButton.addEventListener('click', () => this.hit());
+    private hitEnterKeyHandler(event: KeyboardEvent) {
+        if (!this.hitButton.disabled && (event.key === 'Enter')) {
+            this.hit();
+        }
+    }
+
+    private hitListener(): any {
+        this.hitButton.addEventListener('click', () => {
+            document.removeEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true);
+            this.hit();
+        });
     }
 
     private updateButtons(setVisible: boolean, setEnabled: boolean, buttons: HTMLButtonElement[]): void {

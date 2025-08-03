@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Mouse and keyboard control support
+- Clear hand animation
+
+### Fixed
+- Enter key event listener for hit action
 
 ## [0.3.0] - 02/08/2025
 

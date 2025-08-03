@@ -64,14 +64,12 @@ export abstract class Role {
         return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
     }
 
-    clearHand(): void {
+    async clearHand(): Promise<string> {
         this.hand = [];
         this.writeScore();
 
         document.querySelectorAll<HTMLImageElement>(`.${this.role?.id}-card`).forEach(card => card.className = 'clear-hand');
 
-        setTimeout(() => {
-            this.role.innerHTML = '';
-        }, 1e3); 
+        return new Promise(resolve => setTimeout(resolve, 1e3)).then(() => this.role.innerHTML = '');
     }
 }

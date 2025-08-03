@@ -258,7 +258,7 @@ input::-webkit-inner-spin-button {
     animation-duration: 1s;
 }
 
-.money-bust::before {
+.money-bust::after {
     content: '-';
 }
 
@@ -267,7 +267,7 @@ input::-webkit-inner-spin-button {
     animation-duration: 1s;
 }
 
-.money-win::before {
+.money-win::after {
     content: '+';
 }
 
@@ -276,7 +276,7 @@ input::-webkit-inner-spin-button {
     animation-duration: 1s;
 }
 
-.money-push::before {
+.money-push::after {
     content: '=';
 }
 
