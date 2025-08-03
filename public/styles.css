@@ -1,10 +1,22 @@
-@keyframes fade-in {
+@keyframes add-card {
     from {
         opacity: 0;
+        transform: translateY(-20px);
     }
 
     to {
         opacity: 1;
+    }
+}
+
+@keyframes clear-hand {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(100vh);
     }
 }
 
@@ -113,6 +125,7 @@
 
 html {
     height: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -168,11 +181,17 @@ section {
     gap: 25px;
 }
 
-img[class$='card'] {
+img[class$='card'],
+.clear-hand {
     max-width: 150px;
     min-width: 75px;
-    animation-name: fade-in;
-    animation-duration: 1.5s;
+    animation-name: add-card;
+    animation-duration: 1s;
+}
+
+.clear-hand {
+    animation-name: clear-hand;
+    opacity: 0;
 }
 
 .actions {
@@ -236,28 +255,28 @@ input::-webkit-inner-spin-button {
 
 .money-bust {
     animation-name: money-lose;
-    animation-duration: 1.5s;
+    animation-duration: 1s;
 }
 
-.money-bust::after {
+.money-bust::before {
     content: '-';
 }
 
 .money-win {
     animation-name: money-win;
-    animation-duration: 1.5s;
+    animation-duration: 1s;
 }
 
-.money-win::after {
+.money-win::before {
     content: '+';
 }
 
 .money-push {
     animation-name: money-push;
-    animation-duration: 1.5s;
+    animation-duration: 1s;
 }
 
-.money-push::after {
+.money-push::before {
     content: '=';
 }
 
@@ -314,17 +333,17 @@ hr {
 
 #result-message[class$='push'] {
     animation-name: result-message-push;
-    animation-duration: 1.5s;
+    animation-duration: 1.3s;
 }
 
 #result-message[class$='win'] {
     animation-name: result-message-win;
-    animation-duration: 1.5s;
+    animation-duration: 1.3s;
 }
 
 #result-message[class$='bust'] {
     animation-name: result-message-bust;
-    animation-duration: 1.5s;
+    animation-duration: 1.3s;
 }
 
 .score {

@@ -51,6 +51,9 @@ export class Role {
         var _a;
         this.hand = [];
         this.writeScore();
-        document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.remove());
+        document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.className = 'clear-hand');
+        setTimeout(() => {
+            this.role.innerHTML = '';
+        }, 1e3);
     }
 }

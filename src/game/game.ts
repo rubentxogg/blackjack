@@ -32,6 +32,7 @@ export class Game {
 
         this.dealer.clearHand();
         this.player.clearHand();
+        
         this.updateButtons(false, false, [this.hitButton, this.standButton]);
         this.updateButtons(true, true, [this.placeBetButton]);
         this.betInput.focus();
@@ -169,7 +170,7 @@ export class Game {
     }
 
     /**
-     * Allow to use Enter key to hit after place bet
+     * Allow to use the 'Enter' key to hit after placing a bet
      */
     private hitEnterKeyListener(): void {
         setTimeout(() => {

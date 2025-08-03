@@ -135,7 +135,7 @@ export class Game {
         });
     }
     /**
-     * Allow to use Enter key to hit after place bet
+     * Allow to use the 'Enter' key to hit after placing a bet
      */
     hitEnterKeyListener() {
         setTimeout(() => {

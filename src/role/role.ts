@@ -67,6 +67,11 @@ export abstract class Role {
     clearHand(): void {
         this.hand = [];
         this.writeScore();
-        document.querySelectorAll(`.${this.role?.id}-card`).forEach(card => card.remove());
+
+        document.querySelectorAll<HTMLImageElement>(`.${this.role?.id}-card`).forEach(card => card.className = 'clear-hand');
+
+        setTimeout(() => {
+            this.role.innerHTML = '';
+        }, 1e3); 
     }
 }
