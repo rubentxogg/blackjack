@@ -26,13 +26,19 @@
             <button id="hit">Hit</button>
             <button id="stand">Stand</button>
             <button id="place-bet">
-                Place Bet $<input id="bet" type="number" min="2" step="2" autofocus></span>
+                Place Bet $<input id="bet" type="number" min="2" step="2"></span>
             </button>
         </div>
     </main>
 
     <footer>
-        Total money: <span id="player-money"></span>
+        <div class="player-bet">
+            Player bet: <span id="player-bet"></span>
+        </div>
+        -
+        <div class="player-money">
+            Total money: <span id="player-money"></span>
+        </div>
     </footer>
 
     <script type="module" src="/src/index.js"></script>

@@ -7,16 +7,22 @@ export class Player extends Role {
         this.money = 100;
         this.bet = 0;
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`);
+        this.betDisplay = document.getElementById(`${PLAYER}-bet`);
         this.refreshMoney();
+        this.refreshBet();
     }
     placeBet() {
         const bet = document.getElementById('bet').value;
         this.bet = Number.parseInt(bet);
         this.money -= this.bet;
         this.refreshMoney();
+        this.refreshBet();
     }
     refreshMoney() {
         this.moneyDisplay.innerText = `$${this.money.toString()}`;
+    }
+    refreshBet() {
+        this.betDisplay.innerText = `${this.bet.toString()}`;
     }
     refreshMoneyAfterResult(resultFunc) {
         resultFunc.call(this);
@@ -36,6 +42,7 @@ export class Player extends Role {
         this.moneyDisplay.className = `money-${result}`;
         setTimeout(() => {
             this.moneyDisplay.className = '';
+            this.betDisplay.innerText = '0';
         }, 15e2);
     }
     /**

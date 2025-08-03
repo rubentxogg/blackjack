@@ -3,6 +3,7 @@ import { Role } from "../role/role.js";
 
 export class Player extends Role {
     private readonly moneyDisplay: HTMLSpanElement;
+    private readonly betDisplay: HTMLSpanElement;
     money = 100;
     bet = 0;
 
@@ -11,7 +12,10 @@ export class Player extends Role {
         super(PLAYER);
 
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`) as HTMLSpanElement;
+        this.betDisplay = document.getElementById(`${PLAYER}-bet`) as HTMLSpanElement;
+
         this.refreshMoney();
+        this.refreshBet();
     }
 
     placeBet(): void {
@@ -21,13 +25,18 @@ export class Player extends Role {
         this.money -= this.bet;
 
         this.refreshMoney();
+        this.refreshBet();
     }
 
     refreshMoney(): void {
         this.moneyDisplay.innerText = `$${this.money.toString()}`;
     }
 
-    refreshMoneyAfterResult(resultFunc: Function) {
+    private refreshBet(): void {
+        this.betDisplay.innerText = `${this.bet.toString()}`;
+    }
+
+    refreshMoneyAfterResult(resultFunc: Function): void {
         resultFunc.call(this);
         this.refreshMoney();
         this.setResultClass(resultFunc.name);
@@ -49,6 +58,7 @@ export class Player extends Role {
 
         setTimeout(() => {
             this.moneyDisplay.className = '';
+            this.betDisplay.innerText = '0';
         }, 15e2);
     }
 

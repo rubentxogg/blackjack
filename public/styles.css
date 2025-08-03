@@ -147,6 +147,11 @@ footer {
     gap: 8px;
 }
 
+footer {
+    margin: 10px;
+    gap: 30px;
+}
+
 header {
     margin: auto;
 }
@@ -155,7 +160,6 @@ main {
     background-image: url(./assets/poker-table.jpg);
     border-radius: 5px;
     margin: auto;
-    padding: 30px;
     width: 90%;
     height: calc(100vh - 150px);
     display: flex;
@@ -247,7 +251,7 @@ input::-webkit-inner-spin-button {
 #place-bet {
     background: url('./assets/arrow-sort.png') no-repeat, url('./assets/enter.png') no-repeat;
     background-position-y: center, center;
-    background-position-x: 140px, right;
+    background-position-x: calc(100% - 45px), right;
     background-size: contain;
     color: var(--baby-powder);
     background-color: rgba(255, 255, 255, 0.055);
@@ -304,6 +308,10 @@ button:disabled {
     opacity: 0.4;
 }
 
+button:focus {
+    outline: none;
+}
+
 hr {
     border: 0;
     height: 0;
@@ -350,4 +358,16 @@ hr {
     border-radius: 3px;
     padding: 0 10px;
     background-color: rgba(255, 255, 255, 0.250);
+}
+
+.player-money {
+    background: url('./assets/dollar.png') no-repeat;
+    background-size: 25px;
+    padding-left: 28px;
+}
+
+.player-bet {
+    background: url('./assets/bet.png') no-repeat;
+    background-size: 25px;
+    padding-left: 28px;
 }

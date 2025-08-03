@@ -40,7 +40,7 @@ export class Game {
         ]);
 
         this.updateButtons(true, true, [this.placeBetButton]);
-        this.betInput.focus();
+        this.placeBetButton.focus();
     }
 
     private dealCards(): void {
@@ -144,7 +144,7 @@ export class Game {
     }
 
     private betListener(): void {
-        this.betInput.addEventListener('keypress', (event) => {
+        this.placeBetButton.addEventListener('keydown', (event) => {
             event.preventDefault();
 
             if (event.key === 'Enter') {
@@ -152,19 +152,18 @@ export class Game {
                 return;
             }
 
-            if (event.key.toLocaleLowerCase() === 'w') {
+            if ((event.key === 'ArrowUp') || (event.key.toLocaleLowerCase() === 'w')) {
                 this.betInput.stepUp();
                 return;
             }
 
-            if (event.key.toLocaleLowerCase() === 's') {
+            if ((event.key === 'ArrowDown') || (event.key.toLocaleLowerCase() === 's')) {
                 this.betInput.stepDown();
             }
         });
 
         this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
-        this.betInput.addEventListener('blur', () => this.betInput.focus());
-
+        this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
         this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
         this.placeBetButton.addEventListener('click', () => {
             this.hitEnterKeyListener();
