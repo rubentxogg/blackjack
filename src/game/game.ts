@@ -63,6 +63,7 @@ export class Game {
         }
 
         this.updateButtons(true, true, buttons);
+        this.hitEnterKeyListener();
     }
 
     private endRound(): void {
@@ -128,6 +129,12 @@ export class Game {
 
     private standListener(): void {
         this.standButton.addEventListener('click', () => this.stand());
+
+        document.addEventListener('keypress', (event) => {
+            if (!this.standButton.disabled && (event.key === ' ')) {
+                this.stand();
+            }
+        });
     }
 
     private betListener(): void {
@@ -151,12 +158,26 @@ export class Game {
 
         this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
         this.betInput.addEventListener('blur', () => this.betInput.focus());
-        this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
 
+        this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
         this.placeBetButton.addEventListener('click', () => {
+            this.hitEnterKeyListener();
             this.bet();
-            this.placeBetButton.style.display = 'none';
+            this.updateButtons(false, false, [this.placeBetButton]);
             this.updateButtons(true, true, [this.hitButton, this.standButton]);
+        });
+    }
+
+    /**
+     * Allow to use Enter key to hit after place bet
+     */
+    private hitEnterKeyListener(): void {
+        setTimeout(() => {
+            document.addEventListener('keypress', (event) => {
+                if (!this.hitButton.disabled && (event.key === 'Enter')) {
+                    this.hitButton.click();
+                }
+            }, { once: true });
         });
     }
 
