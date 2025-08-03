@@ -18,11 +18,12 @@ export class Game {
     constructor() {
         this.dealer = new Dealer();
         this.player = new Player();
+        this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
 
     start(): void {
         this.initEventListener();
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.newRound();
     }
 
     private async newRound(): Promise<void> {
@@ -177,7 +178,9 @@ export class Game {
      * Allow to use the 'Enter' key to hit after placing a bet
      */
     private hitEnterKeyListener(): void {
-        setTimeout(() => document.addEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true));
+        setTimeout(() => {
+            document.addEventListener('keypress', this.hitEnterKeyHandler, true,)
+        });
     }
 
     private hitEnterKeyHandler(event: KeyboardEvent) {
@@ -188,7 +191,7 @@ export class Game {
 
     private hitListener(): any {
         this.hitButton.addEventListener('click', () => {
-            document.removeEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true);
+            document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
             this.hit();
         });
     }

@@ -21,10 +21,11 @@ export class Game {
         this.NEW_ROUND_DELAY_MS = 1e3;
         this.dealer = new Dealer();
         this.player = new Player();
+        this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
     start() {
         this.initEventListener();
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.newRound();
     }
     newRound() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -152,7 +153,9 @@ export class Game {
      * Allow to use the 'Enter' key to hit after placing a bet
      */
     hitEnterKeyListener() {
-        setTimeout(() => document.addEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true));
+        setTimeout(() => {
+            document.addEventListener('keypress', this.hitEnterKeyHandler, true);
+        });
     }
     hitEnterKeyHandler(event) {
         if (!this.hitButton.disabled && (event.key === 'Enter')) {
@@ -161,7 +164,7 @@ export class Game {
     }
     hitListener() {
         this.hitButton.addEventListener('click', () => {
-            document.removeEventListener('keypress', (event) => this.hitEnterKeyHandler(event), true);
+            document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
             this.hit();
         });
     }
