@@ -16,6 +16,7 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
+        this.howToPlayButton = document.getElementById('how-to-play');
         this.resultMessage = document.getElementById('result-message');
         this.DEALER_DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 1e3;
@@ -49,6 +50,7 @@ export class Game {
         });
     }
     hit() {
+        this.ripple(this.hitButton);
         const buttons = [this.hitButton, this.standButton];
         this.updateButtons(true, false, buttons);
         this.player.addCard();
@@ -64,6 +66,10 @@ export class Game {
         }
         this.updateButtons(true, true, buttons);
         this.hitEnterKeyListener();
+    }
+    ripple(button) {
+        button.classList.add('ripple');
+        setTimeout(() => button.classList.remove('ripple'), 500);
     }
     endRound() {
         let playerResult = null;
@@ -87,6 +93,7 @@ export class Game {
         }, 15e2);
     }
     stand() {
+        this.ripple(this.standButton);
         this.updateButtons(true, false, [this.hitButton, this.standButton]);
         this.dealer.flipCard();
         this.startDealersTurn();
@@ -112,9 +119,16 @@ export class Game {
         // TODO
     }
     initEventListener() {
+        this.howToPlayListener();
         this.hitListener();
         this.standListener();
         this.betListener();
+    }
+    howToPlayListener() {
+        // TODO show rules and controls
+        this.howToPlayButton.addEventListener('click', () => {
+            this.ripple(this.howToPlayButton);
+        });
     }
     standListener() {
         this.standButton.addEventListener('click', () => this.stand());

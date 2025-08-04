@@ -127,6 +127,16 @@
     }
 }
 
+@keyframes ripple {
+    from {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    to {
+        background-color: none;
+    }
+}
+
 @font-face {
     font-family: nata-regular;
     src: url(./fonts/NataSans-Regular.ttf);
@@ -257,8 +267,9 @@ input::-webkit-inner-spin-button {
     background-color: rgba(255, 255, 255, 0.055);
 }
 
-#hit:not(:disabled):active {
-    background-color: rgba(255, 255, 255, 0.5);
+.ripple {
+    animation: ripple;
+    animation-duration: 500ms;
 }
 
 #stand {
@@ -269,10 +280,6 @@ input::-webkit-inner-spin-button {
     padding-right: 50px;
     color: var(--baby-powder);
     background-color: rgba(255, 255, 255, 0.055);
-}
-
-#stand:not(:disabled):active {
-    background-color: rgba(255, 255, 255, 0.5);
 }
 
 #place-bet {
