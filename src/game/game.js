@@ -18,6 +18,7 @@ export class Game {
         this.standButton = document.getElementById(this.stand.name);
         this.howToPlayButton = document.getElementById('how-to-play');
         this.resultMessage = document.getElementById('result-message');
+        this.howToPlayDialog = document.getElementById('how-to-play-dialog');
         this.DEALER_DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 1e3;
         this.dealer = new Dealer();
@@ -128,6 +129,7 @@ export class Game {
         // TODO show rules and controls
         this.howToPlayButton.addEventListener('click', () => {
             this.ripple(this.howToPlayButton);
+            this.howToPlayDialog.showModal();
         });
     }
     standListener() {

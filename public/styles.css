@@ -417,3 +417,9 @@ hr {
     background-size: 25px;
     padding-left: 28px;
 }
+
+#how-to-play-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
