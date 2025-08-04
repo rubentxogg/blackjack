@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Mouse and keyboard control support
 - Clear hand animation
+- Current player bet display
 
 ### Fixed
 - Enter key event listener for hit action

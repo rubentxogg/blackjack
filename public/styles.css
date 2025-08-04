@@ -26,7 +26,7 @@
     }
 
     50% {
-        color: var(--sea-green);
+        color: var(--green);
     }
 
     100% {
@@ -40,7 +40,7 @@
     }
 
     50% {
-        color: var(--red-ncs);
+        color: var(--red);
     }
 
     100% {
@@ -54,7 +54,7 @@
     }
 
     50% {
-        color: var(--maize);
+        color: var(--yellow);
     }
 
     100% {
@@ -71,7 +71,7 @@
 
     50% {
         opacity: 1;
-        color: var(--maize);
+        color: var(--yellow);
     }
 
     100% {
@@ -88,7 +88,7 @@
 
     50% {
         opacity: 1;
-        color: var(--sea-green);
+        color: var(--green);
     }
 
     100% {
@@ -105,7 +105,21 @@
 
     50% {
         opacity: 1;
-        color: var(--red-ncs);
+        color: var(--red);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fade-in-out {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
     }
 
     100% {
@@ -138,22 +152,27 @@ body {
     font-family: nata-regular, Arial, Helvetica, sans-serif;
 }
 
-header,
 footer {
     width: 100%;
-    margin: 5px;
     display: flex;
     justify-content: center;
-    gap: 8px;
-}
-
-footer {
     margin: 10px;
     gap: 30px;
 }
 
 header {
-    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: -15px;
+}
+
+.how-to-play {
+    background: url('./assets/how-to-play.png') no-repeat;
+    background-size: 25px;
+    padding: 13px;
 }
 
 main {
@@ -238,6 +257,10 @@ input::-webkit-inner-spin-button {
     background-color: rgba(255, 255, 255, 0.055);
 }
 
+#hit:not(:disabled):active {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
 #stand {
     background: url('./assets/spacebar.png') no-repeat;
     background-size: contain;
@@ -246,6 +269,10 @@ input::-webkit-inner-spin-button {
     padding-right: 50px;
     color: var(--baby-powder);
     background-color: rgba(255, 255, 255, 0.055);
+}
+
+#stand:not(:disabled):active {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 #place-bet {
@@ -262,17 +289,9 @@ input::-webkit-inner-spin-button {
     animation-duration: 1s;
 }
 
-.money-bust::after {
-    content: '-';
-}
-
 .money-win {
     animation-name: money-win;
     animation-duration: 1s;
-}
-
-.money-win::after {
-    content: '+';
 }
 
 .money-push {
@@ -282,6 +301,26 @@ input::-webkit-inner-spin-button {
 
 .money-push::after {
     content: '=';
+    position: absolute;
+    animation: fade-in-out;
+    animation-duration: 1s;
+    opacity: 0;
+}
+
+.money-win::after {
+    content: '+';
+    position: absolute;
+    animation: fade-in-out;
+    animation-duration: 1s;
+    opacity: 0;
+}
+
+.money-bust::after {
+    content: '-';
+    position: absolute;
+    animation: fade-in-out;
+    animation-duration: 1s;
+    opacity: 0;
 }
 
 button {
