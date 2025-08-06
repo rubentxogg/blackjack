@@ -62,11 +62,11 @@
     }
 
     25% {
-        color: var(--yellow);
+        color: var(--brown);
     }
 
     50% {
-        color: var(--yellow);
+        color: var(--brown);
     }
 
     100% {
@@ -414,11 +414,12 @@ hr {
     width: fit-content;
     font-size: 4.5em;
     padding: 1rem 2.5rem;
-    border-radius: 5px;
+    border-radius: 10px;
     user-select: none;
     background-color: rgba(0, 0, 0, 0.300);
     z-index: 10000 !important;
     text-transform: capitalize;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 #result-type::first-letter {
@@ -431,7 +432,7 @@ hr {
 }
 
 #result-type[class$='push'] {
-    color: var(--yellow);
+    color: var(--brown);
 }
 
 #result-type[class$='win'] {
@@ -443,7 +444,7 @@ hr {
 }
 
 #result-money[class$='push'] {
-    color: var(--yellow);
+    color: var(--brown);
     animation-name: slide-in;
     animation-duration: 4s;
 }
