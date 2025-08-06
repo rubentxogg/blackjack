@@ -12,7 +12,6 @@ export class Game {
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
     private readonly howToPlayButton = document.getElementById('how-to-play') as HTMLButtonElement;
-    private readonly resultMessage = document.getElementById('result-message') as HTMLSpanElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly DEALER_DELAY_MS = 4e2;
     private readonly NEW_ROUND_DELAY_MS = 1e3;
@@ -42,6 +41,7 @@ export class Game {
         ]);
 
         this.updateButtons(true, true, [this.placeBetButton]);
+        this.player.refreshBet('0');
         this.placeBetButton.focus();
     }
 
@@ -60,8 +60,11 @@ export class Game {
         this.player.addCard();
 
         if (this.player.score > Rules.BLACK_JACK) {
-            this.player.refreshMoneyAfterResult(this.player.bust);
-            this.setResultMessage(this.player.bust);
+            const bust = this.player.bust;
+    
+            this.player.refreshMoneyAfterResult(bust);
+            this.player.setResultMessage(bust);
+
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
         }
@@ -92,16 +95,7 @@ export class Game {
         }
 
         this.player.refreshMoneyAfterResult(playerResult);
-        this.setResultMessage(playerResult);
-    }
-
-    private setResultMessage(resultFunc: Function): void {
-        this.resultMessage.innerText = `${resultFunc.name}!`;
-        this.resultMessage.className = `result-message-${resultFunc.name}`;
-
-        setTimeout(() => {
-            this.resultMessage.className = '';
-        }, 15e2);
+        this.player.setResultMessage(playerResult);
     }
 
     private stand(): void {

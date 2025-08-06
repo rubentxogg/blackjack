@@ -8,8 +8,12 @@ export class Player extends Role {
         this.bet = 0;
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`);
         this.betDisplay = document.getElementById(`${PLAYER}-bet`);
+        this.resultDisplay = document.getElementById('result-message');
         this.refreshMoney();
         this.refreshBet();
+    }
+    get profit() {
+        return this.bet * Rules.ODDS;
     }
     placeBet() {
         const bet = document.getElementById('bet').value;
@@ -21,13 +25,24 @@ export class Player extends Role {
     refreshMoney() {
         this.moneyDisplay.innerText = `$${this.money.toString()}`;
     }
-    refreshBet() {
-        this.betDisplay.innerText = `${this.bet.toString()}`;
+    refreshBet(bet) {
+        this.betDisplay.innerText = bet !== null && bet !== void 0 ? bet : `${this.bet.toString()}`;
     }
     refreshMoneyAfterResult(resultFunc) {
         resultFunc.call(this);
         this.refreshMoney();
         this.setResultClass(resultFunc.name);
+    }
+    setResultMessage(resultFunc) {
+        const result = resultFunc.name;
+        const display = `${result} ${(resultFunc.name === this.win.name)
+            ? ('+$' + this.profit)
+            : '-$' + this.bet}`;
+        this.resultDisplay.innerText = display;
+        this.resultDisplay.className = `result-message-${result}`;
+        setTimeout(() => {
+            this.resultDisplay.className = '';
+        }, 15e2);
     }
     bust() {
         if (this.money <= 0) {
@@ -36,13 +51,12 @@ export class Player extends Role {
         }
     }
     win() {
-        this.money += (this.bet * Rules.ODDS);
+        this.money += this.profit;
     }
     setResultClass(result) {
         this.moneyDisplay.className = `money-${result}`;
         setTimeout(() => {
             this.moneyDisplay.className = '';
-            this.betDisplay.innerText = '0';
         }, 15e2);
     }
     /**

@@ -150,6 +150,10 @@
 html {
     height: 100%;
     overflow-x: hidden;
+    user-select: none; /* CSS3 (little to no support) */
+    -ms-user-select: none; /* IE 10+ */
+    -moz-user-select: none; /* Gecko (Firefox) */
+    -webkit-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 body {
@@ -187,7 +191,7 @@ header {
 
 main {
     background-image: url(./assets/poker-table.jpg);
-    border-radius: 5px;
+    border-radius: 200px;
     margin: auto;
     width: 90%;
     height: calc(100vh - 150px);
@@ -373,9 +377,9 @@ hr {
     right: 0;
     margin: auto;
     width: fit-content;
-    font-size: 6rem;
+    font-size: 4em;
     padding: 1rem 2.5rem;
-    border-radius: 50px;
+    border-radius: 5px;
     user-select: none;
     background-color: rgba(0, 0, 0, 0.300);
     z-index: 10000 !important;
@@ -387,17 +391,17 @@ hr {
 
 #result-message[class$='push'] {
     animation-name: result-message-push;
-    animation-duration: 1.3s;
+    animation-duration: 2s;
 }
 
 #result-message[class$='win'] {
     animation-name: result-message-win;
-    animation-duration: 1.3s;
+    animation-duration: 2s;
 }
 
 #result-message[class$='bust'] {
     animation-name: result-message-bust;
-    animation-duration: 1.3s;
+    animation-duration: 2s;
 }
 
 .score {

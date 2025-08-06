@@ -17,7 +17,6 @@ export class Game {
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
         this.howToPlayButton = document.getElementById('how-to-play');
-        this.resultMessage = document.getElementById('result-message');
         this.howToPlayDialog = document.getElementById('how-to-play-dialog');
         this.DEALER_DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 1e3;
@@ -41,6 +40,7 @@ export class Game {
                 this.player.clearHand()
             ]);
             this.updateButtons(true, true, [this.placeBetButton]);
+            this.player.refreshBet('0');
             this.placeBetButton.focus();
         });
     }
@@ -56,8 +56,9 @@ export class Game {
         this.updateButtons(true, false, buttons);
         this.player.addCard();
         if (this.player.score > Rules.BLACK_JACK) {
-            this.player.refreshMoneyAfterResult(this.player.bust);
-            this.setResultMessage(this.player.bust);
+            const bust = this.player.bust;
+            this.player.refreshMoneyAfterResult(bust);
+            this.player.setResultMessage(bust);
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
         }
@@ -84,14 +85,7 @@ export class Game {
             playerResult = this.player.push;
         }
         this.player.refreshMoneyAfterResult(playerResult);
-        this.setResultMessage(playerResult);
-    }
-    setResultMessage(resultFunc) {
-        this.resultMessage.innerText = `${resultFunc.name}!`;
-        this.resultMessage.className = `result-message-${resultFunc.name}`;
-        setTimeout(() => {
-            this.resultMessage.className = '';
-        }, 15e2);
+        this.player.setResultMessage(playerResult);
     }
     stand() {
         this.ripple(this.standButton);
