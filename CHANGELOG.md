@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 03/08/2025
+## [0.3.1] - 06/08/2025
+
+### Added
+- Styles
+- Show profits or losses in result message
+- Avoid text selection
+
+## [0.3.0] - 03/08/2025
 
 ### Added
 - Mouse and keyboard control support
@@ -15,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Enter key event listener for hit action
 
-## [0.3.0] - 02/08/2025
+## [0.2.0] - 02/08/2025
 
 ### Added
 - Styles
@@ -23,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Wrong delay in stand action
 
-## [0.2.0] - 24/07/2025
+## [0.1.1] - 24/07/2025
 
 ### Added
 - Delay between actions.

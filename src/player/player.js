@@ -8,7 +8,9 @@ export class Player extends Role {
         this.bet = 0;
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`);
         this.betDisplay = document.getElementById(`${PLAYER}-bet`);
-        this.resultDisplay = document.getElementById('result-message');
+        this.resultDisplay = document.getElementById('result-display');
+        this.resultType = document.getElementById('result-type');
+        this.resultMoney = document.getElementById('result-money');
         this.refreshMoney();
         this.refreshBet();
     }
@@ -33,16 +35,20 @@ export class Player extends Role {
         this.refreshMoney();
         this.setResultClass(resultFunc.name);
     }
-    setResultMessage(resultFunc) {
-        const result = resultFunc.name;
-        const display = `${result} ${(resultFunc.name === this.win.name)
-            ? ('+$' + this.profit)
-            : '-$' + this.bet}`;
-        this.resultDisplay.innerText = display;
-        this.resultDisplay.className = `result-message-${result}`;
+    displayResult(resultFunc) {
+        const type = resultFunc.name;
+        this.resultType.innerText = type;
+        const money = (type === this.win.name) ? `+$${this.profit.toString()}` : `-$${this.bet.toString()}`;
+        this.resultMoney.innerText = money;
+        this.resultDisplay.className = 'result-display';
+        this.resultType.className = `result-type-${type}`;
+        this.resultMoney.className = `result-money-${type}`;
         setTimeout(() => {
+            this.resultType.className = '';
+            this.resultMoney.className = '';
             this.resultDisplay.className = '';
-        }, 15e2);
+            this.refreshMoneyAfterResult(resultFunc);
+        }, 3e3);
     }
     bust() {
         if (this.money <= 0) {

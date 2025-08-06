@@ -14,7 +14,7 @@ export class Game {
     private readonly howToPlayButton = document.getElementById('how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly DEALER_DELAY_MS = 4e2;
-    private readonly NEW_ROUND_DELAY_MS = 1e3;
+    private readonly NEW_ROUND_DELAY_MS = 3e3;
 
     constructor() {
         this.dealer = new Dealer();
@@ -60,10 +60,7 @@ export class Game {
         this.player.addCard();
 
         if (this.player.score > Rules.BLACK_JACK) {
-            const bust = this.player.bust;
-    
-            this.player.refreshMoneyAfterResult(bust);
-            this.player.setResultMessage(bust);
+            this.player.displayResult(this.player.bust);
 
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
@@ -94,8 +91,7 @@ export class Game {
             playerResult = this.player.push;
         }
 
-        this.player.refreshMoneyAfterResult(playerResult);
-        this.player.setResultMessage(playerResult);
+        this.player.displayResult(playerResult);
     }
 
     private stand(): void {
