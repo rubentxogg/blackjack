@@ -11,8 +11,7 @@ export class Player extends Role {
         this.resultDisplay = document.getElementById('result-display');
         this.resultType = document.getElementById('result-type');
         this.resultMoney = document.getElementById('result-money');
-        this.refreshMoney();
-        this.refreshBet();
+        this.refreshDisplay();
     }
     get profit() {
         return this.bet * Rules.ODDS;
@@ -21,19 +20,29 @@ export class Player extends Role {
         const bet = document.getElementById('bet').value;
         this.bet = Number.parseInt(bet);
         this.money -= this.bet;
-        this.refreshMoney();
-        this.refreshBet();
+        this.refreshDisplay();
     }
     refreshMoney() {
         this.moneyDisplay.innerText = `$${this.money.toString()}`;
     }
-    refreshBet(bet) {
-        this.betDisplay.innerText = bet !== null && bet !== void 0 ? bet : `${this.bet.toString()}`;
+    refreshBet() {
+        this.betDisplay.innerText = this.bet.toString();
     }
-    refreshMoneyAfterResult(resultFunc) {
-        resultFunc.call(this);
+    refreshDisplay(resultFunc) {
+        let moneyClass = 'refresh';
+        if (resultFunc) {
+            resultFunc.call(this);
+            moneyClass = `money-${resultFunc.name}`;
+            this.bet = 0;
+        }
+        this.betDisplay.className = 'refresh';
+        this.moneyDisplay.className = moneyClass;
         this.refreshMoney();
-        this.setResultClass(resultFunc.name);
+        this.refreshBet();
+        setTimeout(() => {
+            this.moneyDisplay.className = '';
+            this.betDisplay.className = '';
+        }, 5e2);
     }
     displayResult(resultFunc) {
         const type = resultFunc.name;
@@ -47,7 +56,7 @@ export class Player extends Role {
             this.resultType.className = '';
             this.resultMoney.className = '';
             this.resultDisplay.className = '';
-            this.refreshMoneyAfterResult(resultFunc);
+            this.refreshDisplay(resultFunc);
         }, 3e3);
     }
     bust() {
@@ -58,12 +67,6 @@ export class Player extends Role {
     }
     win() {
         this.money += this.profit;
-    }
-    setResultClass(result) {
-        this.moneyDisplay.className = `money-${result}`;
-        setTimeout(() => {
-            this.moneyDisplay.className = '';
-        }, 15e2);
     }
     /**
      * Occurs when the player and the dealer have the same total value for their hands at the end of a round.

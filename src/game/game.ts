@@ -41,7 +41,6 @@ export class Game {
         ]);
 
         this.updateButtons(true, true, [this.placeBetButton]);
-        this.player.refreshBet('0');
         this.placeBetButton.focus();
     }
 
@@ -152,6 +151,12 @@ export class Game {
     }
 
     private betListener(): void {
+        document.addEventListener('mouseenter', () => {
+            if(!this.placeBetButton.disabled) {
+                this.placeBetButton.focus();
+            }
+        });
+
         this.placeBetButton.addEventListener('keydown', (event) => {
             event.preventDefault();
 

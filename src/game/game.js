@@ -40,7 +40,6 @@ export class Game {
                 this.player.clearHand()
             ]);
             this.updateButtons(true, true, [this.placeBetButton]);
-            this.player.refreshBet('0');
             this.placeBetButton.focus();
         });
     }
@@ -132,6 +131,11 @@ export class Game {
         });
     }
     betListener() {
+        document.addEventListener('mouseenter', () => {
+            if (!this.placeBetButton.disabled) {
+                this.placeBetButton.focus();
+            }
+        });
         this.placeBetButton.addEventListener('keydown', (event) => {
             event.preventDefault();
             if (event.key === 'Enter') {

@@ -21,8 +21,7 @@ export class Player extends Role {
         this.resultType = document.getElementById('result-type') as HTMLSpanElement;
         this.resultMoney = document.getElementById('result-money') as HTMLSpanElement;
 
-        this.refreshMoney();
-        this.refreshBet();
+        this.refreshDisplay();
     }
 
     get profit() {
@@ -35,22 +34,35 @@ export class Player extends Role {
         this.bet = Number.parseInt(bet);
         this.money -= this.bet;
 
-        this.refreshMoney();
-        this.refreshBet();
+        this.refreshDisplay();
     }
 
     refreshMoney(): void {
         this.moneyDisplay.innerText = `$${this.money.toString()}`;
     }
 
-    refreshBet(bet?: string): void {
-        this.betDisplay.innerText = bet ?? `${this.bet.toString()}`;
+    refreshBet(): void {
+        this.betDisplay.innerText = this.bet.toString();
     }
 
-    private refreshMoneyAfterResult(resultFunc: Function): void {
-        resultFunc.call(this);
+    private refreshDisplay(resultFunc?: Function): void {
+        let moneyClass = 'refresh';
+
+        if(resultFunc) {
+            resultFunc.call(this);
+            moneyClass = `money-${resultFunc.name}`;
+            this.bet = 0;
+        }
+        
+        this.betDisplay.className = 'refresh';
+        this.moneyDisplay.className = moneyClass;
         this.refreshMoney();
-        this.setResultClass(resultFunc.name);
+        this.refreshBet();
+
+        setTimeout(() => {
+            this.moneyDisplay.className = '';
+            this.betDisplay.className = '';
+        }, 5e2);
     }
 
     displayResult(resultFunc: Function): void {
@@ -68,7 +80,7 @@ export class Player extends Role {
             this.resultType.className = '';
             this.resultMoney.className = '';
             this.resultDisplay.className = '';
-            this.refreshMoneyAfterResult(resultFunc);
+            this.refreshDisplay(resultFunc);
         }, 3e3);
     }
 
@@ -81,14 +93,6 @@ export class Player extends Role {
 
     win(): void {
         this.money += this.profit;
-    }
-
-    private setResultClass(result: string): void {
-        this.moneyDisplay.className = `money-${result}`;
-
-        setTimeout(() => {
-            this.moneyDisplay.className = '';
-        }, 15e2);
     }
 
     /**

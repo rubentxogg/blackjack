@@ -62,11 +62,11 @@
     }
 
     25% {
-        color: var(--brown);
+        color: var(--gray);
     }
 
     50% {
-        color: var(--brown);
+        color: var(--gray);
     }
 
     100% {
@@ -144,17 +144,17 @@
     }
 }
 
-@keyframes fade-in-out {
+@keyframes refresh {
     0% {
         opacity: 0;
     }
 
     50% {
-        opacity: 1;
+        opacity: 0;
     }
 
     100% {
-        opacity: 0;
+        opacity: 1;
     }
 }
 
@@ -189,6 +189,7 @@ html {
     /* Gecko (Firefox) */
     -webkit-user-select: none;
     /* Webkit (Safari, Chrome) */
+    transition: all 1s ease-in-out;
 }
 
 body {
@@ -332,17 +333,17 @@ input::-webkit-inner-spin-button {
 
 .money-bust {
     animation-name: money-lose;
-    animation-duration: 1s;
+    animation-duration: 500ms;
 }
 
 .money-win {
     animation-name: money-win;
-    animation-duration: 1s;
+    animation-duration: 500ms;
 }
 
 .money-push {
     animation-name: money-push;
-    animation-duration: 1s;
+    animation-duration: 500ms;
 }
 
 button {
@@ -432,7 +433,7 @@ hr {
 }
 
 #result-type[class$='push'] {
-    color: var(--brown);
+    color: var(--gray);
 }
 
 #result-type[class$='win'] {
@@ -444,7 +445,7 @@ hr {
 }
 
 #result-money[class$='push'] {
-    color: var(--brown);
+    color: var(--gray);
     animation-name: slide-in;
     animation-duration: 4s;
 }
@@ -459,4 +460,9 @@ hr {
     color: var(--red);
     animation-name: slide-in;
     animation-duration: 4s;
+}
+
+.refresh {
+    animation-name: refresh;
+    animation-duration: 500ms;
 }
