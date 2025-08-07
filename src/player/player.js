@@ -47,7 +47,13 @@ export class Player extends Role {
     displayResult(resultFunc) {
         const type = resultFunc.name;
         this.resultType.innerText = type;
-        const money = (type === this.win.name) ? `+$${this.profit.toString()}` : `-$${this.bet.toString()}`;
+        let money = '';
+        if (type === this.win.name) {
+            money = `+$${this.profit.toString()}`;
+        }
+        else if (type === this.bust.name) {
+            money = `-$${this.bet.toString()}`;
+        }
         this.resultMoney.innerText = money;
         this.resultDisplay.className = 'result-display';
         this.resultType.className = `result-type-${type}`;
@@ -61,7 +67,7 @@ export class Player extends Role {
     }
     bust() {
         if (this.money <= 0) {
-            alert("No money left, game will restart");
+            alert("You've run out of money. \nGame will restart, good luck!");
             location.reload();
         }
     }
