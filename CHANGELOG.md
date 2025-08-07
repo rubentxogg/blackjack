@@ -7,10 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.1] - 07/08/2025
 
-### Fixed
-- Input bet step now accepts decimals if the player's money is decimal.
-
 ### Changed
+- 1:1 payment.
 - Result message display.
 
 ## [0.3.0] - 06/08/2025

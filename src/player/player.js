@@ -1,4 +1,3 @@
-import { Game as Rules } from "../game/game.constants.js";
 import { Role } from "../role/role.js";
 export class Player extends Role {
     constructor() {
@@ -13,8 +12,8 @@ export class Player extends Role {
         this.resultMoney = document.getElementById('result-money');
         this.refreshDisplay();
     }
-    get profit() {
-        return this.bet * Rules.PAYOUT;
+    get payment() {
+        return this.bet;
     }
     placeBet() {
         const bet = document.getElementById('bet').value;
@@ -49,7 +48,7 @@ export class Player extends Role {
         this.resultType.innerText = type;
         let money = '';
         if (type === this.win.name) {
-            money = `+$${this.profit.toString()}`;
+            money = `+$${this.payment.toString()}`;
         }
         else if (type === this.bust.name) {
             money = `-$${this.bet.toString()}`;
@@ -72,7 +71,7 @@ export class Player extends Role {
         }
     }
     win() {
-        this.money += this.profit;
+        this.money += this.payment;
     }
     /**
      * Occurs when the player and the dealer have the same total value for their hands at the end of a round.

@@ -28,7 +28,7 @@ export abstract class Role {
 
         const card = new Card(suit, rank);
 
-        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACK_JACK)) {
+        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACKJACK)) {
             card.dictionary.set(Rank.ACE, 1);
         }
 
@@ -61,7 +61,7 @@ export abstract class Role {
     }
 
     hasBlackjack(): boolean {
-        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
 
     async clearHand(): Promise<string> {

@@ -61,12 +61,12 @@ export class Game {
         const buttons = [this.hitButton, this.standButton];
         this.updateButtons(true, false, buttons);
         this.player.addCard();
-        if (this.player.score > Rules.BLACK_JACK) {
+        if (this.player.score > Rules.BLACKJACK) {
             this.player.displayResult(this.player.bust);
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
         }
-        if (this.player.score === Rules.BLACK_JACK) {
+        if (this.player.score === Rules.BLACKJACK) {
             this.stand();
             return;
         }
@@ -79,7 +79,7 @@ export class Game {
     }
     endRound() {
         let playerResult = null;
-        if ((this.player.score <= Rules.BLACK_JACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACK_JACK))) {
+        if ((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) {
             playerResult = this.player.win;
         }
         else if (this.player.score < this.dealer.score) {

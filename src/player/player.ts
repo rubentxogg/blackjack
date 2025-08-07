@@ -24,8 +24,8 @@ export class Player extends Role {
         this.refreshDisplay();
     }
 
-    get profit() {
-        return this.bet * Rules.PAYOUT;
+    get payment() {
+        return this.bet;
     }
 
     placeBet(): void {
@@ -72,7 +72,7 @@ export class Player extends Role {
         let money = '';
 
         if (type === this.win.name) {
-            money = `+$${this.profit.toString()}`;
+            money = `+$${this.payment.toString()}`;
         } else if (type === this.bust.name) {
             money = `-$${this.bet.toString()}`;
         }
@@ -98,7 +98,7 @@ export class Player extends Role {
     }
 
     win(): void {
-        this.money += this.profit;
+        this.money += this.payment;
     }
 
     /**
