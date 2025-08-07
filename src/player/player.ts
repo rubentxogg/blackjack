@@ -25,13 +25,13 @@ export class Player extends Role {
     }
 
     get profit() {
-        return this.bet * Rules.ODDS;
+        return this.bet * Rules.PAYOUT;
     }
 
     placeBet(): void {
         const bet = (document.getElementById('bet') as HTMLInputElement).value;
 
-        this.bet = Number.parseInt(bet);
+        this.bet = Number(bet);
         this.money -= this.bet;
 
         this.refreshDisplay();

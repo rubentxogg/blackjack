@@ -22,7 +22,7 @@ export class Game {
         this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
 
-    get betInputStep(): string {
+    get betInputMin(): string {
         if(this.player.money % 1) {
             return String(0.5);
         }
@@ -37,7 +37,8 @@ export class Game {
 
     private async newRound(): Promise<void> {
         Game.cardsDealt.length = 0;
-        this.betInput.value = this.betInputStep;
+        this.betInput.min = this.betInputMin;
+        this.betInput.value = this.betInput.min;
         this.betInput.max = this.player.money.toString();
 
         this.updateButtons(false, false, [this.hitButton, this.standButton]);
@@ -184,7 +185,7 @@ export class Game {
         });
 
         this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
-        this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputStep);
+        this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
         this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
         this.placeBetButton.addEventListener('click', () => {
             this.hitEnterKeyListener();

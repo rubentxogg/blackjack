@@ -14,11 +14,11 @@ export class Player extends Role {
         this.refreshDisplay();
     }
     get profit() {
-        return this.bet * Rules.ODDS;
+        return this.bet * Rules.PAYOUT;
     }
     placeBet() {
         const bet = document.getElementById('bet').value;
-        this.bet = Number.parseInt(bet);
+        this.bet = Number(bet);
         this.money -= this.bet;
         this.refreshDisplay();
     }
