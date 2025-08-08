@@ -485,3 +485,11 @@ hr {
     animation-name: refresh;
     animation-duration: 500ms;
 }
+
+#version {
+    position: absolute;
+    right: 5px;
+    bottom: 0;
+    color: var(--gray);
+    font-size: 12px;
+}
