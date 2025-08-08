@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Suit } from "../card/suit.enum.js";
@@ -19,7 +28,7 @@ export class Role {
             return this.addCard();
         }
         const card = new Card(suit, rank);
-        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACK_JACK)) {
+        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACKJACK)) {
             card.dictionary.set(Rank.ACE, 1);
         }
         Game.cardsDealt.push(card);
@@ -45,12 +54,15 @@ export class Role {
         return enumeration[enumKey];
     }
     hasBlackjack() {
-        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
     clearHand() {
-        var _a;
-        this.hand = [];
-        this.writeScore();
-        document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.remove());
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            this.hand = [];
+            this.writeScore();
+            document.querySelectorAll(`.${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`).forEach(card => card.className = 'clear-hand');
+            return new Promise(resolve => setTimeout(resolve, 1e3)).then(() => this.role.innerHTML = '');
+        });
     }
 }

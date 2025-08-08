@@ -6,12 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="palette.css">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/x-icon" href="./assets/icon.svg">
+    <link rel="icon" type="image/x-icon" href="./assets/icon.png">
     <title>Blackjack 3:2</title>
 </head>
 
 <body>
-    <header>Blackjack 3:2</header>
+    <header>
+        <button id="how-to-play" class="how-to-play"></button> Blackjack
+        <dialog id="how-to-play-dialog">
+            <button id="close-how-to-play">X</button>
+
+            <section id="rules">
+                <h2>RULES</h2>
+
+                <article>
+                    <h3>Rule 1</h3>
+                </article>
+
+                <article>
+                    <h3>Rule 2</h3>
+                </article>
+            </section>
+
+            <section id="controls">
+                <h2>CONTROLS</h2>
+
+                <article>
+                    <h3>Stand</h3>
+                </article>
+
+                <article>
+                    <h3>HIT</h3>
+                </article>
+
+                <article>
+                    <h3>BET</h3>
+                </article>
+            </section>
+        </dialog>
+    </header>
 
     <main>
         <h2>Dealer <span id="dealer-score" class="score"></span></h2>
@@ -20,19 +53,28 @@
         <h2>Player <span id="player-score" class="score"></span></h2>
         <section id="player" class="hand"></section>
 
-        <span id="result-message"></span>
+        <div id="result-display">
+            <span id="result-type"></span>
+            <span id="result-money"></span>
+        </div>
 
         <div class="actions">
             <button id="hit">Hit</button>
             <button id="stand">Stand</button>
             <button id="place-bet">
-                Place Bet $<input id="bet" type="number" min="2" step="2" autofocus></span>
+                Place Bet $<input id="bet" type="number"></span>
             </button>
         </div>
     </main>
 
     <footer>
-        Total money: <span id="player-money"></span>
+        <div class="player-bet">
+            Player bet: <span id="player-bet"></span>
+        </div>
+        -
+        <div class="player-money">
+            Total money: <span id="player-money"></span>
+        </div>
     </footer>
 
     <script type="module" src="/src/index.js"></script>

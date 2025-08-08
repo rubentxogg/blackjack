@@ -1,6 +1,7 @@
-@keyframes fade-in {
+@keyframes add-card {
     from {
         opacity: 0;
+        transform: translateY(-20px);
     }
 
     to {
@@ -8,13 +9,29 @@
     }
 }
 
+@keyframes clear-hand {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(100vh);
+    }
+}
+
 @keyframes money-win {
     0% {
+        opacity: 0;
         color: var(--baby-powder);
     }
 
+    25% {
+        color: var(--green);
+    }
+
     50% {
-        color: var(--sea-green);
+        color: var(--green);
     }
 
     100% {
@@ -27,8 +44,12 @@
         color: var(--baby-powder);
     }
 
+    25% {
+        color: var(--red);
+    }
+
     50% {
-        color: var(--red-ncs);
+        color: var(--red);
     }
 
     100% {
@@ -38,11 +59,16 @@
 
 @keyframes money-push {
     0% {
+        opacity: 0;
         color: var(--baby-powder);
     }
 
+    25% {
+        color: var(--gray);
+    }
+
     50% {
-        color: var(--maize);
+        color: var(--gray);
     }
 
     100% {
@@ -50,16 +76,14 @@
     }
 }
 
-@keyframes result-message-push {
+@keyframes result-type {
     0% {
         visibility: visible;
         opacity: 0;
-        color: var(--baby-powder);
     }
 
     50% {
         opacity: 1;
-        color: var(--maize);
     }
 
     100% {
@@ -67,37 +91,93 @@
     }
 }
 
-@keyframes result-message-win {
+@keyframes slide-in {
     0% {
         visibility: visible;
         opacity: 0;
-        color: var(--baby-powder);
+        margin-left: -100vh;
     }
 
-    50% {
+    20% {
+        opacity: 0;
+        margin-left: 0px;
+    }
+
+    35% {
         opacity: 1;
-        color: var(--sea-green);
+        margin-left: 0px;
     }
 
     100% {
+        opacity: 1;
+        margin-left: 0px;
+    }
+}
+
+@keyframes result-display {
+    0% {
+        visibility: visible;
+        opacity: 0;
+    }
+
+    20% {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    35% {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    50% {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    75% {
+        visibility: visible;
+        opacity: 0;
+    }
+
+    100% {
+        visibility: visible;
         opacity: 0;
     }
 }
 
-@keyframes result-message-bust {
+@keyframes refresh {
     0% {
-        visibility: visible;
         opacity: 0;
-        color: var(--baby-powder);
     }
 
     50% {
-        opacity: 1;
-        color: var(--red-ncs);
+        opacity: 0;
     }
 
     100% {
+        opacity: 1;
+    }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(180deg);
         opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes ripple {
+    from {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    to {
+        background-color: none;
     }
 }
 
@@ -113,6 +193,16 @@
 
 html {
     height: 100%;
+    overflow-x: hidden;
+    user-select: none;
+    /* CSS3 (little to no support) */
+    -ms-user-select: none;
+    /* IE 10+ */
+    -moz-user-select: none;
+    /* Gecko (Firefox) */
+    -webkit-user-select: none;
+    /* Webkit (Safari, Chrome) */
+    transition: all 1s ease-in-out;
 }
 
 body {
@@ -125,24 +215,33 @@ body {
     font-family: nata-regular, Arial, Helvetica, sans-serif;
 }
 
-header,
 footer {
     width: 100%;
-    margin: 5px;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    margin: 10px;
+    gap: 30px;
 }
 
 header {
-    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: -15px;
+}
+
+.how-to-play {
+    background: url('./assets/how-to-play.png') no-repeat;
+    background-size: 25px;
+    padding: 13px;
 }
 
 main {
     background-image: url(./assets/poker-table.jpg);
-    border-radius: 5px;
+    border-radius: 200px;
     margin: auto;
-    padding: 30px;
     width: 90%;
     height: calc(100vh - 150px);
     display: flex;
@@ -168,11 +267,22 @@ section {
     gap: 25px;
 }
 
-img[class$='card'] {
+img[class$='card'],
+.clear-hand {
     max-width: 150px;
     min-width: 75px;
-    animation-name: fade-in;
-    animation-duration: 1.5s;
+    animation-name: add-card;
+    animation-duration: 1s;
+}
+
+.clear-hand {
+    animation-name: clear-hand;
+    opacity: 0;
+}
+
+.flip {
+    animation-name: flip !important;
+    animation-duration: 500ms !important;
 }
 
 .actions {
@@ -215,6 +325,11 @@ input::-webkit-inner-spin-button {
     background-color: rgba(255, 255, 255, 0.055);
 }
 
+.ripple {
+    animation: ripple;
+    animation-duration: 500ms;
+}
+
 #stand {
     background: url('./assets/spacebar.png') no-repeat;
     background-size: contain;
@@ -228,7 +343,7 @@ input::-webkit-inner-spin-button {
 #place-bet {
     background: url('./assets/arrow-sort.png') no-repeat, url('./assets/enter.png') no-repeat;
     background-position-y: center, center;
-    background-position-x: 140px, right;
+    background-position-x: calc(100% - 45px), right;
     background-size: contain;
     color: var(--baby-powder);
     background-color: rgba(255, 255, 255, 0.055);
@@ -236,29 +351,17 @@ input::-webkit-inner-spin-button {
 
 .money-bust {
     animation-name: money-lose;
-    animation-duration: 1.5s;
-}
-
-.money-bust::after {
-    content: '-';
+    animation-duration: 500ms;
 }
 
 .money-win {
     animation-name: money-win;
-    animation-duration: 1.5s;
-}
-
-.money-win::after {
-    content: '+';
+    animation-duration: 500ms;
 }
 
 .money-push {
     animation-name: money-push;
-    animation-duration: 1.5s;
-}
-
-.money-push::after {
-    content: '=';
+    animation-duration: 500ms;
 }
 
 button {
@@ -285,6 +388,10 @@ button:disabled {
     opacity: 0.4;
 }
 
+button:focus {
+    outline: none;
+}
+
 hr {
     border: 0;
     height: 0;
@@ -293,42 +400,88 @@ hr {
     width: 40%;
 }
 
-#result-message {
+.score {
+    border-radius: 3px;
+    padding: 0 10px;
+    background-color: rgba(255, 255, 255, 0.250);
+}
+
+.player-money {
+    background: url('./assets/dollar.png') no-repeat;
+    background-size: 25px;
+    padding-left: 28px;
+}
+
+.player-bet {
+    background: url('./assets/bet.png') no-repeat;
+    background-size: 25px;
+    padding-left: 28px;
+}
+
+#how-to-play-dialog {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    backdrop-filter: blur(2px);
+}
+
+#result-display {
     visibility: hidden;
     position: absolute;
     left: 0;
     right: 0;
     margin: auto;
     width: fit-content;
-    font-size: 6rem;
+    font-size: 7.5em;
     padding: 1rem 2.5rem;
-    border-radius: 50px;
+    border-radius: 10px;
     user-select: none;
-    background-color: rgba(0, 0, 0, 0.300);
+    background-color: rgba(0, 0, 0, 0.041);
     z-index: 10000 !important;
+    text-transform: capitalize;
+    text-shadow: 0 13.36px 8.896px #00000093,0 -2px 1px #00000038;
 }
 
-#result-message::first-letter {
-    text-transform: uppercase;
+#result-type::first-letter {
+    text-transform: capitalize;
 }
 
-#result-message[class$='push'] {
-    animation-name: result-message-push;
-    animation-duration: 1.5s;
+.result-display {
+    animation: result-display;
+    animation-duration: 4s;
 }
 
-#result-message[class$='win'] {
-    animation-name: result-message-win;
-    animation-duration: 1.5s;
+#result-type[class$='push'] {
+    color: var(--gray);
 }
 
-#result-message[class$='bust'] {
-    animation-name: result-message-bust;
-    animation-duration: 1.5s;
+#result-type[class$='win'] {
+    color: var(--green);
 }
 
-.score {
-    border-radius: 3px;
-    padding: 0 10px;
-    background-color: rgba(255, 255, 255, 0.250);
+#result-type[class$='bust'] {
+    color: var(--red);
+}
+
+#result-money[class$='push'] {
+    color: var(--gray);
+    animation-name: slide-in;
+    animation-duration: 4s;
+}
+
+#result-money[class$='win'] {
+    color: var(--green);
+    animation-name: slide-in;
+    animation-duration: 4s;
+}
+
+#result-money[class$='bust'] {
+    color: var(--red);
+    animation-name: slide-in;
+    animation-duration: 4s;
+}
+
+.refresh {
+    animation-name: refresh;
+    animation-duration: 500ms;
 }

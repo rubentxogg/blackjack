@@ -16,12 +16,11 @@ export class Dealer extends Role {
         }
         const secondCard = this.hand[1];
         const hiddenCard = document.getElementById(`${secondCard.face}-hidden`);
-        if (hiddenCard) {
-            hiddenCard.src = `./assets/${secondCard.face}.svg`;
-            hiddenCard.alt = secondCard.face;
-            hiddenCard.id = hiddenCard.alt;
-            super.writeScore(this.score.toString());
-        }
+        hiddenCard.className = `flip ${hiddenCard.className}`;
+        hiddenCard.src = `./assets/${secondCard.face}.svg`;
+        hiddenCard.alt = secondCard.face;
+        hiddenCard.id = secondCard.face;
+        super.writeScore(this.score.toString());
     }
     get isInitialHand() {
         return this.hand.length === 2;

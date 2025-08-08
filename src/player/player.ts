@@ -1,8 +1,12 @@
-import { Game as Rules } from "../game/game.constants.js";
 import { Role } from "../role/role.js";
 
 export class Player extends Role {
     private readonly moneyDisplay: HTMLSpanElement;
+    private readonly betDisplay: HTMLSpanElement;
+    private readonly resultDisplay: HTMLDivElement;
+    private readonly resultType: HTMLSpanElement;
+    private readonly resultMoney: HTMLSpanElement;
+
     money = 100;
     bet = 0;
 
@@ -11,45 +15,89 @@ export class Player extends Role {
         super(PLAYER);
 
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`) as HTMLSpanElement;
-        this.refreshMoney();
+        this.betDisplay = document.getElementById(`${PLAYER}-bet`) as HTMLSpanElement;
+        this.resultDisplay = document.getElementById('result-display') as HTMLDivElement;
+        this.resultType = document.getElementById('result-type') as HTMLSpanElement;
+        this.resultMoney = document.getElementById('result-money') as HTMLSpanElement;
+
+        this.refreshDisplay();
+    }
+
+    get payment() {
+        return this.bet;
     }
 
     placeBet(): void {
         const bet = (document.getElementById('bet') as HTMLInputElement).value;
 
-        this.bet = Number.parseInt(bet);
+        this.bet = Number(bet);
         this.money -= this.bet;
 
-        this.refreshMoney();
+        this.refreshDisplay();
     }
 
     refreshMoney(): void {
         this.moneyDisplay.innerText = `$${this.money.toString()}`;
     }
 
-    refreshMoneyAfterResult(resultFunc: Function) {
-        resultFunc.call(this);
+    refreshBet(): void {
+        this.betDisplay.innerText = this.bet.toString();
+    }
+
+    private refreshDisplay(resultFunc?: Function): void {
+        let moneyClass = 'refresh';
+
+        if (resultFunc) {
+            resultFunc.call(this);
+            moneyClass = `money-${resultFunc.name}`;
+            this.bet = 0;
+        }
+
+        this.betDisplay.className = 'refresh';
+        this.moneyDisplay.className = moneyClass;
         this.refreshMoney();
-        this.setResultClass(resultFunc.name);
+        this.refreshBet();
+
+        setTimeout(() => {
+            this.moneyDisplay.className = '';
+            this.betDisplay.className = '';
+        }, 5e2);
+    }
+
+    displayResult(resultFunc: Function): void {
+        const type = resultFunc.name;
+        this.resultType.innerText = type;
+
+        let money = '';
+
+        if (type === this.win.name) {
+            money = `+$${this.payment.toString()}`;
+        } else if (type === this.bust.name) {
+            money = `-$${this.bet.toString()}`;
+        }
+
+        this.resultMoney.innerText = money;
+        this.resultDisplay.className = 'result-display';
+        this.resultType.className = `result-type-${type}`;
+        this.resultMoney.className = `result-money-${type}`;
+
+        setTimeout(() => {
+            this.resultType.className = '';
+            this.resultMoney.className = '';
+            this.resultDisplay.className = '';
+            this.refreshDisplay(resultFunc);
+        }, 3e3);
     }
 
     bust(): void {
         if (this.money <= 0) {
-            alert("No money left, game will restart");
+            alert("You've run out of money. \nGame will restart, good luck!");
             location.reload();
         }
     }
 
     win(): void {
-        this.money += (this.bet * Rules.ODDS);
-    }
-
-    private setResultClass(result: string): void {
-        this.moneyDisplay.className = `money-${result}`;
-
-        setTimeout(() => {
-            this.moneyDisplay.className = '';
-        }, 15e2);
+        this.money += this.payment;
     }
 
     /**

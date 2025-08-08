@@ -28,7 +28,7 @@ export abstract class Role {
 
         const card = new Card(suit, rank);
 
-        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACK_JACK)) {
+        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACKJACK)) {
             card.dictionary.set(Rank.ACE, 1);
         }
 
@@ -61,12 +61,15 @@ export abstract class Role {
     }
 
     hasBlackjack(): boolean {
-        return (this.hand.length === 2) && (Rules.BLACK_JACK === this.score);
+        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
 
-    clearHand(): void {
+    async clearHand(): Promise<string> {
         this.hand = [];
         this.writeScore();
-        document.querySelectorAll(`.${this.role?.id}-card`).forEach(card => card.remove());
+
+        document.querySelectorAll<HTMLImageElement>(`.${this.role?.id}-card`).forEach(card => card.className = 'clear-hand');
+
+        return new Promise(resolve => setTimeout(resolve, 1e3)).then(() => this.role.innerHTML = '');
     }
 }

@@ -11,30 +11,47 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
-    private readonly resultMessage = document.getElementById('result-message') as HTMLSpanElement;
+    private readonly howToPlayButton = document.getElementById('how-to-play') as HTMLButtonElement;
+    private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
+    private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
     private readonly DEALER_DELAY_MS = 4e2;
-    private readonly NEW_ROUND_DELAY_MS = 15e2;
+    private readonly NEW_ROUND_DELAY_MS = 3e3;
 
     constructor() {
         this.dealer = new Dealer();
         this.player = new Player();
+        this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
 
-    start() {
+    get betInputMin(): string {
+        if(this.player.money % 1) {
+            return String(0.5);
+        }
+
+        return !(this.player.money % 2) ? String(2) : String(1);
+    }
+
+    start(): void {
+        this.initEventListener();
         this.newRound();
-        this.initActions();
     }
 
-    private newRound(): void {
+    private async newRound(): Promise<void> {
         Game.cardsDealt.length = 0;
-        this.betInput.value = String(2);
+        this.betInput.min = this.betInputMin;
+        this.betInput.value = this.betInput.min;
         this.betInput.max = this.player.money.toString();
 
-        this.dealer.clearHand();
-        this.player.clearHand();
         this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, false, [this.placeBetButton]);
+
+        await Promise.all([
+            this.dealer.clearHand(),
+            this.player.clearHand()
+        ]);
+
         this.updateButtons(true, true, [this.placeBetButton]);
-        this.betInput.focus();
+        this.placeBetButton.focus();
     }
 
     private dealCards(): void {
@@ -45,30 +62,37 @@ export class Game {
     }
 
     private hit(): void {
+        this.ripple(this.hitButton);
         const buttons = [this.hitButton, this.standButton];
 
         this.updateButtons(true, false, buttons);
         this.player.addCard();
 
-        if (this.player.score > Rules.BLACK_JACK) {
-            this.player.refreshMoneyAfterResult(this.player.bust);
-            this.setResultMessage(this.player.bust);
+        if (this.player.score > Rules.BLACKJACK) {
+            this.player.displayResult(this.player.bust);
+
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
             return;
         }
 
-        if (this.player.score === Rules.BLACK_JACK) {
+        if (this.player.score === Rules.BLACKJACK) {
             this.stand();
             return;
         }
 
         this.updateButtons(true, true, buttons);
+        this.hitEnterKeyListener();
+    }
+
+    private ripple(button: HTMLButtonElement): void {
+        button.classList.add('ripple');
+        setTimeout(() => button.classList.remove('ripple'), 500);
     }
 
     private endRound(): void {
         let playerResult = null;
 
-        if ((this.player.score <= Rules.BLACK_JACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACK_JACK))) {
+        if ((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) {
             playerResult = this.player.win;
         } else if (this.player.score < this.dealer.score) {
             playerResult = this.player.bust;
@@ -76,20 +100,11 @@ export class Game {
             playerResult = this.player.push;
         }
 
-        this.player.refreshMoneyAfterResult(playerResult);
-        this.setResultMessage(playerResult);
-    }
-
-    private setResultMessage(resultFunc: Function): void {
-        this.resultMessage.innerText = `${resultFunc.name}!`;
-        this.resultMessage.className = `result-message-${resultFunc.name}`;
-
-        setTimeout(() => {
-            this.resultMessage.className = '';
-        }, 15e2);
+        this.player.displayResult(playerResult);
     }
 
     private stand(): void {
+        this.ripple(this.standButton);
         this.updateButtons(true, false, [this.hitButton, this.standButton]);
         this.dealer.flipCard();
         this.startDealersTurn();
@@ -120,13 +135,41 @@ export class Game {
         // TODO
     }
 
-    private initActions(): void {
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+    private initEventListener(): void {
+        this.howToPlayListener();
+        this.hitListener();
+        this.standListener();
+        this.betListener();
+    }
 
-        this.hitButton.addEventListener('click', () => this.hit());
+    private howToPlayListener(): void {
+        // TODO show rules and controls
+        this.howToPlayButton.addEventListener('click', () => {
+            this.ripple(this.howToPlayButton);
+            this.howToPlayDialog.showModal();
+        });
+
+        this.howToPlayCloseButton.addEventListener('click', () => this.howToPlayDialog.close());
+    }
+
+    private standListener(): void {
         this.standButton.addEventListener('click', () => this.stand());
 
-        this.betInput.addEventListener('keypress', (event) => {
+        document.addEventListener('keypress', (event) => {
+            if (!this.standButton.disabled && (event.key === ' ')) {
+                this.stand();
+            }
+        });
+    }
+
+    private betListener(): void {
+        document.addEventListener('mouseover', () => {
+            if(!this.placeBetButton.disabled) {
+                this.placeBetButton.focus();
+            }
+        });
+
+        this.placeBetButton.addEventListener('keydown', (event) => {
             event.preventDefault();
 
             if (event.key === 'Enter') {
@@ -134,23 +177,46 @@ export class Game {
                 return;
             }
 
-            if (event.key.toLocaleLowerCase() === 'w') {
+            if ((event.key === 'ArrowUp') || (event.key.toLocaleLowerCase() === 'w')) {
                 this.betInput.stepUp();
                 return;
             }
 
-            if (event.key.toLocaleLowerCase() === 's') {
+            if ((event.key === 'ArrowDown') || (event.key.toLocaleLowerCase() === 's')) {
                 this.betInput.stepDown();
             }
         });
 
-        this.betInput.addEventListener('change', () => this.betInput.step = (this.player.money % 2 === 0) ? String(2) : String(1));
-        this.betInput.addEventListener('blur', () => this.betInput.focus());
-
+        this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
+        this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
+        this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
         this.placeBetButton.addEventListener('click', () => {
+            this.hitEnterKeyListener();
             this.bet();
-            this.placeBetButton.style.display = 'none';
+            this.updateButtons(false, false, [this.placeBetButton]);
             this.updateButtons(true, true, [this.hitButton, this.standButton]);
+        });
+    }
+
+    /**
+     * Allow to use the 'Enter' key to hit after placing a bet
+     */
+    private hitEnterKeyListener(): void {
+        setTimeout(() => {
+            document.addEventListener('keypress', this.hitEnterKeyHandler, true,)
+        });
+    }
+
+    private hitEnterKeyHandler(event: KeyboardEvent) {
+        if (!this.hitButton.disabled && (event.key === 'Enter')) {
+            this.hit();
+        }
+    }
+
+    private hitListener(): any {
+        this.hitButton.addEventListener('click', () => {
+            document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
+            this.hit();
         });
     }
 
