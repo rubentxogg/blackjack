@@ -18,6 +18,7 @@ export class Game {
         this.standButton = document.getElementById(this.stand.name);
         this.howToPlayButton = document.getElementById('how-to-play');
         this.howToPlayDialog = document.getElementById('how-to-play-dialog');
+        this.howToPlayCloseButton = document.getElementById('close-how-to-play');
         this.DEALER_DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 3e3;
         this.dealer = new Dealer();
@@ -128,6 +129,7 @@ export class Game {
             this.ripple(this.howToPlayButton);
             this.howToPlayDialog.showModal();
         });
+        this.howToPlayCloseButton.addEventListener('click', () => this.howToPlayDialog.close());
     }
     standListener() {
         this.standButton.addEventListener('click', () => this.stand());

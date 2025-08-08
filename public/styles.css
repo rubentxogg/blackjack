@@ -22,6 +22,7 @@
 
 @keyframes money-win {
     0% {
+        opacity: 0;
         color: var(--baby-powder);
     }
 
@@ -58,6 +59,7 @@
 
 @keyframes money-push {
     0% {
+        opacity: 0;
         color: var(--baby-powder);
     }
 
@@ -150,6 +152,17 @@
     }
 
     50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(180deg);
         opacity: 0;
     }
 
@@ -265,6 +278,11 @@ img[class$='card'],
 .clear-hand {
     animation-name: clear-hand;
     opacity: 0;
+}
+
+.flip {
+    animation-name: flip !important;
+    animation-duration: 500ms !important;
 }
 
 .actions {
@@ -401,9 +419,10 @@ hr {
 }
 
 #how-to-play-dialog {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    backdrop-filter: blur(2px);
 }
 
 #result-display {

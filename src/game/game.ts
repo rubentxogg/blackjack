@@ -13,6 +13,7 @@ export class Game {
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
     private readonly howToPlayButton = document.getElementById('how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
+    private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
     private readonly DEALER_DELAY_MS = 4e2;
     private readonly NEW_ROUND_DELAY_MS = 3e3;
 
@@ -147,6 +148,8 @@ export class Game {
             this.ripple(this.howToPlayButton);
             this.howToPlayDialog.showModal();
         });
+
+        this.howToPlayCloseButton.addEventListener('click', () => this.howToPlayDialog.close());
     }
 
     private standListener(): void {

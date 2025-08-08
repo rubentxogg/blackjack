@@ -1,4 +1,3 @@
-import { Game as Rules } from "../game/game.constants.js";
 import { Role } from "../role/role.js";
 
 export class Player extends Role {
