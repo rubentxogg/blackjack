@@ -73,7 +73,7 @@ export class Player extends Role {
         }
     }
     win() {
-        this.money += this.payment;
+        this.money += (this.bet + this.payment);
     }
     /**
      * Occurs when the player and the dealer have the same total value for their hands at the end of a round.

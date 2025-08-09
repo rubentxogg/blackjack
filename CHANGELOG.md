@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Change previous ace value if player exceeds 21 points.
+- The player does not get any money even though he won.
 
 ## [0.3.2] - 08/08/2025
 

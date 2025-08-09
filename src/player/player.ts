@@ -100,7 +100,7 @@ export class Player extends Role {
     }
 
     win(): void {
-        this.money += this.payment;
+        this.money += (this.bet + this.payment);
     }
 
     /**
