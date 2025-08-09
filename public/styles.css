@@ -181,6 +181,12 @@
     }
 }
 
+@keyframes refresh-value {
+    0% {
+        color: transparent;
+    }
+}
+
 @font-face {
     font-family: nata-regular;
     src: url(./fonts/NataSans-Regular.ttf);
@@ -492,4 +498,9 @@ hr {
     bottom: 0;
     color: var(--gray);
     font-size: 12px;
+}
+
+.refresh-value {
+    animation-name: refresh-value;
+    animation-duration: 500ms;
 }

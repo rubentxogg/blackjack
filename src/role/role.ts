@@ -39,7 +39,9 @@ export abstract class Role {
     }
 
     protected writeScore(score?: string) {
+        this.scoreBox.classList.add('refresh-value');
         this.scoreBox.innerText = score ?? this.score.toString();
+        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), 5e2);
     }
 
     protected writeCard(card: Card, isHidden?: boolean): void {
