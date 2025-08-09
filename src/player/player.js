@@ -11,6 +11,7 @@ export class Player extends Role {
         this.resultDisplay = document.getElementById('result-display');
         this.resultType = document.getElementById('result-type');
         this.resultMoney = document.getElementById('result-money');
+        this.blackjackDisplay = document.getElementById('blackjack-display');
         this.refreshDisplay();
     }
     get payment() {
@@ -85,13 +86,15 @@ export class Player extends Role {
         if (!this.blackjack) {
             return false;
         }
+        this.resultType.innerText = '';
         this.resultMoney.innerText = '';
         this.resultDisplay.className = 'result-display';
-        this.resultType.className = 'blackjack'; // TODO Bumping letters animation
-        this.resultType.innerText = 'BLACKJACK!';
+        this.blackjackDisplay.style.display = 'block';
+        this.blackjackDisplay.className = 'wave';
         setTimeout(() => {
-            this.resultType.className = '';
+            this.blackjackDisplay.style.display = 'none';
             this.resultDisplay.className = '';
+            this.blackjackDisplay.className = '';
         }, 3e3);
         return true;
     }

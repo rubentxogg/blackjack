@@ -7,6 +7,7 @@ export class Player extends Role {
     private readonly resultDisplay: HTMLDivElement;
     private readonly resultType: HTMLSpanElement;
     private readonly resultMoney: HTMLSpanElement;
+    private readonly blackjackDisplay: HTMLDivElement;
 
     money = 100;
     bet = 0;
@@ -20,6 +21,7 @@ export class Player extends Role {
         this.resultDisplay = document.getElementById('result-display') as HTMLDivElement;
         this.resultType = document.getElementById('result-type') as HTMLSpanElement;
         this.resultMoney = document.getElementById('result-money') as HTMLSpanElement;
+        this.blackjackDisplay = document.getElementById('blackjack-display') as HTMLDivElement;
 
         this.refreshDisplay();
     }
@@ -114,15 +116,16 @@ export class Player extends Role {
             return false;
         }
 
+        this.resultType.innerText = '';
         this.resultMoney.innerText = '';
         this.resultDisplay.className = 'result-display';
-        this.resultType.className = 'blackjack';  // TODO Bumping letters animation
-        this.resultType.innerText = 'BLACKJACK!';
-
+        this.blackjackDisplay.style.display = 'block';
+        this.blackjackDisplay.className = 'wave';
 
         setTimeout(() => {
-            this.resultType.className = '';
+            this.blackjackDisplay.style.display = 'none';
             this.resultDisplay.className = '';
+            this.blackjackDisplay.className = '';
         }, 3e3);
 
         return true;

@@ -192,6 +192,18 @@
     src: url(./fonts/NataSans-Regular.ttf);
 }
 
+@keyframes wave {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -211,6 +223,7 @@ html {
     transition: all 1s ease-in-out;
 }
 
+/* LAYOUT */
 body {
     min-height: 100%;
     background: var(--raisin-black);
@@ -445,7 +458,7 @@ hr {
     background-color: rgba(0, 0, 0, 0.041);
     z-index: 10000 !important;
     text-transform: capitalize;
-    text-shadow: 0 13.36px 8.896px #00000093,0 -2px 1px #00000038;
+    text-shadow: 0 13.36px 8.896px #00000093, 0 -2px 1px #00000038;
 }
 
 #result-type::first-letter {
@@ -505,6 +518,61 @@ hr {
     animation-duration: 500ms;
 }
 
-.blackjack {
-    color: yellow;
+/* BLACKJACK */
+#blackjack-display {
+    display: none;
+    text-shadow: none;
+    color: transparent;
+    /* fallback for old browsers */
+    background: #00C9FF;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(left, #92FE9D, #00C9FF);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to left, #92FE9D, #00C9FF);
+    background-clip: text;
+}
+
+.wave span {
+    display: inline-block;
+    animation: wave 1s normal;
+}
+
+.wave span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.wave span:nth-child(2) {
+    animation-delay: .1s;
+}
+
+.wave span:nth-child(3) {
+    animation-delay: .2s;
+}
+
+.wave span:nth-child(4) {
+    animation-delay: .3s;
+}
+
+.wave span:nth-child(5) {
+    animation-delay: .4s;
+}
+
+.wave span:nth-child(6) {
+    animation-delay: .5s;
+}
+
+.wave span:nth-child(7) {
+    animation-delay: .6s;
+}
+
+.wave span:nth-child(8) {
+    animation-delay: .7s;
+}
+
+.wave span:nth-child(9) {
+    animation-delay: .8s;
+}
+
+.wave span:nth-child(10) {
+    animation-delay: .9s;
 }
