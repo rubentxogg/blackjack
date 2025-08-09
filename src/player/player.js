@@ -82,9 +82,9 @@ export class Player extends Role {
         this.money += this.bet;
     }
     hasBlackjack() {
-        // if (!this.blackjack) {
-        //     return false;
-        // }
+        if (!this.blackjack) {
+            return false;
+        }
         this.resultMoney.innerText = '';
         this.resultDisplay.className = 'result-display';
         this.resultType.className = 'blackjack'; // TODO Bumping letters animation

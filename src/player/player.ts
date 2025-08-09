@@ -110,9 +110,9 @@ export class Player extends Role {
     }
 
     hasBlackjack(): boolean {
-        // if (!this.blackjack) {
-        //     return false;
-        // }
+        if (!this.blackjack) {
+            return false;
+        }
 
         this.resultMoney.innerText = '';
         this.resultDisplay.className = 'result-display';

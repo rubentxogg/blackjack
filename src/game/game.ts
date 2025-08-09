@@ -122,14 +122,9 @@ export class Game {
         }, this.DEALER_DELAY_MS);
     }
 
-    private async bet(): Promise<void> {
+    private bet(): void {
         this.player.placeBet();
         this.dealCards();
-
-        if (this.player.hasBlackjack()) {
-            this.updateButtons(true, false, [this.hitButton, this.standButton]); // TODO Does not work
-            await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
-        }
     }
 
     private doubleDown(): void {
@@ -195,11 +190,19 @@ export class Game {
         this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
         this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
         this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
-        this.placeBetButton.addEventListener('click', () => {
+        this.placeBetButton.addEventListener('click', async () => {
             this.hitEnterKeyListener();
             this.bet();
             this.updateButtons(false, false, [this.placeBetButton]);
-            this.updateButtons(true, true, [this.hitButton, this.standButton]);
+
+            const actionButtons = [this.hitButton, this.standButton];
+            
+            if (this.player.hasBlackjack()) {
+                this.updateButtons(true, false, actionButtons);
+                return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+            }
+
+            this.updateButtons(true, true, actionButtons);
         });
     }
 
