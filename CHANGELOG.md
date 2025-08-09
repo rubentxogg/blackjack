@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Player blackjack display and functionality.
 
+### Fixed
+- Change previous ace value if player exceeds 21 points.
+
 ## [0.3.2] - 08/08/2025
 
 ### Added

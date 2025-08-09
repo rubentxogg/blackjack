@@ -25,17 +25,18 @@ export class Role {
         return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
     addCard() {
+        var _a;
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
         if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
             return this.addCard();
         }
         const card = new Card(suit, rank);
-        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACKJACK)) {
-            card.dictionary.set(Rank.ACE, 1);
-        }
         Game.cardsDealt.push(card);
         this.hand.push(card);
+        if ((this.score > Rules.BLACKJACK)) {
+            (_a = this.hand.find(card => (card.rank === Rank.ACE) && (card.dictionary.get(Rank.ACE) === 11))) === null || _a === void 0 ? void 0 : _a.dictionary.set(Rank.ACE, 1);
+        }
         this.writeCard(card);
         this.writeScore();
     }

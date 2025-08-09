@@ -32,12 +32,13 @@ export abstract class Role {
 
         const card = new Card(suit, rank);
 
-        if ((Rank.ACE === card.rank) && ((this.score + card.value) > Rules.BLACKJACK)) {
-            card.dictionary.set(Rank.ACE, 1);
-        }
-
         Game.cardsDealt.push(card);
         this.hand.push(card);
+
+        if ((this.score > Rules.BLACKJACK)) {
+            this.hand.find(card => (card.rank === Rank.ACE) && (card.dictionary.get(Rank.ACE) === 11))?.dictionary.set(Rank.ACE, 1);
+        }
+
         this.writeCard(card);
         this.writeScore();
     }
