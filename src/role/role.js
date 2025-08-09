@@ -21,6 +21,9 @@ export class Role {
     get score() {
         return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0);
     }
+    get blackjack() {
+        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
+    }
     addCard() {
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
@@ -54,9 +57,6 @@ export class Role {
         const keys = Object.keys(enumeration).filter(key => Number.isNaN(Number.parseInt(key)));
         const enumKey = keys[Math.floor(Math.random() * keys.length)];
         return enumeration[enumKey];
-    }
-    hasBlackjack() {
-        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
     clearHand() {
         return __awaiter(this, void 0, void 0, function* () {

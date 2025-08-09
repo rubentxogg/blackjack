@@ -108,8 +108,14 @@ export class Game {
         }, this.DEALER_DELAY_MS);
     }
     bet() {
-        this.player.placeBet();
-        this.dealCards();
+        return __awaiter(this, void 0, void 0, function* () {
+            this.player.placeBet();
+            this.dealCards();
+            if (this.player.hasBlackjack()) {
+                this.updateButtons(true, false, [this.hitButton, this.standButton]); // TODO Does not work
+                yield new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+            }
+        });
     }
     doubleDown() {
         // TODO

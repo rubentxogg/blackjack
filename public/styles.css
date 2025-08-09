@@ -504,3 +504,7 @@ hr {
     animation-name: refresh-value;
     animation-duration: 500ms;
 }
+
+.blackjack {
+    color: yellow;
+}

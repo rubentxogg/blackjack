@@ -8,9 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.2] - 08/08/2025
 
 ### Added
-- Dealer card flip animation
-- Version display
-- Score refresh animation
+- Dealer card flip animation.
+- Version display.
+- Score refresh animation.
+- Exclamation character '!' to result message.
 
 ## [0.3.1] - 07/08/2025
 

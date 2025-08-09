@@ -24,7 +24,7 @@ export class Game {
     }
 
     get betInputMin(): string {
-        if(this.player.money % 1) {
+        if (this.player.money % 1) {
             return String(0.5);
         }
 
@@ -122,9 +122,14 @@ export class Game {
         }, this.DEALER_DELAY_MS);
     }
 
-    private bet(): void {
+    private async bet(): Promise<void> {
         this.player.placeBet();
         this.dealCards();
+
+        if (this.player.hasBlackjack()) {
+            this.updateButtons(true, false, [this.hitButton, this.standButton]); // TODO Does not work
+            await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+        }
     }
 
     private doubleDown(): void {
@@ -164,7 +169,7 @@ export class Game {
 
     private betListener(): void {
         document.addEventListener('mouseover', () => {
-            if(!this.placeBetButton.disabled) {
+            if (!this.placeBetButton.disabled) {
                 this.placeBetButton.focus();
             }
         });

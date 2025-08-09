@@ -18,6 +18,10 @@ export abstract class Role {
         return this.hand.map(card => card.value).reduce((prev, curr) => prev + curr, 0);
     }
 
+    get blackjack(): boolean {
+        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
+    }
+
     addCard(): void {
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
@@ -60,10 +64,6 @@ export abstract class Role {
         const enumKey = keys[Math.floor(Math.random() * keys.length)];
 
         return enumeration[enumKey];
-    }
-
-    hasBlackjack(): boolean {
-        return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
 
     async clearHand(): Promise<string> {

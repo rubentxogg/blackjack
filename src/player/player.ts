@@ -1,4 +1,5 @@
 import { Role } from "../role/role.js";
+import { Game } from "../game/game.constants.js";
 
 export class Player extends Role {
     private readonly moneyDisplay: HTMLSpanElement;
@@ -24,7 +25,7 @@ export class Player extends Role {
     }
 
     get payment() {
-        return this.bet;
+        return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
 
     placeBet(): void {
@@ -66,7 +67,7 @@ export class Player extends Role {
 
     displayResult(resultFunc: Function): void {
         const type = resultFunc.name;
-        this.resultType.innerText = type;
+        this.resultType.innerText = `${type}!`;
 
         let money = '';
 
@@ -106,5 +107,24 @@ export class Player extends Role {
      */
     push(): void {
         this.money += this.bet;
+    }
+
+    hasBlackjack(): boolean {
+        // if (!this.blackjack) {
+        //     return false;
+        // }
+
+        this.resultMoney.innerText = '';
+        this.resultDisplay.className = 'result-display';
+        this.resultType.className = 'blackjack';  // TODO Bumping letters animation
+        this.resultType.innerText = 'BLACKJACK!';
+
+
+        setTimeout(() => {
+            this.resultType.className = '';
+            this.resultDisplay.className = '';
+        }, 3e3);
+
+        return true;
     }
 }
