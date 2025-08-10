@@ -11,7 +11,7 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
-    private readonly howToPlayButton = document.getElementById('how-to-play') as HTMLButtonElement;
+    private readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
     private readonly DEALER_DELAY_MS = 4e2;
@@ -143,9 +143,8 @@ export class Game {
     }
 
     private howToPlayListener(): void {
-        // TODO show rules and controls
-        this.howToPlayButton.addEventListener('click', () => {
-            this.ripple(this.howToPlayButton);
+        this.howToPlayOpenButton.addEventListener('click', () => {
+            this.ripple(this.howToPlayOpenButton);
             this.howToPlayDialog.showModal();
         });
 
@@ -196,7 +195,7 @@ export class Game {
             this.updateButtons(false, false, [this.placeBetButton]);
 
             const actionButtons = [this.hitButton, this.standButton];
-            
+
             if (this.player.hasBlackjack()) {
                 this.updateButtons(true, false, actionButtons);
                 return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());

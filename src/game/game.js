@@ -16,7 +16,7 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
-        this.howToPlayButton = document.getElementById('how-to-play');
+        this.howToPlayOpenButton = document.getElementById('open-how-to-play');
         this.howToPlayDialog = document.getElementById('how-to-play-dialog');
         this.howToPlayCloseButton = document.getElementById('close-how-to-play');
         this.DEALER_DELAY_MS = 4e2;
@@ -124,9 +124,8 @@ export class Game {
         this.betListener();
     }
     howToPlayListener() {
-        // TODO show rules and controls
-        this.howToPlayButton.addEventListener('click', () => {
-            this.ripple(this.howToPlayButton);
+        this.howToPlayOpenButton.addEventListener('click', () => {
+            this.ripple(this.howToPlayOpenButton);
             this.howToPlayDialog.showModal();
         });
         this.howToPlayCloseButton.addEventListener('click', () => this.howToPlayDialog.close());
