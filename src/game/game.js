@@ -63,8 +63,10 @@ export class Game {
         this.updateButtons(true, false, buttons);
         this.player.addCard();
         if (this.player.score > Rules.BLACKJACK) {
-            this.player.displayResult(this.player.bust);
-            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+            setTimeout(() => {
+                this.player.displayResult(this.player.bust);
+                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+            }, 500);
             return;
         }
         if (this.player.score === Rules.BLACKJACK) {
@@ -95,7 +97,7 @@ export class Game {
         this.ripple(this.standButton);
         this.updateButtons(true, false, [this.hitButton, this.standButton]);
         this.dealer.flipCard();
-        this.startDealersTurn();
+        setTimeout(() => this.startDealersTurn(), 500);
     }
     startDealersTurn() {
         setTimeout(() => {
