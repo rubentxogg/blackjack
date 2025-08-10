@@ -1,4 +1,5 @@
 import { Role } from "../role/role.js";
+import { Game } from "../game/game.constants.js";
 
 export class Player extends Role {
     private readonly moneyDisplay: HTMLSpanElement;
@@ -6,6 +7,7 @@ export class Player extends Role {
     private readonly resultDisplay: HTMLDivElement;
     private readonly resultType: HTMLSpanElement;
     private readonly resultMoney: HTMLSpanElement;
+    private readonly blackjackDisplay: HTMLDivElement;
 
     money = 100;
     bet = 0;
@@ -19,12 +21,13 @@ export class Player extends Role {
         this.resultDisplay = document.getElementById('result-display') as HTMLDivElement;
         this.resultType = document.getElementById('result-type') as HTMLSpanElement;
         this.resultMoney = document.getElementById('result-money') as HTMLSpanElement;
+        this.blackjackDisplay = document.getElementById('blackjack-display') as HTMLDivElement;
 
         this.refreshDisplay();
     }
 
     get payment() {
-        return this.bet;
+        return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
 
     placeBet(): void {
@@ -66,7 +69,7 @@ export class Player extends Role {
 
     displayResult(resultFunc: Function): void {
         const type = resultFunc.name;
-        this.resultType.innerText = type;
+        this.resultType.innerText = `${type}!`;
 
         let money = '';
 
@@ -97,7 +100,7 @@ export class Player extends Role {
     }
 
     win(): void {
-        this.money += this.payment;
+        this.money += (this.bet + this.payment);
     }
 
     /**
@@ -106,5 +109,25 @@ export class Player extends Role {
      */
     push(): void {
         this.money += this.bet;
+    }
+
+    hasBlackjack(): boolean {
+        if (!this.blackjack) {
+            return false;
+        }
+
+        this.resultType.innerText = '';
+        this.resultMoney.innerText = '';
+        this.resultDisplay.className = 'result-display';
+        this.blackjackDisplay.style.display = 'block';
+        this.blackjackDisplay.className = 'wave';
+
+        setTimeout(() => {
+            this.blackjackDisplay.style.display = 'none';
+            this.resultDisplay.className = '';
+            this.blackjackDisplay.className = '';
+        }, 3e3);
+
+        return true;
     }
 }

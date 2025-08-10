@@ -5,10 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 10/08/2025
+- Added how to play functionality.
+
+## [0.4.0] - 09/08/2025
+
+### Added
+- Player blackjack display and functionality.
+
+### Fixed
+- Change previous ace value if player exceeds 21 points.
+- The player does not get any money even though he won.
+
 ## [0.3.2] - 08/08/2025
 
 ### Added
-- Dealer card flip animation
+- Dealer card flip animation.
+- Version display.
+- Score refresh animation.
+- Exclamation character '!' to result message.
 
 ## [0.3.1] - 07/08/2025
 

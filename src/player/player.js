@@ -1,4 +1,5 @@
 import { Role } from "../role/role.js";
+import { Game } from "../game/game.constants.js";
 export class Player extends Role {
     constructor() {
         const PLAYER = Player.name.toLocaleLowerCase();
@@ -10,10 +11,11 @@ export class Player extends Role {
         this.resultDisplay = document.getElementById('result-display');
         this.resultType = document.getElementById('result-type');
         this.resultMoney = document.getElementById('result-money');
+        this.blackjackDisplay = document.getElementById('blackjack-display');
         this.refreshDisplay();
     }
     get payment() {
-        return this.bet;
+        return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
     placeBet() {
         const bet = document.getElementById('bet').value;
@@ -45,7 +47,7 @@ export class Player extends Role {
     }
     displayResult(resultFunc) {
         const type = resultFunc.name;
-        this.resultType.innerText = type;
+        this.resultType.innerText = `${type}!`;
         let money = '';
         if (type === this.win.name) {
             money = `+$${this.payment.toString()}`;
@@ -71,7 +73,7 @@ export class Player extends Role {
         }
     }
     win() {
-        this.money += this.payment;
+        this.money += (this.bet + this.payment);
     }
     /**
      * Occurs when the player and the dealer have the same total value for their hands at the end of a round.
@@ -79,5 +81,21 @@ export class Player extends Role {
      */
     push() {
         this.money += this.bet;
+    }
+    hasBlackjack() {
+        if (!this.blackjack) {
+            return false;
+        }
+        this.resultType.innerText = '';
+        this.resultMoney.innerText = '';
+        this.resultDisplay.className = 'result-display';
+        this.blackjackDisplay.style.display = 'block';
+        this.blackjackDisplay.className = 'wave';
+        setTimeout(() => {
+            this.blackjackDisplay.style.display = 'none';
+            this.resultDisplay.className = '';
+            this.blackjackDisplay.className = '';
+        }, 3e3);
+        return true;
     }
 }

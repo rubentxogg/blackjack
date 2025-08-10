@@ -11,7 +11,7 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
-    private readonly howToPlayButton = document.getElementById('how-to-play') as HTMLButtonElement;
+    private readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
     private readonly DEALER_DELAY_MS = 4e2;
@@ -24,7 +24,7 @@ export class Game {
     }
 
     get betInputMin(): string {
-        if(this.player.money % 1) {
+        if (this.player.money % 1) {
             return String(0.5);
         }
 
@@ -143,9 +143,8 @@ export class Game {
     }
 
     private howToPlayListener(): void {
-        // TODO show rules and controls
-        this.howToPlayButton.addEventListener('click', () => {
-            this.ripple(this.howToPlayButton);
+        this.howToPlayOpenButton.addEventListener('click', () => {
+            this.ripple(this.howToPlayOpenButton);
             this.howToPlayDialog.showModal();
         });
 
@@ -164,7 +163,7 @@ export class Game {
 
     private betListener(): void {
         document.addEventListener('mouseover', () => {
-            if(!this.placeBetButton.disabled) {
+            if (!this.placeBetButton.disabled) {
                 this.placeBetButton.focus();
             }
         });
@@ -190,11 +189,19 @@ export class Game {
         this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
         this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
         this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
-        this.placeBetButton.addEventListener('click', () => {
+        this.placeBetButton.addEventListener('click', async () => {
             this.hitEnterKeyListener();
             this.bet();
             this.updateButtons(false, false, [this.placeBetButton]);
-            this.updateButtons(true, true, [this.hitButton, this.standButton]);
+
+            const actionButtons = [this.hitButton, this.standButton];
+
+            if (this.player.hasBlackjack()) {
+                this.updateButtons(true, false, actionButtons);
+                return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+            }
+
+            this.updateButtons(true, true, actionButtons);
         });
     }
 

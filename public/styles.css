@@ -181,9 +181,37 @@
     }
 }
 
+@keyframes refresh-value {
+    0% {
+        color: transparent;
+    }
+}
+
 @font-face {
     font-family: nata-regular;
     src: url(./fonts/NataSans-Regular.ttf);
+}
+
+@keyframes wave {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes blowUpModal {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 * {
@@ -205,6 +233,7 @@ html {
     transition: all 1s ease-in-out;
 }
 
+/* LAYOUT */
 body {
     min-height: 100%;
     background: var(--raisin-black);
@@ -418,11 +447,128 @@ hr {
     padding-left: 28px;
 }
 
-#how-to-play-dialog {
-    width: 100%;
-    height: 100%;
-    background: transparent;
+#how-to-play-dialog:modal {
+    color: var(--baby-powder);
+    width: 50%;
+    height: calc(100vh - 15%);
+    padding: 25px;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.651);
+    border: none;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    z-index: 0;
+    transform: scale(1);
+    animation: blowUpModal .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
     backdrop-filter: blur(2px);
+}
+
+#how-to-play-dialog:modal section {
+    width: 100%;
+}
+
+#how-to-play-dialog:modal section div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#close-how-to-play {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background: url('./assets/close.png') no-repeat;
+    background-position: center;
+    background-size: contain;
+    padding: 20px;
+
+}
+
+#how-to-play {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* HOW TO PLAY > INFO CONTAINER */
+.info-container {
+    margin-top: 10px;
+    gap: 30px;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, 300px);
+    align-items: baseline !important;
+    justify-content: space-evenly !important;
+}
+
+.info-container-item {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.info-container-item h3 {
+    width: 100%;
+    color: yellow;
+    text-shadow: 0 13.36px 8.896px #00000093, 0 -2px 1px #00000038;
+}
+
+/* HOW TO PLAY > HOW TO PLAY */
+#how-to-play-dialog>h2 {
+    background: url('./assets/how-to-play.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 97px);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* HOW TO PLAY > GOAL */
+#how-to-play article:nth-of-type(1) h2 {
+    background: url('./assets/goal.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: left;
+    padding-left: 42px;
+    text-align: left;
+}
+
+/* HOW TO PLAY > CARD VALUES */
+#how-to-play article:nth-of-type(2) h2 {
+    background: url('./assets/cards.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: left;
+    padding-left: 42px;
+    text-align: left;
+}
+
+/* HOW TO PLAY > PLAYER ACTIONS */
+#how-to-play article:nth-of-type(3) h2 {
+    background: url('./assets/actions.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 109px);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* HOW TO PLAY > ROUND RESULT */
+#how-to-play article:nth-of-type(4) h2 {
+    background: url('./assets/plus-minus.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 102px);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* HOW TO PLAY > SPECIAL SITUATIONS */
+#how-to-play article:nth-of-type(5) h2 {
+    background: url('./assets/joker.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 129px);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #result-display {
@@ -439,7 +585,7 @@ hr {
     background-color: rgba(0, 0, 0, 0.041);
     z-index: 10000 !important;
     text-transform: capitalize;
-    text-shadow: 0 13.36px 8.896px #00000093,0 -2px 1px #00000038;
+    text-shadow: 0 13.36px 8.896px #00000093, 0 -2px 1px #00000038;
 }
 
 #result-type::first-letter {
@@ -484,4 +630,76 @@ hr {
 .refresh {
     animation-name: refresh;
     animation-duration: 500ms;
+}
+
+#version {
+    position: absolute;
+    right: 5px;
+    bottom: 0;
+    color: var(--gray);
+    font-size: 12px;
+}
+
+.refresh-value {
+    animation-name: refresh-value;
+    animation-duration: 500ms;
+}
+
+/* BLACKJACK */
+#blackjack-display {
+    display: none;
+    text-shadow: none;
+    color: transparent;
+    /* fallback for old browsers */
+    background: #00C9FF;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(left, #92FE9D, #00C9FF);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to left, #92FE9D, #00C9FF);
+    background-clip: text;
+}
+
+.wave span {
+    display: inline-block;
+    animation: wave 1s normal;
+}
+
+.wave span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.wave span:nth-child(2) {
+    animation-delay: .1s;
+}
+
+.wave span:nth-child(3) {
+    animation-delay: .2s;
+}
+
+.wave span:nth-child(4) {
+    animation-delay: .3s;
+}
+
+.wave span:nth-child(5) {
+    animation-delay: .4s;
+}
+
+.wave span:nth-child(6) {
+    animation-delay: .5s;
+}
+
+.wave span:nth-child(7) {
+    animation-delay: .6s;
+}
+
+.wave span:nth-child(8) {
+    animation-delay: .7s;
+}
+
+.wave span:nth-child(9) {
+    animation-delay: .8s;
+}
+
+.wave span:nth-child(10) {
+    animation-delay: .9s;
 }
