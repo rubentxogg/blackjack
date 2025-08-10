@@ -449,8 +449,8 @@ hr {
 
 #how-to-play-dialog:modal {
     color: var(--baby-powder);
-    width: calc(100vh - 10%);
-    height: calc(100vh - 10%);
+    width: 50%;
+    height: calc(100vh - 15%);
     padding: 25px;
     margin: auto;
     background: rgba(0, 0, 0, 0.651);
@@ -460,16 +460,11 @@ hr {
     z-index: 0;
     transform: scale(1);
     animation: blowUpModal .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(2px);
 }
 
 #how-to-play-dialog:modal section {
     width: 100%;
-}
-
-#how-to-play-dialog h2 {
-    color: var(--gray);
-    margin: auto auto 30px auto;
 }
 
 #how-to-play-dialog:modal section div {
@@ -486,32 +481,94 @@ hr {
     background-position: center;
     background-size: contain;
     padding: 20px;
-    
+
 }
 
 #how-to-play {
-   display: flex;
-   flex-direction: column;
-   gap: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
 }
 
 /* HOW TO PLAY > INFO CONTAINER */
 .info-container {
     margin-top: 10px;
-    gap: 10px;
+    gap: 30px;
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 200px));
+    grid-template-columns: repeat(auto-fit, 300px);
+    align-items: baseline !important;
+    justify-content: space-evenly !important;
 }
 
-.info-container-item { 
+.info-container-item {
     display: flex;
     flex-wrap: wrap;
-    border: 2px solid red;
 }
 
-.info-container-item h4{
+.info-container-item h3 {
     width: 100%;
     color: yellow;
+    text-shadow: 0 13.36px 8.896px #00000093, 0 -2px 1px #00000038;
+}
+
+/* HOW TO PLAY > HOW TO PLAY */
+#how-to-play-dialog>h2 {
+    background: url('./assets/how-to-play.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 97px);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* HOW TO PLAY > GOAL */
+#how-to-play article:nth-of-type(1) h2 {
+    background: url('./assets/goal.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: left;
+    padding-left: 42px;
+    text-align: left;
+}
+
+/* HOW TO PLAY > CARD VALUES */
+#how-to-play article:nth-of-type(2) h2 {
+    background: url('./assets/cards.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: left;
+    padding-left: 42px;
+    text-align: left;
+}
+
+/* HOW TO PLAY > PLAYER ACTIONS */
+#how-to-play article:nth-of-type(3) h2 {
+    background: url('./assets/actions.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 109px);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* HOW TO PLAY > ROUND RESULT */
+#how-to-play article:nth-of-type(4) h2 {
+    background: url('./assets/plus-minus.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 102px);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* HOW TO PLAY > SPECIAL SITUATIONS */
+#how-to-play article:nth-of-type(5) h2 {
+    background: url('./assets/joker.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: calc(50% - 129px);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #result-display {
