@@ -16,6 +16,7 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
+        this.doubleDownButton = document.getElementById('double-down');
         this.howToPlayOpenButton = document.getElementById('open-how-to-play');
         this.howToPlayDialog = document.getElementById('how-to-play-dialog');
         this.howToPlayCloseButton = document.getElementById('close-how-to-play');
@@ -41,7 +42,7 @@ export class Game {
             this.betInput.min = this.betInputMin;
             this.betInput.value = this.betInput.min;
             this.betInput.max = this.player.money.toString();
-            this.updateButtons(false, false, [this.hitButton, this.standButton]);
+            this.updateButtons(false, false, [this.hitButton, this.standButton, this.doubleDownButton]);
             this.updateButtons(true, false, [this.placeBetButton]);
             yield Promise.all([
                 this.dealer.clearHand(),
@@ -60,7 +61,7 @@ export class Game {
     hit() {
         this.ripple(this.hitButton);
         const buttons = [this.hitButton, this.standButton];
-        this.updateButtons(true, false, buttons);
+        this.updateButtons(true, false, [...buttons, this.doubleDownButton]);
         this.player.addCard();
         if (this.player.score > Rules.BLACKJACK) {
             setTimeout(() => {
@@ -95,7 +96,7 @@ export class Game {
     }
     stand() {
         this.ripple(this.standButton);
-        this.updateButtons(true, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, false, [this.hitButton, this.standButton, this.doubleDownButton]);
         this.dealer.flipCard();
         setTimeout(() => this.startDealersTurn(), 500);
     }
@@ -115,6 +116,7 @@ export class Game {
     }
     doubleDown() {
         // TODO
+        this.ripple(this.doubleDownButton);
     }
     split() {
         // TODO
@@ -124,6 +126,15 @@ export class Game {
         this.hitListener();
         this.standListener();
         this.betListener();
+        this.doubleDownListener();
+    }
+    doubleDownListener() {
+        this.doubleDownButton.addEventListener('click', () => this.doubleDown());
+        document.addEventListener('keydown', (event) => {
+            if (!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
+                this.doubleDown();
+            }
+        });
     }
     howToPlayListener() {
         this.howToPlayOpenButton.addEventListener('click', () => {
@@ -167,7 +178,7 @@ export class Game {
             this.hitEnterKeyListener();
             this.bet();
             this.updateButtons(false, false, [this.placeBetButton]);
-            const actionButtons = [this.hitButton, this.standButton];
+            const actionButtons = [this.hitButton, this.standButton, this.doubleDownButton];
             if (this.player.hasBlackjack()) {
                 this.updateButtons(true, false, actionButtons);
                 return yield new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
@@ -196,7 +207,7 @@ export class Game {
     }
     updateButtons(setVisible, setEnabled, buttons) {
         buttons.forEach(button => {
-            button.style.display = setVisible ? '' : 'none';
+            button.style.display = setVisible ? 'block' : 'none';
             button.disabled = !setEnabled;
         });
     }

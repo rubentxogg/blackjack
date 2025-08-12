@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="palette.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="./assets/icon.png">
-    <title>Blackjack 3:2</title>
+    <title>Blackjack</title>
 </head>
 
 <body>
     <header>
-        <button id="open-how-to-play" class="how-to-play"></button> Blackjack
+        <button id="open-how-to-play" class="how-to-play"></button> 
+        <span>Blackjack</span>
+
         <dialog id="how-to-play-dialog">
             <button id="close-how-to-play"></button>
             <h2>How to play</h2>
@@ -116,7 +118,8 @@
         <div class="actions">
             <button id="hit">Hit</button>
             <button id="stand">Stand</button>
-            <button id="place-bet">
+            <button id="double-down">Double Down</button>
+            <button id="place-bet" disabled>
                 Place Bet $<input id="bet" type="number"></span>
             </button>
         </div>
@@ -126,12 +129,12 @@
         <div class="player-bet">
             Player bet: <span id="player-bet"></span>
         </div>
-        -
+        <span>-</span>
         <div class="player-money">
             Total money: <span id="player-money"></span>
         </div>
 
-        <span id="version">v1.0.0</span>
+        <span id="version">v1.0.1</span>
     </footer>
 
     <script type="module" src="./src/index.js"></script>

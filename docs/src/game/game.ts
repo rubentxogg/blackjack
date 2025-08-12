@@ -11,6 +11,7 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
+    private readonly doubleDownButton = document.getElementById('double-down') as HTMLButtonElement;
     private readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
@@ -42,7 +43,7 @@ export class Game {
         this.betInput.value = this.betInput.min;
         this.betInput.max = this.player.money.toString();
 
-        this.updateButtons(false, false, [this.hitButton, this.standButton]);
+        this.updateButtons(false, false, [this.hitButton, this.standButton, this.doubleDownButton]);
         this.updateButtons(true, false, [this.placeBetButton]);
 
         await Promise.all([
@@ -65,7 +66,7 @@ export class Game {
         this.ripple(this.hitButton);
         const buttons = [this.hitButton, this.standButton];
 
-        this.updateButtons(true, false, buttons);
+        this.updateButtons(true, false, [...buttons, this.doubleDownButton]);
         this.player.addCard();
 
         if (this.player.score > Rules.BLACKJACK) {
@@ -106,7 +107,7 @@ export class Game {
 
     private stand(): void {
         this.ripple(this.standButton);
-        this.updateButtons(true, false, [this.hitButton, this.standButton]);
+        this.updateButtons(true, false, [this.hitButton, this.standButton, this.doubleDownButton]);
         this.dealer.flipCard();
         setTimeout(() => this.startDealersTurn(), 500);
     }
@@ -130,6 +131,7 @@ export class Game {
 
     private doubleDown(): void {
         // TODO
+        this.ripple(this.doubleDownButton);
     }
 
     private split(): void {
@@ -141,6 +143,17 @@ export class Game {
         this.hitListener();
         this.standListener();
         this.betListener();
+        this.doubleDownListener();
+    }
+
+    private doubleDownListener(): void {
+        this.doubleDownButton.addEventListener('click', () => this.doubleDown());
+
+        document.addEventListener('keydown', (event) => {
+            if(!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
+                this.doubleDown();
+            }
+        });
     }
 
     private howToPlayListener(): void {
@@ -195,7 +208,7 @@ export class Game {
             this.bet();
             this.updateButtons(false, false, [this.placeBetButton]);
 
-            const actionButtons = [this.hitButton, this.standButton];
+            const actionButtons = [this.hitButton, this.standButton, this.doubleDownButton];
 
             if (this.player.hasBlackjack()) {
                 this.updateButtons(true, false, actionButtons);
@@ -230,7 +243,7 @@ export class Game {
 
     private updateButtons(setVisible: boolean, setEnabled: boolean, buttons: HTMLButtonElement[]): void {
         buttons.forEach(button => {
-            button.style.display = setVisible ? '' : 'none';
+            button.style.display = setVisible ? 'block' : 'none';
             button.disabled = !setEnabled;
         });
     }
