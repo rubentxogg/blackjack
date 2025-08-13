@@ -69,7 +69,7 @@ export class Game {
         this.updateButtons([
             { button: this.hitButton, visible: true, disabled: true },
             { button: this.standButton, visible: true, disabled: true },
-            { button: this.doubleDownButton, visible: !this.doubleDownButton.disabled, disabled: true }
+            { button: this.doubleDownButton, visible: this.player.isDoublingDown, disabled: true }
         ]);
         this.player.addCard();
         if (this.player.score > Rules.BLACKJACK) {
@@ -79,7 +79,7 @@ export class Game {
             }, 500);
             return;
         }
-        if ((this.player.score === Rules.BLACKJACK)) {
+        if ((this.player.score === Rules.BLACKJACK) || this.player.isDoublingDown) {
             this.stand();
             return;
         }
@@ -109,8 +109,9 @@ export class Game {
     stand() {
         this.ripple(this.standButton);
         this.updateButtons([
-            { button: this.hitButton, visible: true, disabled: false },
-            { button: this.standButton, visible: true, disabled: false },
+            { button: this.hitButton, visible: true, disabled: true },
+            { button: this.standButton, visible: true, disabled: true },
+            { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
         ]);
         this.dealer.flipCard();
         setTimeout(() => this.startDealersTurn(), 500);
@@ -127,6 +128,8 @@ export class Game {
     }
     bet() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.player.placeBet();
+            this.dealCards();
             this.hitEnterKeyListener();
             this.updateButtons([
                 { button: this.placeBetButton, visible: false, disabled: false }
@@ -135,21 +138,20 @@ export class Game {
                 this.updateButtons([
                     { button: this.hitButton, visible: true, disabled: true },
                     { button: this.standButton, visible: true, disabled: true },
-                    { button: this.doubleDownButton, visible: true, disabled: true },
+                    { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true },
                 ]);
                 return yield new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
             }
             this.updateButtons([
                 { button: this.hitButton, visible: true, disabled: false },
                 { button: this.standButton, visible: true, disabled: false },
-                { button: this.doubleDownButton, visible: true, disabled: !this.player.canDoubleDown },
+                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown },
             ]);
-            this.player.placeBet();
-            this.dealCards();
         });
     }
     doubleDown() {
         this.ripple(this.doubleDownButton);
+        this.player.doubleDown();
         this.hit();
     }
     split() {

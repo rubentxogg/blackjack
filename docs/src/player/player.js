@@ -6,6 +6,7 @@ export class Player extends Role {
         super(PLAYER);
         this.money = 100;
         this.bet = 0;
+        this.isDoublingDown = false;
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`);
         this.betDisplay = document.getElementById(`${PLAYER}-bet`);
         this.resultDisplay = document.getElementById('result-display');
@@ -18,9 +19,10 @@ export class Player extends Role {
         return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
     get canDoubleDown() {
-        return (this.bet * 2) <= this.money;
+        return this.bet <= this.money;
     }
     placeBet() {
+        this.isDoublingDown = false;
         const bet = document.getElementById('bet').value;
         this.bet = Number(bet);
         this.money -= this.bet;
@@ -100,5 +102,14 @@ export class Player extends Role {
             this.blackjackDisplay.className = '';
         }, 3e3);
         return true;
+    }
+    doubleDown() {
+        if (!this.canDoubleDown) {
+            return;
+        }
+        this.isDoublingDown = true;
+        this.money -= this.bet;
+        this.bet += this.bet;
+        this.refreshDisplay();
     }
 }

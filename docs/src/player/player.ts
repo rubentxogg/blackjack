@@ -11,6 +11,7 @@ export class Player extends Role {
 
     money = 100;
     bet = 0;
+    isDoublingDown = false;
 
     constructor() {
         const PLAYER = Player.name.toLocaleLowerCase();
@@ -31,15 +32,16 @@ export class Player extends Role {
     }
 
     get canDoubleDown() {
-        return (this.bet * 2) <= this.money;
+        return this.bet <= this.money;
     }
 
     placeBet(): void {
+        this.isDoublingDown = false;
+
         const bet = (document.getElementById('bet') as HTMLInputElement).value;
 
         this.bet = Number(bet);
         this.money -= this.bet;
-
         this.refreshDisplay();
     }
 
@@ -133,5 +135,16 @@ export class Player extends Role {
         }, 3e3);
 
         return true;
+    }
+
+    doubleDown(): void {
+        if (!this.canDoubleDown) {
+            return;
+        }
+
+        this.isDoublingDown = true;
+        this.money -= this.bet;
+        this.bet += this.bet;
+        this.refreshDisplay();
     }
 }
