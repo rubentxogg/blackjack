@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Modified
 - Layout minor adjustments.
+- Code refactor to improve action buttons readability.
 
 ## [1.0.1] - 11/08/2025
 

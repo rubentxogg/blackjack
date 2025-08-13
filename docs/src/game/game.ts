@@ -43,15 +43,22 @@ export class Game {
         this.betInput.value = this.betInput.min;
         this.betInput.max = this.player.money.toString();
 
-        this.updateButtons(false, false, [this.hitButton, this.standButton, this.doubleDownButton]);
-        this.updateButtons(true, false, [this.placeBetButton]);
+        this.updateButtons([
+            { button: this.hitButton, visible: false, disabled: true },
+            { button: this.standButton, visible: false, disabled: true },
+            { button: this.placeBetButton, visible: true, disabled: true },
+            { button: this.doubleDownButton, visible: false, disabled: true }
+        ]);
 
         await Promise.all([
             this.dealer.clearHand(),
             this.player.clearHand()
         ]);
 
-        this.updateButtons(true, true, [this.placeBetButton]);
+        this.updateButtons([
+            { button: this.placeBetButton, visible: true, disabled: false }
+        ]);
+
         this.placeBetButton.focus();
     }
 
@@ -64,9 +71,13 @@ export class Game {
 
     private hit(): void {
         this.ripple(this.hitButton);
-        const buttons = [this.hitButton, this.standButton];
 
-        this.updateButtons(true, false, [...buttons, this.doubleDownButton]);
+        this.updateButtons([
+            { button: this.hitButton, visible: true, disabled: true },
+            { button: this.standButton, visible: true, disabled: true },
+            { button: this.doubleDownButton, visible: !this.doubleDownButton.disabled, disabled: true }
+        ]);
+
         this.player.addCard();
 
         if (this.player.score > Rules.BLACKJACK) {
@@ -77,12 +88,16 @@ export class Game {
             return;
         }
 
-        if (this.player.score === Rules.BLACKJACK) {
+        if ((this.player.score === Rules.BLACKJACK)) {
             this.stand();
             return;
         }
 
-        this.updateButtons(true, true, buttons);
+        this.updateButtons([
+            { button: this.hitButton, visible: true, disabled: false },
+            { button: this.standButton, visible: true, disabled: false }
+        ]);
+
         this.hitEnterKeyListener();
     }
 
@@ -107,7 +122,12 @@ export class Game {
 
     private stand(): void {
         this.ripple(this.standButton);
-        this.updateButtons(true, false, [this.hitButton, this.standButton, this.doubleDownButton]);
+
+        this.updateButtons([
+            { button: this.hitButton, visible: true, disabled: false },
+            { button: this.standButton, visible: true, disabled: false },
+        ]);
+
         this.dealer.flipCard();
         setTimeout(() => this.startDealersTurn(), 500);
     }
@@ -124,14 +144,35 @@ export class Game {
         }, this.DEALER_DELAY_MS);
     }
 
-    private bet(): void {
+    private async bet(): Promise<void> {
+        this.hitEnterKeyListener();
+
+        this.updateButtons([
+            { button: this.placeBetButton, visible: false, disabled: false }
+        ]);
+
+        if (this.player.hasBlackjack()) {
+            this.updateButtons([
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: true, disabled: true },
+            ]);
+            return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+        }
+
+        this.updateButtons([
+            { button: this.hitButton, visible: true, disabled: false },
+            { button: this.standButton, visible: true, disabled: false },
+            { button: this.doubleDownButton, visible: true, disabled: !this.player.canDoubleDown },
+        ]);
+
         this.player.placeBet();
         this.dealCards();
     }
 
     private doubleDown(): void {
-        // TODO
         this.ripple(this.doubleDownButton);
+        this.hit();
     }
 
     private split(): void {
@@ -150,7 +191,7 @@ export class Game {
         this.doubleDownButton.addEventListener('click', () => this.doubleDown());
 
         document.addEventListener('keydown', (event) => {
-            if(!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
+            if (!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
                 this.doubleDown();
             }
         });
@@ -203,20 +244,7 @@ export class Game {
         this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
         this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
         this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
-        this.placeBetButton.addEventListener('click', async () => {
-            this.hitEnterKeyListener();
-            this.bet();
-            this.updateButtons(false, false, [this.placeBetButton]);
-
-            const actionButtons = [this.hitButton, this.standButton, this.doubleDownButton];
-
-            if (this.player.hasBlackjack()) {
-                this.updateButtons(true, false, actionButtons);
-                return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
-            }
-
-            this.updateButtons(true, true, actionButtons);
-        });
+        this.placeBetButton.addEventListener('click', () => this.bet());
     }
 
     /**
@@ -241,10 +269,10 @@ export class Game {
         });
     }
 
-    private updateButtons(setVisible: boolean, setEnabled: boolean, buttons: HTMLButtonElement[]): void {
-        buttons.forEach(button => {
-            button.style.display = setVisible ? 'block' : 'none';
-            button.disabled = !setEnabled;
+    private updateButtons(config: ButtonConfig[]): void {
+        config.forEach(cfg => {
+            cfg.button.style.display = cfg.visible ? 'block' : 'none';
+            cfg.button.disabled = cfg.disabled;
         });
     }
 }

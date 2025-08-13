@@ -17,6 +17,9 @@ export class Player extends Role {
     get payment() {
         return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
+    get canDoubleDown() {
+        return (this.bet * 2) <= this.money;
+    }
     placeBet() {
         const bet = document.getElementById('bet').value;
         this.bet = Number(bet);
