@@ -57,6 +57,7 @@ export class Game {
         './assets/SPADES-THREE.svg',
         './assets/SPADES-TWO.svg'
     ];
+    static readonly ADD_CARD_DELAY = 7e2;
 
     /**
      * Blackjack (3:2 payout): For every $2 you wager, you win $3. 

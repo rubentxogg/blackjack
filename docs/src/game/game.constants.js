@@ -64,3 +64,4 @@ Game.CARD_IMAGES = [
     './assets/SPADES-THREE.svg',
     './assets/SPADES-TWO.svg'
 ];
+Game.ADD_CARD_DELAY = 7e2;

@@ -1,4 +1,5 @@
 import { Card } from "../card/card.js";
+import { Game } from "../game/game.constants.js";
 import { Role } from "../role/role.js";
 
 
@@ -18,7 +19,7 @@ export class Dealer extends Role {
         super.writeScore(score);
     }
 
-    flipCard(): void {
+    async flipCard(): Promise<void> {
         if (!this.isInitialHand) {
             return;
         }
@@ -32,6 +33,7 @@ export class Dealer extends Role {
         hiddenCard.id = secondCard.face;
 
         super.writeScore(this.score.toString());
+        return new Promise(resolve => setTimeout(resolve, Game.ADD_CARD_DELAY));
     }
 
     get isInitialHand(): boolean {

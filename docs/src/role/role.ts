@@ -22,7 +22,7 @@ export abstract class Role {
         return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
 
-    addCard(): void {
+    async addCard(): Promise<void> {
         const suit = this.getRandomEnum(Suit);
         const rank = this.getRandomEnum(Rank);
 
@@ -41,12 +41,14 @@ export abstract class Role {
 
         this.writeCard(card);
         this.writeScore();
+
+        return new Promise(resolve => setTimeout(resolve, Rules.ADD_CARD_DELAY));
     }
 
     protected writeScore(score?: string) {
         this.scoreBox.classList.add('refresh-value');
         this.scoreBox.innerText = score ?? this.score.toString();
-        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), 5e2);
+        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), Rules.ADD_CARD_DELAY);
     }
 
     protected writeCard(card: Card, isHidden?: boolean): void {

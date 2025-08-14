@@ -15,7 +15,6 @@ export class Game {
     private readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
-    private readonly DEALER_DELAY_MS = 4e2;
     private readonly NEW_ROUND_DELAY_MS = 3e3;
 
     constructor() {
@@ -62,20 +61,20 @@ export class Game {
         this.placeBetButton.focus();
     }
 
-    private dealCards(): void {
-        [...Array(2)].forEach(() => {
-            this.dealer.addCard();
-            this.player.addCard();
-        });
+    private async dealCards(): Promise<void> {
+        await this.player.addCard();
+        await this.dealer.addCard();
+        await this.player.addCard();
+        await this.dealer.addCard();
     }
 
-    private hit(): void {
+    private async hit(): Promise<void> {
         this.ripple(this.hitButton);
 
         this.updateButtons([
             { button: this.hitButton, visible: true, disabled: true },
             { button: this.standButton, visible: true, disabled: true },
-            { button: this.doubleDownButton, visible: this.player.isDoublingDown, disabled: true }
+            { button: this.doubleDownButton, visible: this.doubleDownButton.style.display !== 'none', disabled: true }
         ]);
 
         this.player.addCard();
@@ -84,7 +83,7 @@ export class Game {
             setTimeout(() => {
                 this.player.displayResult(this.player.bust);
                 setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-            }, 500);
+            }, Rules.ADD_CARD_DELAY);
             return;
         }
 
@@ -120,7 +119,7 @@ export class Game {
         this.player.displayResult(playerResult);
     }
 
-    private stand(): void {
+    private async stand(): Promise<void> {
         this.ripple(this.standButton);
 
         this.updateButtons([
@@ -129,37 +128,33 @@ export class Game {
             { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
         ]);
 
-        this.dealer.flipCard();
-        setTimeout(() => this.startDealersTurn(), 500);
+        await this.dealer.flipCard();
+        this.startDealersTurn();
     }
 
-    private startDealersTurn(): void {
-        setTimeout(() => {
-            if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
-                this.dealer.addCard();
-                return this.startDealersTurn();
-            }
+    private async startDealersTurn(): Promise<void> {
+        if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
+            await this.dealer.addCard();
+            return this.startDealersTurn();
+        }
 
-            this.endRound();
-            setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-        }, this.DEALER_DELAY_MS);
+        this.endRound();
+        setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
     }
 
     private async bet(): Promise<void> {
         this.player.placeBet();
-        this.dealCards();
-        this.hitEnterKeyListener();
 
         this.updateButtons([
-            { button: this.placeBetButton, visible: false, disabled: false }
+            { button: this.placeBetButton, visible: false, disabled: true },
+            { button: this.hitButton, visible: true, disabled: true },
+            { button: this.standButton, visible: true, disabled: true },
+            { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
         ]);
+        this.hitEnterKeyListener();
+        await this.dealCards();
 
         if (this.player.hasBlackjack()) {
-            this.updateButtons([
-                { button: this.hitButton, visible: true, disabled: true },
-                { button: this.standButton, visible: true, disabled: true },
-                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true },
-            ]);
             return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
         }
 

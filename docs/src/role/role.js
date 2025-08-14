@@ -25,25 +25,28 @@ export class Role {
         return (this.hand.length === 2) && (Rules.BLACKJACK === this.score);
     }
     addCard() {
-        var _a;
-        const suit = this.getRandomEnum(Suit);
-        const rank = this.getRandomEnum(Rank);
-        if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
-            return this.addCard();
-        }
-        const card = new Card(suit, rank);
-        Game.cardsDealt.push(card);
-        this.hand.push(card);
-        if ((this.score > Rules.BLACKJACK)) {
-            (_a = this.hand.find(card => (card.rank === Rank.ACE) && (card.dictionary.get(Rank.ACE) === 11))) === null || _a === void 0 ? void 0 : _a.dictionary.set(Rank.ACE, 1);
-        }
-        this.writeCard(card);
-        this.writeScore();
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const suit = this.getRandomEnum(Suit);
+            const rank = this.getRandomEnum(Rank);
+            if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
+                return this.addCard();
+            }
+            const card = new Card(suit, rank);
+            Game.cardsDealt.push(card);
+            this.hand.push(card);
+            if ((this.score > Rules.BLACKJACK)) {
+                (_a = this.hand.find(card => (card.rank === Rank.ACE) && (card.dictionary.get(Rank.ACE) === 11))) === null || _a === void 0 ? void 0 : _a.dictionary.set(Rank.ACE, 1);
+            }
+            this.writeCard(card);
+            this.writeScore();
+            return new Promise(resolve => setTimeout(resolve, Rules.ADD_CARD_DELAY));
+        });
     }
     writeScore(score) {
         this.scoreBox.classList.add('refresh-value');
         this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
-        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), 5e2);
+        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), Rules.ADD_CARD_DELAY);
     }
     writeCard(card, isHidden) {
         var _a, _b;

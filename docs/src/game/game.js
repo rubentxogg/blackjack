@@ -20,7 +20,6 @@ export class Game {
         this.howToPlayOpenButton = document.getElementById('open-how-to-play');
         this.howToPlayDialog = document.getElementById('how-to-play-dialog');
         this.howToPlayCloseButton = document.getElementById('close-how-to-play');
-        this.DEALER_DELAY_MS = 4e2;
         this.NEW_ROUND_DELAY_MS = 3e3;
         this.dealer = new Dealer();
         this.player = new Player();
@@ -59,35 +58,39 @@ export class Game {
         });
     }
     dealCards() {
-        [...Array(2)].forEach(() => {
-            this.dealer.addCard();
-            this.player.addCard();
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.player.addCard();
+            yield this.dealer.addCard();
+            yield this.player.addCard();
+            yield this.dealer.addCard();
         });
     }
     hit() {
-        this.ripple(this.hitButton);
-        this.updateButtons([
-            { button: this.hitButton, visible: true, disabled: true },
-            { button: this.standButton, visible: true, disabled: true },
-            { button: this.doubleDownButton, visible: this.player.isDoublingDown, disabled: true }
-        ]);
-        this.player.addCard();
-        if (this.player.score > Rules.BLACKJACK) {
-            setTimeout(() => {
-                this.player.displayResult(this.player.bust);
-                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-            }, 500);
-            return;
-        }
-        if ((this.player.score === Rules.BLACKJACK) || this.player.isDoublingDown) {
-            this.stand();
-            return;
-        }
-        this.updateButtons([
-            { button: this.hitButton, visible: true, disabled: false },
-            { button: this.standButton, visible: true, disabled: false }
-        ]);
-        this.hitEnterKeyListener();
+        return __awaiter(this, void 0, void 0, function* () {
+            this.ripple(this.hitButton);
+            this.updateButtons([
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: this.doubleDownButton.style.display !== 'none', disabled: true }
+            ]);
+            this.player.addCard();
+            if (this.player.score > Rules.BLACKJACK) {
+                setTimeout(() => {
+                    this.player.displayResult(this.player.bust);
+                    setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+                }, Rules.ADD_CARD_DELAY);
+                return;
+            }
+            if ((this.player.score === Rules.BLACKJACK) || this.player.isDoublingDown) {
+                this.stand();
+                return;
+            }
+            this.updateButtons([
+                { button: this.hitButton, visible: true, disabled: false },
+                { button: this.standButton, visible: true, disabled: false }
+            ]);
+            this.hitEnterKeyListener();
+        });
     }
     ripple(button) {
         button.classList.add('ripple');
@@ -107,39 +110,39 @@ export class Game {
         this.player.displayResult(playerResult);
     }
     stand() {
-        this.ripple(this.standButton);
-        this.updateButtons([
-            { button: this.hitButton, visible: true, disabled: true },
-            { button: this.standButton, visible: true, disabled: true },
-            { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
-        ]);
-        this.dealer.flipCard();
-        setTimeout(() => this.startDealersTurn(), 500);
+        return __awaiter(this, void 0, void 0, function* () {
+            this.ripple(this.standButton);
+            this.updateButtons([
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
+            ]);
+            yield this.dealer.flipCard();
+            this.startDealersTurn();
+        });
     }
     startDealersTurn() {
-        setTimeout(() => {
+        return __awaiter(this, void 0, void 0, function* () {
             if (this.dealer.score < Rules.DEALER_HIT_LIMIT) {
-                this.dealer.addCard();
+                yield this.dealer.addCard();
                 return this.startDealersTurn();
             }
             this.endRound();
             setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
-        }, this.DEALER_DELAY_MS);
+        });
     }
     bet() {
         return __awaiter(this, void 0, void 0, function* () {
             this.player.placeBet();
-            this.dealCards();
-            this.hitEnterKeyListener();
             this.updateButtons([
-                { button: this.placeBetButton, visible: false, disabled: false }
+                { button: this.placeBetButton, visible: false, disabled: true },
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
             ]);
+            this.hitEnterKeyListener();
+            yield this.dealCards();
             if (this.player.hasBlackjack()) {
-                this.updateButtons([
-                    { button: this.hitButton, visible: true, disabled: true },
-                    { button: this.standButton, visible: true, disabled: true },
-                    { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true },
-                ]);
                 return yield new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
             }
             this.updateButtons([
