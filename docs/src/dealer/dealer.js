@@ -31,7 +31,7 @@ export class Dealer extends Role {
             const secondCard = this.hand[1];
             const hiddenCard = document.getElementById(`${secondCard.face}-hidden`);
             hiddenCard.className = `flip ${hiddenCard.className}`;
-            hiddenCard.src = `./assets/${secondCard.face}.svg`;
+            hiddenCard.src = `${Game.ASSETS_CARDS}/${secondCard.face}.svg`;
             hiddenCard.alt = secondCard.face;
             hiddenCard.id = secondCard.face;
             _super.writeScore.call(this, this.score.toString());

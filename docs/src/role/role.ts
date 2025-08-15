@@ -56,7 +56,7 @@ export abstract class Role {
 
         img.alt = !isHidden ? card.face : `${card.face}-hidden`;
         img.id = img.alt;
-        img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;
+        img.src = !isHidden ? `${Rules.ASSETS_CARDS}/${card.face}.svg` : `${Rules.ASSETS_CARDS}/HIDDEN.svg`;
         img.className = `${this.role?.id}-card`;
 
         this.role?.appendChild(img);

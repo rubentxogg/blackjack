@@ -99,7 +99,7 @@ export class Game {
             { button: this.doubleDownButton, visible: this.doubleDownButton.style.display !== 'none', disabled: true }
         ]);
 
-        this.player.addCard();
+        await this.player.addCard();
 
         if (this.player.score > Rules.BLACKJACK) {
             setTimeout(() => {

@@ -725,12 +725,47 @@ hr {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
 }
 
 .chips {
     display: flex;
-    gap: 20px;
     justify-content: center;
+    gap: 15px;
     width: 100%;
+}
+
+.chips button {
+    color: transparent;
+    display: none;
+}
+
+.chips button:nth-child(1) { 
+    background: url('./assets/chips/chip1.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(2) { 
+    background: url('./assets/chips/chip5.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(3) { 
+    background: url('./assets/chips/chip25.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(4) { 
+    background: url('./assets/chips/chip100.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(5) { 
+    background: url('./assets/chips/chip500.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
 }

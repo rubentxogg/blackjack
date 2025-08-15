@@ -53,7 +53,7 @@ export class Role {
         const img = document.createElement('img');
         img.alt = !isHidden ? card.face : `${card.face}-hidden`;
         img.id = img.alt;
-        img.src = !isHidden ? `./assets/${card.face}.svg` : `./assets/HIDDEN.svg`;
+        img.src = !isHidden ? `${Rules.ASSETS_CARDS}/${card.face}.svg` : `${Rules.ASSETS_CARDS}/HIDDEN.svg`;
         img.className = `${(_a = this.role) === null || _a === void 0 ? void 0 : _a.id}-card`;
         (_b = this.role) === null || _b === void 0 ? void 0 : _b.appendChild(img);
     }

@@ -28,7 +28,7 @@ export class Dealer extends Role {
         const hiddenCard = document.getElementById(`${secondCard.face}-hidden`) as HTMLImageElement;
 
         hiddenCard.className = `flip ${hiddenCard.className}`;
-        hiddenCard.src = `./assets/${secondCard.face}.svg`;
+        hiddenCard.src = `${Game.ASSETS_CARDS}/${secondCard.face}.svg`;
         hiddenCard.alt = secondCard.face;
         hiddenCard.id = secondCard.face;
 

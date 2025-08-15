@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Betting chips.
 
+### Changed
+- Assets organization.
+
 ## [1.1.1] - 14/08/2025
 
 ### Added
