@@ -6,6 +6,7 @@ export class Player extends Role {
         super(PLAYER);
         this.money = 100;
         this.bet = 0;
+        this.insuranceBet = 0;
         this.isDoublingDown = false;
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`);
         this.betDisplay = document.getElementById(`${PLAYER}-bet`);

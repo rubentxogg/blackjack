@@ -58,11 +58,12 @@ export class Game {
         './assets/SPADES-TWO.svg'
     ];
     static readonly ADD_CARD_DELAY = 7e2;
+    static readonly NEW_ROUND_DELAY_MS = 3e3;
 
     /**
      * Blackjack (3:2 payout): For every $2 you wager, you win $3. 
      * Other winning hands (1:1 payout): For every $1 you wager, you win $1. 
-     * Insurance (2:1 payout): If you take insurance and the dealer has a blackjack, you win 2:1 on your insurance bet
+     * Insurance (2:1 payout): If you take insurance and the dealer has a blackjack, you win 2:1 on your insurance bet. Player can bet no greater than half of the initial bet
      */
 
     private constructor() { }

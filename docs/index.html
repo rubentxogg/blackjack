@@ -122,9 +122,19 @@
             <button id="hit">Hit</button>
             <button id="stand">Stand</button>
             <button id="double-down">Double Down</button>
-            <button id="place-bet" disabled>
-                Place Bet $<input id="bet" type="number"></span>
-            </button>
+
+            <div class="bet-container">
+                <div class="chips">
+                    <button id="chip-1" disabled>1</button>
+                    <button id="chip-5" disabled>5</button>
+                    <button id="chip-25" disabled>25</button>
+                    <button id="chip-100" disabled>100</button>
+                    <button id="chip-500" disabled>500</button>
+                </div>
+                <button id="place-bet" disabled>
+                    Place Bet $<input id="bet" type="number"></span>
+                </button>
+            </div>
         </div>
     </main>
 
@@ -137,7 +147,7 @@
             Total money: <span id="player-money"></span>
         </div>
 
-        <span id="version">v1.1.1</span>
+        <span id="version">v1.2.1</span>
     </footer>
 
     <script type="module" src="./src/index.js"></script>

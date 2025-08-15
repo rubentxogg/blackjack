@@ -11,6 +11,7 @@ export class Player extends Role {
 
     money = 100;
     bet = 0;
+    insuranceBet = 0;
     isDoublingDown = false;
 
     constructor() {

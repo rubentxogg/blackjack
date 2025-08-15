@@ -8,19 +8,40 @@ export class Game {
     private readonly player: Player;
     static readonly cardsDealt: Card[] = [];
     private readonly betInput = document.getElementById(this.bet.name) as HTMLInputElement;
-    private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
-    private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
-    private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
     private readonly doubleDownButton = document.getElementById('double-down') as HTMLButtonElement;
     private readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
-    private readonly NEW_ROUND_DELAY_MS = 3e3;
+
+    // Actions
+    private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
+    private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
+    private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
+
+    // Bet chips
+    private readonly chipOne = document.getElementById('chip-1') as HTMLButtonElement;
+    private readonly chipFive = document.getElementById('chip-5') as HTMLButtonElement;
+    private readonly chipTwentyFive = document.getElementById('chip-25') as HTMLButtonElement;
+    private readonly chipHundred = document.getElementById('chip-100') as HTMLButtonElement;
+    private readonly chipFiveHundred = document.getElementById('chip-500') as HTMLButtonElement;
 
     constructor() {
         this.dealer = new Dealer();
         this.player = new Player();
         this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
+    }
+
+    get chips(): ButtonConfig[] {
+        const isPlaceBetButtonVisible = this.placeBetButton.style.display !== 'none';
+        const isDisabled = (chipValue: number) => this.placeBetButton.disabled || ((this.player.money - Number(this.betInput.value)) < chipValue);
+
+        return [
+            { button: this.chipOne, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipOne.innerText)) },
+            { button: this.chipFive, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipFive.innerText)) },
+            { button: this.chipTwentyFive, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipTwentyFive.innerText)) },
+            { button: this.chipHundred, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipHundred.innerText)) },
+            { button: this.chipFiveHundred, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipFiveHundred.innerText)) }
+        ];
     }
 
     get betInputMin(): string {
@@ -46,8 +67,9 @@ export class Game {
             { button: this.hitButton, visible: false, disabled: true },
             { button: this.standButton, visible: false, disabled: true },
             { button: this.placeBetButton, visible: true, disabled: true },
-            { button: this.doubleDownButton, visible: false, disabled: true }
+            { button: this.doubleDownButton, visible: false, disabled: true },
         ]);
+        this.updateButtons([...this.chips]);
 
         await Promise.all([
             this.dealer.clearHand(),
@@ -55,9 +77,9 @@ export class Game {
         ]);
 
         this.updateButtons([
-            { button: this.placeBetButton, visible: true, disabled: false }
+            { button: this.placeBetButton, visible: true, disabled: false },
         ]);
-
+        this.updateButtons([...this.chips]);
         this.placeBetButton.focus();
     }
 
@@ -82,7 +104,7 @@ export class Game {
         if (this.player.score > Rules.BLACKJACK) {
             setTimeout(() => {
                 this.player.displayResult(this.player.bust);
-                setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+                setTimeout(() => this.newRound(), Rules.NEW_ROUND_DELAY_MS);
             }, Rules.ADD_CARD_DELAY);
             return;
         }
@@ -139,7 +161,7 @@ export class Game {
         }
 
         this.endRound();
-        setTimeout(() => this.newRound(), this.NEW_ROUND_DELAY_MS);
+        setTimeout(() => this.newRound(), Rules.NEW_ROUND_DELAY_MS);
     }
 
     private async bet(): Promise<void> {
@@ -151,6 +173,7 @@ export class Game {
             { button: this.standButton, visible: true, disabled: true },
             { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
         ]);
+        this.updateButtons([...this.chips]);
         this.hitEnterKeyListener();
         await this.dealCards();
 
@@ -161,7 +184,10 @@ export class Game {
         this.updateButtons([
             { button: this.hitButton, visible: true, disabled: false },
             { button: this.standButton, visible: true, disabled: false },
-            { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown },
+            { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown }
+        ]);
+        this.updateButtons([
+            ...this.chips
         ]);
     }
 
@@ -181,6 +207,14 @@ export class Game {
         this.standListener();
         this.betListener();
         this.doubleDownListener();
+        this.chipsListener();
+    }
+
+    private chipsListener(): void {
+        this.chips.forEach(chipCfg => chipCfg.button.addEventListener('click', () => {
+            this.betInput.value = (Number(this.betInput.value) + Number(chipCfg.button.innerText)).toString();
+            this.updateButtons([...this.chips]);
+        }));
     }
 
     private doubleDownListener(): void {
@@ -224,22 +258,25 @@ export class Game {
 
             if (event.key === 'Enter') {
                 this.betInput.click();
-                return;
-            }
-
-            if ((event.key === 'ArrowUp') || (event.key.toLocaleLowerCase() === 'w')) {
+            } else if ((event.key === 'ArrowUp') || (event.key.toLocaleLowerCase() === 'w')) {
                 this.betInput.stepUp();
-                return;
-            }
-
-            if ((event.key === 'ArrowDown') || (event.key.toLocaleLowerCase() === 's')) {
+            } else if ((event.key === 'ArrowDown') || (event.key.toLocaleLowerCase() === 's')) {
                 this.betInput.stepDown();
             }
+
+            this.updateButtons([...this.chips]);
         });
 
         this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
         this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
-        this.placeBetButton.addEventListener('wheel', (event) => (event.deltaY > 0) ? this.betInput.stepDown() : this.betInput.stepUp());
+        this.placeBetButton.addEventListener('wheel', (event) => {
+            if (event.deltaY > 0) {
+                this.betInput.stepDown()
+            } else {
+                this.betInput.stepUp()
+            }
+            this.updateButtons([...this.chips]);
+        });
         this.placeBetButton.addEventListener('click', () => this.bet());
     }
 

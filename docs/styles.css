@@ -720,3 +720,17 @@ hr {
 .wave span:nth-child(10) {
     animation-delay: .9s;
 }
+
+.bet-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chips {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+}
