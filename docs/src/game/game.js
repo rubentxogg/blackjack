@@ -21,25 +21,31 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
-        // Bet chips
-        this.chipOne = document.getElementById('chip-1');
-        this.chipFive = document.getElementById('chip-5');
-        this.chipTwentyFive = document.getElementById('chip-25');
-        this.chipHundred = document.getElementById('chip-100');
-        this.chipFiveHundred = document.getElementById('chip-500');
+        // Betting chips
+        this.chip1 = document.getElementById('chip-1');
+        this.chip5 = document.getElementById('chip-5');
+        this.chip10 = document.getElementById('chip-10');
+        this.chip25 = document.getElementById('chip-25');
+        this.chip100 = document.getElementById('chip-100');
+        this.chip500 = document.getElementById('chip-500');
+        this.chip1k = document.getElementById('chip-1k');
+        this.chip5k = document.getElementById('chip-5k');
         this.dealer = new Dealer();
         this.player = new Player();
         this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
     get chips() {
-        const isPlaceBetButtonVisible = this.placeBetButton.style.display !== 'none';
-        const isDisabled = (chipValue) => this.placeBetButton.disabled || ((this.player.money - Number(this.betInput.value)) < chipValue);
+        const isVisible = (chipValue) => (this.placeBetButton.style.display !== 'none') && (this.player.money >= Number(chipValue));
+        const isDisabled = (chipValue) => this.placeBetButton.disabled || ((this.player.money - Number(this.betInput.value)) < Number(chipValue));
         return [
-            { button: this.chipOne, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipOne.innerText)) },
-            { button: this.chipFive, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipFive.innerText)) },
-            { button: this.chipTwentyFive, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipTwentyFive.innerText)) },
-            { button: this.chipHundred, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipHundred.innerText)) },
-            { button: this.chipFiveHundred, visible: isPlaceBetButtonVisible, disabled: isDisabled(Number(this.chipFiveHundred.innerText)) }
+            { button: this.chip1, visible: isVisible(this.chip1.value), disabled: isDisabled(this.chip1.value) },
+            { button: this.chip5, visible: isVisible(this.chip5.value), disabled: isDisabled(this.chip5.value) },
+            { button: this.chip10, visible: isVisible(this.chip10.value), disabled: isDisabled(this.chip10.value) },
+            { button: this.chip25, visible: isVisible(this.chip25.value), disabled: isDisabled(this.chip25.value) },
+            { button: this.chip100, visible: isVisible(this.chip100.value), disabled: isDisabled(this.chip100.value) },
+            { button: this.chip500, visible: isVisible(this.chip500.value), disabled: isDisabled(this.chip500.value) },
+            { button: this.chip1k, visible: isVisible(this.chip1k.value), disabled: isDisabled(this.chip1k.value) },
+            { button: this.chip5k, visible: isVisible(this.chip5k.value), disabled: isDisabled(this.chip5k.value) }
         ];
     }
     get betInputMin() {
@@ -113,7 +119,7 @@ export class Game {
     }
     ripple(button) {
         button.classList.add('ripple');
-        setTimeout(() => button.classList.remove('ripple'), 500);
+        setTimeout(() => button.classList.remove('ripple'), 200);
     }
     endRound() {
         let playerResult = null;
@@ -193,7 +199,8 @@ export class Game {
     }
     chipsListener() {
         this.chips.forEach(chipCfg => chipCfg.button.addEventListener('click', () => {
-            this.betInput.value = (Number(this.betInput.value) + Number(chipCfg.button.innerText)).toString();
+            this.ripple(chipCfg.button);
+            this.betInput.value = (Number(this.betInput.value) + Number(chipCfg.button.value)).toString();
             this.updateButtons([...this.chips]);
         }));
     }

@@ -392,7 +392,7 @@ input::-webkit-inner-spin-button {
 
 .ripple {
     animation: ripple;
-    animation-duration: 500ms;
+    animation-duration: 200ms;
 }
 
 .money-bust {
@@ -738,6 +738,8 @@ hr {
 .chips button {
     color: transparent;
     display: none;
+    padding: 24px;
+    border-radius: 100%;
 }
 
 .chips button:nth-child(1) { 
@@ -753,19 +755,37 @@ hr {
 }
 
 .chips button:nth-child(3) { 
-    background: url('./assets/chips/chip25.png') no-repeat;
+    background: url('./assets/chips/chip10.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(4) { 
-    background: url('./assets/chips/chip100.png') no-repeat;
+    background: url('./assets/chips/chip25.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(5) { 
+    background: url('./assets/chips/chip100.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(6) { 
     background: url('./assets/chips/chip500.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(7) { 
+    background: url('./assets/chips/chip1k.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(8) { 
+    background: url('./assets/chips/chip5k.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
