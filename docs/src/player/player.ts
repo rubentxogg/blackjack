@@ -118,9 +118,9 @@ export class Player extends Role {
         this.money += this.bet;
     }
 
-    hasBlackjack(): boolean {
+    async hasBlackjack(): Promise<boolean> {
         if (!this.blackjack) {
-            return false;
+            return Promise.resolve(false);
         }
 
         this.resultType.innerText = '';
@@ -129,13 +129,12 @@ export class Player extends Role {
         this.blackjackDisplay.style.display = 'block';
         this.blackjackDisplay.className = 'wave';
 
-        setTimeout(() => {
+        return new Promise(resolve => setTimeout(resolve, 3e3)).then(() => {
             this.blackjackDisplay.style.display = 'none';
             this.resultDisplay.className = '';
             this.blackjackDisplay.className = '';
-        }, 3e3);
-
-        return true;
+            return true;
+        });
     }
 
     doubleDown(): void {

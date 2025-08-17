@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { Role } from "../role/role.js";
 import { Game } from "../game/game.constants.js";
 export class Player extends Role {
@@ -89,20 +98,22 @@ export class Player extends Role {
         this.money += this.bet;
     }
     hasBlackjack() {
-        if (!this.blackjack) {
-            return false;
-        }
-        this.resultType.innerText = '';
-        this.resultMoney.innerText = '';
-        this.resultDisplay.className = 'result-display';
-        this.blackjackDisplay.style.display = 'block';
-        this.blackjackDisplay.className = 'wave';
-        setTimeout(() => {
-            this.blackjackDisplay.style.display = 'none';
-            this.resultDisplay.className = '';
-            this.blackjackDisplay.className = '';
-        }, 3e3);
-        return true;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.blackjack) {
+                return Promise.resolve(false);
+            }
+            this.resultType.innerText = '';
+            this.resultMoney.innerText = '';
+            this.resultDisplay.className = 'result-display';
+            this.blackjackDisplay.style.display = 'block';
+            this.blackjackDisplay.className = 'wave';
+            return new Promise(resolve => setTimeout(resolve, 3e3)).then(() => {
+                this.blackjackDisplay.style.display = 'none';
+                this.resultDisplay.className = '';
+                this.blackjackDisplay.className = '';
+                return true;
+            });
+        });
     }
     doubleDown() {
         if (!this.canDoubleDown) {

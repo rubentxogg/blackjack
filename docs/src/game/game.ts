@@ -93,7 +93,9 @@ export class Game {
         await this.player.addCard();
         await this.dealer.addCard();
         await this.player.addCard();
+        await this.player.hasBlackjack();
         await this.dealer.addCard();
+        await this.dealer.flipCard(0);
     }
 
     private async hit(): Promise<void> {
@@ -156,7 +158,7 @@ export class Game {
             { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
         ]);
 
-        await this.dealer.flipCard();
+        await this.dealer.flipCard(1);
         this.startDealersTurn();
     }
 
@@ -171,6 +173,10 @@ export class Game {
     }
 
     private async bet(): Promise<void> {
+        if (Number(this.betInput.value) > this.player.money) {
+            return;
+        }
+
         this.player.placeBet();
 
         this.updateButtons([
@@ -180,11 +186,10 @@ export class Game {
             { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
         ]);
         this.updateButtons([...this.chips]);
-        this.hitEnterKeyListener();
         await this.dealCards();
 
-        if (this.player.hasBlackjack()) {
-            return await new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+        if (this.player.blackjack) {
+            this.stand();
         }
 
         this.updateButtons([
@@ -192,9 +197,8 @@ export class Game {
             { button: this.standButton, visible: true, disabled: false },
             { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown }
         ]);
-        this.updateButtons([
-            ...this.chips
-        ]);
+        this.updateButtons([...this.chips]);
+        this.hitEnterKeyListener();
     }
 
     private doubleDown(): void {

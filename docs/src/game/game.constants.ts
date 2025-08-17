@@ -56,7 +56,7 @@ export class Game {
         `${Game.ASSETS_CARDS}/SPADES-SIX.svg`,
         `${Game.ASSETS_CARDS}/SPADES-TEN.svg`,
         `${Game.ASSETS_CARDS}/SPADES-THREE.svg`,
-        `${Game.ASSETS_CARDS}/SPADES-TWO.svg` 
+        `${Game.ASSETS_CARDS}/SPADES-TWO.svg`
     ];
     static readonly ADD_CARD_DELAY = 7e2;
     static readonly NEW_ROUND_DELAY_MS = 3e3;

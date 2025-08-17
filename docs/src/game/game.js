@@ -87,7 +87,9 @@ export class Game {
             yield this.player.addCard();
             yield this.dealer.addCard();
             yield this.player.addCard();
+            yield this.player.hasBlackjack();
             yield this.dealer.addCard();
+            yield this.dealer.flipCard(0);
         });
     }
     hit() {
@@ -142,7 +144,7 @@ export class Game {
                 { button: this.standButton, visible: true, disabled: true },
                 { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
             ]);
-            yield this.dealer.flipCard();
+            yield this.dealer.flipCard(1);
             this.startDealersTurn();
         });
     }
@@ -158,6 +160,9 @@ export class Game {
     }
     bet() {
         return __awaiter(this, void 0, void 0, function* () {
+            if (Number(this.betInput.value) > this.player.money) {
+                return;
+            }
             this.player.placeBet();
             this.updateButtons([
                 { button: this.placeBetButton, visible: false, disabled: true },
@@ -166,19 +171,17 @@ export class Game {
                 { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
             ]);
             this.updateButtons([...this.chips]);
-            this.hitEnterKeyListener();
             yield this.dealCards();
-            if (this.player.hasBlackjack()) {
-                return yield new Promise(resolve => setTimeout(resolve, 3e3)).then(() => this.stand());
+            if (this.player.blackjack) {
+                this.stand();
             }
             this.updateButtons([
                 { button: this.hitButton, visible: true, disabled: false },
                 { button: this.standButton, visible: true, disabled: false },
                 { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown }
             ]);
-            this.updateButtons([
-                ...this.chips
-            ]);
+            this.updateButtons([...this.chips]);
+            this.hitEnterKeyListener();
         });
     }
     doubleDown() {
