@@ -14,6 +14,9 @@ export class Dealer extends Role {
     constructor() {
         super(Dealer.name.toLocaleLowerCase());
     }
+    get hiddenCard() {
+        return document.querySelectorAll("[id$=hidden]")[0];
+    }
     writeCard(card) {
         super.writeCard(card, this.isInitialHand);
     }
@@ -43,13 +46,23 @@ export class Dealer extends Role {
     get isInitialHand() {
         return this.hand.length <= 2;
     }
-    // TODO
     checkBlackjack() {
-        const card = this.hand[0];
-        if ((Rank.ACE === card.rank) || (card.dictionary.get(card.rank) === 10)) {
-            // checking for blackjack...
-            return this.blackjack;
-        }
-        return false;
+        return __awaiter(this, void 0, void 0, function* () {
+            const card = this.hand[0];
+            if ((Rank.ACE === card.rank) || (card.dictionary.get(card.rank) === 10)) {
+                const checkMessage = document.createElement('span');
+                checkMessage.textContent = 'The dealer is checking if he has blackjack...';
+                checkMessage.className = 'dealer-check';
+                this.hiddenCard.style.opacity = '0.5';
+                this.role.append(checkMessage);
+                return new Promise(resolve => setTimeout(resolve, 5000))
+                    .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
+                    .then(() => new Promise(resolve => setTimeout(resolve, 5000)))
+                    .then(() => this.role.removeChild(checkMessage))
+                    .then(() => this.hiddenCard.style.opacity = '1')
+                    .then(() => true);
+            }
+            return Promise.resolve(false);
+        });
     }
 }

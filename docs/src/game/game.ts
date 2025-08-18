@@ -96,6 +96,7 @@ export class Game {
         await this.player.hasBlackjack();
         await this.dealer.addCard();
         await this.dealer.flipCard(0);
+        await this.dealer.checkBlackjack();
     }
 
     private async hit(): Promise<void> {
@@ -188,7 +189,7 @@ export class Game {
         this.updateButtons([...this.chips]);
         await this.dealCards();
 
-        if (this.player.blackjack) {
+        if (this.player.blackjack || this.dealer.blackjack) {
             this.stand();
         }
 

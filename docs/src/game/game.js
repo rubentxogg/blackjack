@@ -90,6 +90,7 @@ export class Game {
             yield this.player.hasBlackjack();
             yield this.dealer.addCard();
             yield this.dealer.flipCard(0);
+            yield this.dealer.checkBlackjack();
         });
     }
     hit() {
@@ -172,7 +173,7 @@ export class Game {
             ]);
             this.updateButtons([...this.chips]);
             yield this.dealCards();
-            if (this.player.blackjack) {
+            if (this.player.blackjack || this.dealer.blackjack) {
                 this.stand();
             }
             this.updateButtons([

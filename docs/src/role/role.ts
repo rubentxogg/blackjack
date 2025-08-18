@@ -5,7 +5,7 @@ import { Game as Rules } from "../game/game.constants.js";
 import { Game } from "../game/game.js";
 
 export abstract class Role {
-    private readonly role: HTMLDivElement;
+    protected readonly role: HTMLDivElement;
     private readonly scoreBox: HTMLSpanElement;
     protected hand: Card[] = [];
 
