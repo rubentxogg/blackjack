@@ -2,7 +2,8 @@ export class Game {
     static readonly ASSETS_CARDS = './assets/cards';
     static readonly BLACKJACK = 21;
     static readonly DEALER_HIT_LIMIT = 17;
-    static readonly BLACKJACK_PAYOUT = 1.5;
+    static readonly BLACKJACK_PAYOUT = 1.5; // 3:2
+    static readonly INSURANCE_PAYOUT = 2; // 1:2
     static readonly CARD_IMAGES = [
         `${Game.ASSETS_CARDS}/CLUBS-ACE.svg`,
         `${Game.ASSETS_CARDS}/CLUBS-EIGHT.svg`,

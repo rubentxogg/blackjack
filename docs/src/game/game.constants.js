@@ -9,7 +9,8 @@ export class Game {
 Game.ASSETS_CARDS = './assets/cards';
 Game.BLACKJACK = 21;
 Game.DEALER_HIT_LIMIT = 17;
-Game.BLACKJACK_PAYOUT = 1.5;
+Game.BLACKJACK_PAYOUT = 1.5; // 3:2
+Game.INSURANCE_PAYOUT = 2; // 1:2
 Game.CARD_IMAGES = [
     `${Game.ASSETS_CARDS}/CLUBS-ACE.svg`,
     `${Game.ASSETS_CARDS}/CLUBS-EIGHT.svg`,

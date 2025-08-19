@@ -8,7 +8,6 @@ export class Game {
     private readonly player: Player;
     static readonly cardsDealt: Card[] = [];
     private readonly betInput = document.getElementById(this.bet.name) as HTMLInputElement;
-    private readonly doubleDownButton = document.getElementById('double-down') as HTMLButtonElement;
     private readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     private readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
     private readonly howToPlayCloseButton = document.getElementById('close-how-to-play') as HTMLButtonElement;
@@ -17,6 +16,8 @@ export class Game {
     private readonly placeBetButton = document.getElementById(`place-${this.bet.name}`) as HTMLButtonElement;
     private readonly hitButton = document.getElementById(this.hit.name) as HTMLButtonElement;
     private readonly standButton = document.getElementById(this.stand.name) as HTMLButtonElement;
+    private readonly doubleDownButton = document.getElementById('double-down') as HTMLButtonElement;
+    private readonly declineButton = document.getElementById('decline') as HTMLButtonElement;
 
     // Betting chips
     private readonly chip1 = document.getElementById('chip-1') as HTMLButtonElement;
@@ -28,6 +29,8 @@ export class Game {
     private readonly chip1k = document.getElementById('chip-1k') as HTMLButtonElement;
     private readonly chip5k = document.getElementById('chip-5k') as HTMLButtonElement;
 
+    private playerInsuranceResponse: any = undefined;
+
     constructor() {
         this.dealer = new Dealer();
         this.player = new Player();
@@ -35,8 +38,13 @@ export class Game {
     }
 
     get chips(): ButtonConfig[] {
-        const isVisible = (chipValue: string) => (this.placeBetButton.style.display !== 'none') && (this.player.money >= Number(chipValue));
-        const isDisabled = (chipValue: string) => this.placeBetButton.disabled || ((this.player.money - Number(this.betInput.value)) < Number(chipValue));
+        const isVisible = (chipValue: string) => (this.placeBetButton.style.display !== 'none') 
+            && (!this.dealer.offerInsurance && (this.player.money >= Number(chipValue)) 
+            || (this.dealer.offerInsurance && (Number(this.betInput.max) >= Number(chipValue))));
+
+        const isDisabled = (chipValue: string) => this.placeBetButton.disabled
+            || ((!this.dealer.offerInsurance && ((this.player.money - Number(this.betInput.value)) < Number(chipValue)))
+            || (this.dealer.offerInsurance && ((Number(this.betInput.max) - Number(this.betInput.value)) < Number(chipValue))));
 
         return [
             { button: this.chip1, visible: isVisible(this.chip1.value), disabled: isDisabled(this.chip1.value) },
@@ -63,10 +71,14 @@ export class Game {
         this.newRound();
     }
 
+    private askPlayerForInsurance(): Promise<boolean> {
+        return new Promise(resolve => { this.playerInsuranceResponse = resolve });
+    }
+
     private async newRound(): Promise<void> {
         Game.cardsDealt.length = 0;
-        this.betInput.min = this.betInputMin;
-        this.betInput.value = this.betInput.min;
+        this.betInput.min = '0';
+        this.betInput.value = '0';
         this.betInput.max = this.player.money.toString();
 
         this.updateButtons([
@@ -96,12 +108,9 @@ export class Game {
         await this.player.hasBlackjack();
         await this.dealer.addCard();
         await this.dealer.flipCard(0);
-        await this.dealer.checkBlackjack();
     }
 
     private async hit(): Promise<void> {
-        this.ripple(this.hitButton);
-
         this.updateButtons([
             { button: this.hitButton, visible: true, disabled: true },
             { button: this.standButton, visible: true, disabled: true },
@@ -139,7 +148,9 @@ export class Game {
     private endRound(): void {
         let playerResult = null;
 
-        if ((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) {
+        const isInsuranceWin = this.player.isPlayingInsurance && this.dealer.blackjack;
+
+        if (((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) || isInsuranceWin) {
             playerResult = this.player.win;
         } else if (this.player.score < this.dealer.score) {
             playerResult = this.player.bust;
@@ -151,8 +162,6 @@ export class Game {
     }
 
     private async stand(): Promise<void> {
-        this.ripple(this.standButton);
-
         this.updateButtons([
             { button: this.hitButton, visible: true, disabled: true },
             { button: this.standButton, visible: true, disabled: true },
@@ -174,7 +183,9 @@ export class Game {
     }
 
     private async bet(): Promise<void> {
-        if (Number(this.betInput.value) > this.player.money) {
+        const bet = Number(this.betInput.value);
+
+        if ((bet <= 0) || (bet > this.player.money) || (bet > Number(this.betInput.max))) {
             return;
         }
 
@@ -187,10 +198,13 @@ export class Game {
             { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
         ]);
         this.updateButtons([...this.chips]);
+
         await this.dealCards();
+        await this.checkForInsurance();
+        await this.dealer.checkBlackjack();
 
         if (this.player.blackjack || this.dealer.blackjack) {
-            this.stand();
+            return this.stand();
         }
 
         this.updateButtons([
@@ -202,8 +216,44 @@ export class Game {
         this.hitEnterKeyListener();
     }
 
+    private async checkForInsurance(): Promise<void> {
+        const maxInsuranceBet = (Number(this.player.bet.toString()) / 2).toString();
+
+        if (!this.dealer.offerInsurance || (this.player.money === 0) || (this.player.money < Number(maxInsuranceBet))) {
+            return;
+        }
+
+        this.dealer.askForInsurance();
+        this.betInput.min = '0';
+        this.betInput.value = '0';
+        this.betInput.max = maxInsuranceBet;
+
+        this.updateButtons([
+            { button: this.placeBetButton, visible: true, disabled: false },
+            { button: this.declineButton, visible: true, disabled: false },
+            { button: this.hitButton, visible: false, disabled: true },
+            { button: this.standButton, visible: false, disabled: true },
+            { button: this.doubleDownButton, visible: false, disabled: true }
+        ]);
+        this.updateButtons([...this.chips]);
+
+        this.player.isPlayingInsurance = await this.askPlayerForInsurance();
+
+        if (this.player.isPlayingInsurance) {
+            document.getElementById('dealer-message')?.remove();
+            this.updateButtons([
+                { button: this.placeBetButton, visible: false, disabled: true },
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true },
+                { button: this.declineButton, visible: false, disabled: true }
+            ]);
+            this.updateButtons([...this.chips]);
+            this.player.placeBet();
+        }
+    }
+
     private doubleDown(): void {
-        this.ripple(this.doubleDownButton);
         this.player.doubleDown();
         this.hit();
     }
@@ -219,6 +269,34 @@ export class Game {
         this.betListener();
         this.doubleDownListener();
         this.chipsListener();
+        this.declineListener();
+    }
+
+    private declineListener(): void {
+        this.declineButton.addEventListener('click', () => {
+            this.ripple(this.declineButton);
+            document.getElementById('dealer-message')?.remove();
+            this.updateButtons([
+                { button: this.placeBetButton, visible: false, disabled: true },
+                { button: this.declineButton, visible: false, disabled: true },
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
+
+            ]);
+            this.updateButtons([...this.chips]);
+            this.playerInsuranceResponse(false);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (this.declineButton.disabled) {
+                return;
+            }
+
+            if (event.key === 'Backspace') {
+                this.declineButton.click();
+            }
+        });
     }
 
     private chipsListener(): void {
@@ -230,11 +308,14 @@ export class Game {
     }
 
     private doubleDownListener(): void {
-        this.doubleDownButton.addEventListener('click', () => this.doubleDown());
+        this.doubleDownButton.addEventListener('click', () => {
+            this.ripple(this.doubleDownButton);
+            this.doubleDown();
+        });
 
         document.addEventListener('keydown', (event) => {
             if (!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
-                this.doubleDown();
+                this.doubleDownButton.click();
             }
         });
     }
@@ -249,11 +330,14 @@ export class Game {
     }
 
     private standListener(): void {
-        this.standButton.addEventListener('click', () => this.stand());
+        this.standButton.addEventListener('click', () => {
+            this.ripple(this.standButton);
+            this.stand();
+        });
 
         document.addEventListener('keypress', (event) => {
             if (!this.standButton.disabled && (event.key === ' ')) {
-                this.stand();
+                this.standButton.click();
             }
         });
     }
@@ -289,7 +373,15 @@ export class Game {
             }
             this.updateButtons([...this.chips]);
         });
-        this.placeBetButton.addEventListener('click', () => this.bet());
+        this.placeBetButton.addEventListener('click', () => {
+            this.ripple(this.placeBetButton);
+
+            if (this.dealer.offerInsurance) {
+                return this.playerInsuranceResponse(true);
+            }
+
+            this.bet();
+        });
     }
 
     /**
@@ -303,13 +395,14 @@ export class Game {
 
     private hitEnterKeyHandler(event: KeyboardEvent) {
         if (!this.hitButton.disabled && (event.key === 'Enter')) {
-            this.hit();
+            this.hitButton.click();
         }
     }
 
     private hitListener(): any {
         this.hitButton.addEventListener('click', () => {
             document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
+            this.ripple(this.hitButton);
             this.hit();
         });
     }

@@ -17,6 +17,7 @@ export class Player extends Role {
         this.bet = 0;
         this.insuranceBet = 0;
         this.isDoublingDown = false;
+        this.isPlayingInsurance = false;
         this.moneyDisplay = document.getElementById(`${PLAYER}-money`);
         this.betDisplay = document.getElementById(`${PLAYER}-bet`);
         this.resultDisplay = document.getElementById('result-display');
@@ -26,6 +27,9 @@ export class Player extends Role {
         this.refreshDisplay();
     }
     get payment() {
+        if (this.isPlayingInsurance) {
+            return this.insuranceBet * Game.INSURANCE_PAYOUT;
+        }
         return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
     get canDoubleDown() {
@@ -34,8 +38,14 @@ export class Player extends Role {
     placeBet() {
         this.isDoublingDown = false;
         const bet = document.getElementById('bet').value;
-        this.bet = Number(bet);
-        this.money -= this.bet;
+        if (this.isPlayingInsurance) {
+            this.insuranceBet = Number(bet);
+            this.money -= this.insuranceBet;
+        }
+        else {
+            this.bet = Number(bet);
+            this.money -= this.bet;
+        }
         this.refreshDisplay();
     }
     refreshMoney() {
@@ -88,7 +98,7 @@ export class Player extends Role {
         }
     }
     win() {
-        this.money += (this.bet + this.payment);
+        this.money += (!this.isPlayingInsurance ? (this.bet + this.payment) : (this.insuranceBet + this.payment));
     }
     /**
      * Occurs when the player and the dealer have the same total value for their hands at the end of a round.

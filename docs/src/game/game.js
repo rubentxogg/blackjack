@@ -13,7 +13,6 @@ import { Game as Rules } from "./game.constants.js";
 export class Game {
     constructor() {
         this.betInput = document.getElementById(this.bet.name);
-        this.doubleDownButton = document.getElementById('double-down');
         this.howToPlayOpenButton = document.getElementById('open-how-to-play');
         this.howToPlayDialog = document.getElementById('how-to-play-dialog');
         this.howToPlayCloseButton = document.getElementById('close-how-to-play');
@@ -21,6 +20,8 @@ export class Game {
         this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
         this.hitButton = document.getElementById(this.hit.name);
         this.standButton = document.getElementById(this.stand.name);
+        this.doubleDownButton = document.getElementById('double-down');
+        this.declineButton = document.getElementById('decline');
         // Betting chips
         this.chip1 = document.getElementById('chip-1');
         this.chip5 = document.getElementById('chip-5');
@@ -30,13 +31,18 @@ export class Game {
         this.chip500 = document.getElementById('chip-500');
         this.chip1k = document.getElementById('chip-1k');
         this.chip5k = document.getElementById('chip-5k');
+        this.playerInsuranceResponse = undefined;
         this.dealer = new Dealer();
         this.player = new Player();
         this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
     get chips() {
-        const isVisible = (chipValue) => (this.placeBetButton.style.display !== 'none') && (this.player.money >= Number(chipValue));
-        const isDisabled = (chipValue) => this.placeBetButton.disabled || ((this.player.money - Number(this.betInput.value)) < Number(chipValue));
+        const isVisible = (chipValue) => (this.placeBetButton.style.display !== 'none')
+            && (!this.dealer.offerInsurance && (this.player.money >= Number(chipValue))
+                || (this.dealer.offerInsurance && (Number(this.betInput.max) >= Number(chipValue))));
+        const isDisabled = (chipValue) => this.placeBetButton.disabled
+            || ((!this.dealer.offerInsurance && ((this.player.money - Number(this.betInput.value)) < Number(chipValue)))
+                || (this.dealer.offerInsurance && ((Number(this.betInput.max) - Number(this.betInput.value)) < Number(chipValue))));
         return [
             { button: this.chip1, visible: isVisible(this.chip1.value), disabled: isDisabled(this.chip1.value) },
             { button: this.chip5, visible: isVisible(this.chip5.value), disabled: isDisabled(this.chip5.value) },
@@ -58,11 +64,14 @@ export class Game {
         this.initEventListener();
         this.newRound();
     }
+    askPlayerForInsurance() {
+        return new Promise(resolve => { this.playerInsuranceResponse = resolve; });
+    }
     newRound() {
         return __awaiter(this, void 0, void 0, function* () {
             Game.cardsDealt.length = 0;
-            this.betInput.min = this.betInputMin;
-            this.betInput.value = this.betInput.min;
+            this.betInput.min = '0';
+            this.betInput.value = '0';
             this.betInput.max = this.player.money.toString();
             this.updateButtons([
                 { button: this.hitButton, visible: false, disabled: true },
@@ -90,12 +99,10 @@ export class Game {
             yield this.player.hasBlackjack();
             yield this.dealer.addCard();
             yield this.dealer.flipCard(0);
-            yield this.dealer.checkBlackjack();
         });
     }
     hit() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.ripple(this.hitButton);
             this.updateButtons([
                 { button: this.hitButton, visible: true, disabled: true },
                 { button: this.standButton, visible: true, disabled: true },
@@ -126,7 +133,8 @@ export class Game {
     }
     endRound() {
         let playerResult = null;
-        if ((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) {
+        const isInsuranceWin = this.player.isPlayingInsurance && this.dealer.blackjack;
+        if (((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) || isInsuranceWin) {
             playerResult = this.player.win;
         }
         else if (this.player.score < this.dealer.score) {
@@ -139,7 +147,6 @@ export class Game {
     }
     stand() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.ripple(this.standButton);
             this.updateButtons([
                 { button: this.hitButton, visible: true, disabled: true },
                 { button: this.standButton, visible: true, disabled: true },
@@ -161,7 +168,8 @@ export class Game {
     }
     bet() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (Number(this.betInput.value) > this.player.money) {
+            const bet = Number(this.betInput.value);
+            if ((bet <= 0) || (bet > this.player.money) || (bet > Number(this.betInput.max))) {
                 return;
             }
             this.player.placeBet();
@@ -173,8 +181,10 @@ export class Game {
             ]);
             this.updateButtons([...this.chips]);
             yield this.dealCards();
+            yield this.checkForInsurance();
+            yield this.dealer.checkBlackjack();
             if (this.player.blackjack || this.dealer.blackjack) {
-                this.stand();
+                return this.stand();
             }
             this.updateButtons([
                 { button: this.hitButton, visible: true, disabled: false },
@@ -185,8 +195,41 @@ export class Game {
             this.hitEnterKeyListener();
         });
     }
+    checkForInsurance() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const maxInsuranceBet = (Number(this.player.bet.toString()) / 2).toString();
+            if (!this.dealer.offerInsurance || (this.player.money === 0) || (this.player.money < Number(maxInsuranceBet))) {
+                return;
+            }
+            this.dealer.askForInsurance();
+            this.betInput.min = '0';
+            this.betInput.value = '0';
+            this.betInput.max = maxInsuranceBet;
+            this.updateButtons([
+                { button: this.placeBetButton, visible: true, disabled: false },
+                { button: this.declineButton, visible: true, disabled: false },
+                { button: this.hitButton, visible: false, disabled: true },
+                { button: this.standButton, visible: false, disabled: true },
+                { button: this.doubleDownButton, visible: false, disabled: true }
+            ]);
+            this.updateButtons([...this.chips]);
+            this.player.isPlayingInsurance = yield this.askPlayerForInsurance();
+            if (this.player.isPlayingInsurance) {
+                (_a = document.getElementById('dealer-message')) === null || _a === void 0 ? void 0 : _a.remove();
+                this.updateButtons([
+                    { button: this.placeBetButton, visible: false, disabled: true },
+                    { button: this.hitButton, visible: true, disabled: true },
+                    { button: this.standButton, visible: true, disabled: true },
+                    { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true },
+                    { button: this.declineButton, visible: false, disabled: true }
+                ]);
+                this.updateButtons([...this.chips]);
+                this.player.placeBet();
+            }
+        });
+    }
     doubleDown() {
-        this.ripple(this.doubleDownButton);
         this.player.doubleDown();
         this.hit();
     }
@@ -200,6 +243,31 @@ export class Game {
         this.betListener();
         this.doubleDownListener();
         this.chipsListener();
+        this.declineListener();
+    }
+    declineListener() {
+        this.declineButton.addEventListener('click', () => {
+            var _a;
+            this.ripple(this.declineButton);
+            (_a = document.getElementById('dealer-message')) === null || _a === void 0 ? void 0 : _a.remove();
+            this.updateButtons([
+                { button: this.placeBetButton, visible: false, disabled: true },
+                { button: this.declineButton, visible: false, disabled: true },
+                { button: this.hitButton, visible: true, disabled: true },
+                { button: this.standButton, visible: true, disabled: true },
+                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
+            ]);
+            this.updateButtons([...this.chips]);
+            this.playerInsuranceResponse(false);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (this.declineButton.disabled) {
+                return;
+            }
+            if (event.key === 'Backspace') {
+                this.declineButton.click();
+            }
+        });
     }
     chipsListener() {
         this.chips.forEach(chipCfg => chipCfg.button.addEventListener('click', () => {
@@ -209,10 +277,13 @@ export class Game {
         }));
     }
     doubleDownListener() {
-        this.doubleDownButton.addEventListener('click', () => this.doubleDown());
+        this.doubleDownButton.addEventListener('click', () => {
+            this.ripple(this.doubleDownButton);
+            this.doubleDown();
+        });
         document.addEventListener('keydown', (event) => {
             if (!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
-                this.doubleDown();
+                this.doubleDownButton.click();
             }
         });
     }
@@ -224,10 +295,13 @@ export class Game {
         this.howToPlayCloseButton.addEventListener('click', () => this.howToPlayDialog.close());
     }
     standListener() {
-        this.standButton.addEventListener('click', () => this.stand());
+        this.standButton.addEventListener('click', () => {
+            this.ripple(this.standButton);
+            this.stand();
+        });
         document.addEventListener('keypress', (event) => {
             if (!this.standButton.disabled && (event.key === ' ')) {
-                this.stand();
+                this.standButton.click();
             }
         });
     }
@@ -261,7 +335,13 @@ export class Game {
             }
             this.updateButtons([...this.chips]);
         });
-        this.placeBetButton.addEventListener('click', () => this.bet());
+        this.placeBetButton.addEventListener('click', () => {
+            this.ripple(this.placeBetButton);
+            if (this.dealer.offerInsurance) {
+                return this.playerInsuranceResponse(true);
+            }
+            this.bet();
+        });
     }
     /**
      * Allow to use the 'Enter' key to hit after placing a bet
@@ -273,12 +353,13 @@ export class Game {
     }
     hitEnterKeyHandler(event) {
         if (!this.hitButton.disabled && (event.key === 'Enter')) {
-            this.hit();
+            this.hitButton.click();
         }
     }
     hitListener() {
         this.hitButton.addEventListener('click', () => {
             document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
+            this.ripple(this.hitButton);
             this.hit();
         });
     }

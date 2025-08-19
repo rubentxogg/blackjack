@@ -13,6 +13,7 @@ export class Player extends Role {
     bet = 0;
     insuranceBet = 0;
     isDoublingDown = false;
+    isPlayingInsurance = false;
 
     constructor() {
         const PLAYER = Player.name.toLocaleLowerCase();
@@ -29,6 +30,10 @@ export class Player extends Role {
     }
 
     get payment() {
+        if(this.isPlayingInsurance) {
+            return this.insuranceBet * Game.INSURANCE_PAYOUT;
+        }
+
         return !this.blackjack ? this.bet : (this.bet * Game.BLACKJACK_PAYOUT);
     }
 
@@ -41,8 +46,14 @@ export class Player extends Role {
 
         const bet = (document.getElementById('bet') as HTMLInputElement).value;
 
-        this.bet = Number(bet);
-        this.money -= this.bet;
+        if(this.isPlayingInsurance) {
+            this.insuranceBet = Number(bet);
+            this.money -= this.insuranceBet;
+        } else {
+            this.bet = Number(bet);
+            this.money -= this.bet;
+        }
+        
         this.refreshDisplay();
     }
 
@@ -107,7 +118,7 @@ export class Player extends Role {
     }
 
     win(): void {
-        this.money += (this.bet + this.payment);
+        this.money += (!this.isPlayingInsurance ? (this.bet + this.payment) : (this.insuranceBet + this.payment));
     }
 
     /**

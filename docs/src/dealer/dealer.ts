@@ -10,6 +10,10 @@ export class Dealer extends Role {
         super(Dealer.name.toLocaleLowerCase());
     }
 
+    get offerInsurance() {
+        return (Rank.ACE === this.hand[0]?.rank);
+    }
+
     private get hiddenCard(): HTMLImageElement {
         return document.querySelectorAll("[id$=hidden]")[0] as HTMLImageElement;
     }
@@ -48,6 +52,7 @@ export class Dealer extends Role {
     }
 
     async checkBlackjack(): Promise<boolean> {
+        this.hiddenCard.style.opacity = '1';
         const card = this.hand[0];
 
         if ((Rank.ACE === card.rank) || (card.dictionary.get(card.rank) === 10)) {
@@ -59,14 +64,30 @@ export class Dealer extends Role {
 
             this.role.append(checkMessage);
 
-            return new Promise(resolve => setTimeout(resolve, 5000))
+            return new Promise(resolve => setTimeout(resolve, 4500))
                 .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
-                .then(() => new Promise(resolve => setTimeout(resolve, 5000)))
+                .then(() => new Promise(resolve => setTimeout(resolve, 4500)))
                 .then(() => this.role.removeChild(checkMessage))
                 .then(() => this.hiddenCard.style.opacity = '1')
-                .then(() => true);
+                .then(() => true)
         }
 
         return Promise.resolve(false);
+    }
+
+    askForInsurance(): boolean {
+        if(!this.offerInsurance) {
+            return false;
+        }
+
+        const checkMessage = document.createElement('span');
+
+        checkMessage.id = 'dealer-message';
+        checkMessage.textContent = 'The dealer offers you insurance';
+        checkMessage.className = 'dealer-check';
+        this.hiddenCard.style.opacity = '0.5';
+        this.role.append(checkMessage);
+
+        return true;
     }
 }
