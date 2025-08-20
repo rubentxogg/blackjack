@@ -7,51 +7,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { ActionButton } from "../action-button/action-button.js";
 import { Dealer } from "../dealer/dealer.js";
 import { Player } from "../player/player.js";
 import { Game as Rules } from "./game.constants.js";
 export class Game {
     constructor() {
-        this.betInput = document.getElementById(this.bet.name);
-        this.howToPlayOpenButton = document.getElementById('open-how-to-play');
-        this.howToPlayDialog = document.getElementById('how-to-play-dialog');
-        this.howToPlayCloseButton = document.getElementById('close-how-to-play');
-        // Actions
-        this.placeBetButton = document.getElementById(`place-${this.bet.name}`);
-        this.hitButton = document.getElementById(this.hit.name);
-        this.standButton = document.getElementById(this.stand.name);
-        this.doubleDownButton = document.getElementById('double-down');
-        this.declineButton = document.getElementById('decline');
-        // Betting chips
-        this.chip1 = document.getElementById('chip-1');
-        this.chip5 = document.getElementById('chip-5');
-        this.chip10 = document.getElementById('chip-10');
-        this.chip25 = document.getElementById('chip-25');
-        this.chip100 = document.getElementById('chip-100');
-        this.chip500 = document.getElementById('chip-500');
-        this.chip1k = document.getElementById('chip-1k');
-        this.chip5k = document.getElementById('chip-5k');
         this.playerInsuranceResponse = undefined;
         this.dealer = new Dealer();
         this.player = new Player();
         this.hitEnterKeyHandler = this.hitEnterKeyHandler.bind(this);
     }
     get chips() {
-        const isVisible = (chipValue) => (this.placeBetButton.style.display !== 'none')
+        const isVisible = (chipValue) => (ActionButton.placeBet.style.display !== 'none')
             && (!this.dealer.offerInsurance && (this.player.money >= Number(chipValue))
-                || (this.dealer.offerInsurance && (Number(this.betInput.max) >= Number(chipValue))));
-        const isDisabled = (chipValue) => this.placeBetButton.disabled
-            || ((!this.dealer.offerInsurance && ((this.player.money - Number(this.betInput.value)) < Number(chipValue)))
-                || (this.dealer.offerInsurance && ((Number(this.betInput.max) - Number(this.betInput.value)) < Number(chipValue))));
+                || (this.dealer.offerInsurance && (Number(ActionButton.betInput.max) >= Number(chipValue))));
+        const isDisabled = (chipValue) => ActionButton.placeBet.disabled
+            || ((!this.dealer.offerInsurance && ((this.player.money - Number(ActionButton.betInput.value)) < Number(chipValue)))
+                || (this.dealer.offerInsurance && ((Number(ActionButton.betInput.max) - Number(ActionButton.betInput.value)) < Number(chipValue))));
         return [
-            { button: this.chip1, visible: isVisible(this.chip1.value), disabled: isDisabled(this.chip1.value) },
-            { button: this.chip5, visible: isVisible(this.chip5.value), disabled: isDisabled(this.chip5.value) },
-            { button: this.chip10, visible: isVisible(this.chip10.value), disabled: isDisabled(this.chip10.value) },
-            { button: this.chip25, visible: isVisible(this.chip25.value), disabled: isDisabled(this.chip25.value) },
-            { button: this.chip100, visible: isVisible(this.chip100.value), disabled: isDisabled(this.chip100.value) },
-            { button: this.chip500, visible: isVisible(this.chip500.value), disabled: isDisabled(this.chip500.value) },
-            { button: this.chip1k, visible: isVisible(this.chip1k.value), disabled: isDisabled(this.chip1k.value) },
-            { button: this.chip5k, visible: isVisible(this.chip5k.value), disabled: isDisabled(this.chip5k.value) }
+            { button: ActionButton.chip1, visible: isVisible(ActionButton.chip1.value), disabled: isDisabled(ActionButton.chip1.value) },
+            { button: ActionButton.chip5, visible: isVisible(ActionButton.chip5.value), disabled: isDisabled(ActionButton.chip5.value) },
+            { button: ActionButton.chip10, visible: isVisible(ActionButton.chip10.value), disabled: isDisabled(ActionButton.chip10.value) },
+            { button: ActionButton.chip25, visible: isVisible(ActionButton.chip25.value), disabled: isDisabled(ActionButton.chip25.value) },
+            { button: ActionButton.chip100, visible: isVisible(ActionButton.chip100.value), disabled: isDisabled(ActionButton.chip100.value) },
+            { button: ActionButton.chip500, visible: isVisible(ActionButton.chip500.value), disabled: isDisabled(ActionButton.chip500.value) },
+            { button: ActionButton.chip1k, visible: isVisible(ActionButton.chip1k.value), disabled: isDisabled(ActionButton.chip1k.value) },
+            { button: ActionButton.chip5k, visible: isVisible(ActionButton.chip5k.value), disabled: isDisabled(ActionButton.chip5k.value) }
         ];
     }
     get betInputMin() {
@@ -70,25 +52,25 @@ export class Game {
     newRound() {
         return __awaiter(this, void 0, void 0, function* () {
             Game.cardsDealt.length = 0;
-            this.betInput.min = '0';
-            this.betInput.value = '0';
-            this.betInput.max = this.player.money.toString();
-            this.updateButtons([
-                { button: this.hitButton, visible: false, disabled: true },
-                { button: this.standButton, visible: false, disabled: true },
-                { button: this.placeBetButton, visible: true, disabled: true },
-                { button: this.doubleDownButton, visible: false, disabled: true },
+            ActionButton.betInput.min = '0';
+            ActionButton.betInput.value = '0';
+            ActionButton.betInput.max = this.player.money.toString();
+            ActionButton.update([
+                { button: ActionButton.hit, visible: false, disabled: true },
+                { button: ActionButton.stand, visible: false, disabled: true },
+                { button: ActionButton.placeBet, visible: true, disabled: true },
+                { button: ActionButton.doubleDown, visible: false, disabled: true },
             ]);
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
             yield Promise.all([
                 this.dealer.clearHand(),
                 this.player.clearHand()
             ]);
-            this.updateButtons([
-                { button: this.placeBetButton, visible: true, disabled: false },
+            ActionButton.update([
+                { button: ActionButton.placeBet, visible: true, disabled: false },
             ]);
-            this.updateButtons([...this.chips]);
-            this.placeBetButton.focus();
+            ActionButton.update([...this.chips]);
+            ActionButton.placeBet.focus();
         });
     }
     dealCards() {
@@ -103,10 +85,10 @@ export class Game {
     }
     hit() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.updateButtons([
-                { button: this.hitButton, visible: true, disabled: true },
-                { button: this.standButton, visible: true, disabled: true },
-                { button: this.doubleDownButton, visible: this.doubleDownButton.style.display !== 'none', disabled: true }
+            ActionButton.update([
+                { button: ActionButton.hit, visible: true, disabled: true },
+                { button: ActionButton.stand, visible: true, disabled: true },
+                { button: ActionButton.doubleDown, visible: ActionButton.doubleDown.style.display !== 'none', disabled: true }
             ]);
             yield this.player.addCard();
             if (this.player.score > Rules.BLACKJACK) {
@@ -120,9 +102,9 @@ export class Game {
                 this.stand();
                 return;
             }
-            this.updateButtons([
-                { button: this.hitButton, visible: true, disabled: false },
-                { button: this.standButton, visible: true, disabled: false }
+            ActionButton.update([
+                { button: ActionButton.hit, visible: true, disabled: false },
+                { button: ActionButton.stand, visible: true, disabled: false }
             ]);
             this.hitEnterKeyListener();
         });
@@ -147,10 +129,10 @@ export class Game {
     }
     stand() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.updateButtons([
-                { button: this.hitButton, visible: true, disabled: true },
-                { button: this.standButton, visible: true, disabled: true },
-                { button: this.doubleDownButton, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
+            ActionButton.update([
+                { button: ActionButton.hit, visible: true, disabled: true },
+                { button: ActionButton.stand, visible: true, disabled: true },
+                { button: ActionButton.doubleDown, visible: this.player.isDoublingDown || this.player.canDoubleDown, disabled: true }
             ]);
             yield this.dealer.flipCard(1);
             this.startDealersTurn();
@@ -168,30 +150,30 @@ export class Game {
     }
     bet() {
         return __awaiter(this, void 0, void 0, function* () {
-            const bet = Number(this.betInput.value);
-            if ((bet <= 0) || (bet > this.player.money) || (bet > Number(this.betInput.max))) {
+            const bet = Number(ActionButton.betInput.value);
+            if ((bet <= 0) || (bet > this.player.money) || (bet > Number(ActionButton.betInput.max))) {
                 return;
             }
             this.player.placeBet();
-            this.updateButtons([
-                { button: this.placeBetButton, visible: false, disabled: true },
-                { button: this.hitButton, visible: true, disabled: true },
-                { button: this.standButton, visible: true, disabled: true },
-                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
+            ActionButton.update([
+                { button: ActionButton.placeBet, visible: false, disabled: true },
+                { button: ActionButton.hit, visible: true, disabled: true },
+                { button: ActionButton.stand, visible: true, disabled: true },
+                { button: ActionButton.doubleDown, visible: this.player.canDoubleDown, disabled: true }
             ]);
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
             yield this.dealCards();
             yield this.checkForInsurance();
             yield this.dealer.checkBlackjack();
             if (this.player.blackjack || this.dealer.blackjack) {
                 return this.stand();
             }
-            this.updateButtons([
-                { button: this.hitButton, visible: true, disabled: false },
-                { button: this.standButton, visible: true, disabled: false },
-                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown }
+            ActionButton.update([
+                { button: ActionButton.hit, visible: true, disabled: false },
+                { button: ActionButton.stand, visible: true, disabled: false },
+                { button: ActionButton.doubleDown, visible: this.player.canDoubleDown, disabled: !this.player.canDoubleDown }
             ]);
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
             this.hitEnterKeyListener();
         });
     }
@@ -203,28 +185,28 @@ export class Game {
                 return;
             }
             this.dealer.askForInsurance();
-            this.betInput.min = '0';
-            this.betInput.value = '0';
-            this.betInput.max = maxInsuranceBet;
-            this.updateButtons([
-                { button: this.placeBetButton, visible: true, disabled: false },
-                { button: this.declineButton, visible: true, disabled: false },
-                { button: this.hitButton, visible: false, disabled: true },
-                { button: this.standButton, visible: false, disabled: true },
-                { button: this.doubleDownButton, visible: false, disabled: true }
+            ActionButton.betInput.min = '0';
+            ActionButton.betInput.value = '0';
+            ActionButton.betInput.max = maxInsuranceBet;
+            ActionButton.update([
+                { button: ActionButton.placeBet, visible: true, disabled: false },
+                { button: ActionButton.decline, visible: true, disabled: false },
+                { button: ActionButton.hit, visible: false, disabled: true },
+                { button: ActionButton.stand, visible: false, disabled: true },
+                { button: ActionButton.doubleDown, visible: false, disabled: true }
             ]);
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
             this.player.isPlayingInsurance = yield this.askPlayerForInsurance();
             if (this.player.isPlayingInsurance) {
                 (_a = document.getElementById('dealer-message')) === null || _a === void 0 ? void 0 : _a.remove();
-                this.updateButtons([
-                    { button: this.placeBetButton, visible: false, disabled: true },
-                    { button: this.hitButton, visible: true, disabled: true },
-                    { button: this.standButton, visible: true, disabled: true },
-                    { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true },
-                    { button: this.declineButton, visible: false, disabled: true }
+                ActionButton.update([
+                    { button: ActionButton.placeBet, visible: false, disabled: true },
+                    { button: ActionButton.hit, visible: true, disabled: true },
+                    { button: ActionButton.stand, visible: true, disabled: true },
+                    { button: ActionButton.doubleDown, visible: this.player.canDoubleDown, disabled: true },
+                    { button: ActionButton.decline, visible: false, disabled: true }
                 ]);
-                this.updateButtons([...this.chips]);
+                ActionButton.update([...this.chips]);
                 this.player.placeBet();
             }
         });
@@ -246,97 +228,97 @@ export class Game {
         this.declineListener();
     }
     declineListener() {
-        this.declineButton.addEventListener('click', () => {
+        ActionButton.decline.addEventListener('click', () => {
             var _a;
-            this.ripple(this.declineButton);
+            this.ripple(ActionButton.decline);
             (_a = document.getElementById('dealer-message')) === null || _a === void 0 ? void 0 : _a.remove();
-            this.updateButtons([
-                { button: this.placeBetButton, visible: false, disabled: true },
-                { button: this.declineButton, visible: false, disabled: true },
-                { button: this.hitButton, visible: true, disabled: true },
-                { button: this.standButton, visible: true, disabled: true },
-                { button: this.doubleDownButton, visible: this.player.canDoubleDown, disabled: true }
+            ActionButton.update([
+                { button: ActionButton.placeBet, visible: false, disabled: true },
+                { button: ActionButton.decline, visible: false, disabled: true },
+                { button: ActionButton.hit, visible: true, disabled: true },
+                { button: ActionButton.stand, visible: true, disabled: true },
+                { button: ActionButton.doubleDown, visible: this.player.canDoubleDown, disabled: true }
             ]);
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
             this.playerInsuranceResponse(false);
         });
         document.addEventListener('keydown', (event) => {
-            if (this.declineButton.disabled) {
+            if (ActionButton.decline.disabled) {
                 return;
             }
             if (event.key === 'Backspace') {
-                this.declineButton.click();
+                ActionButton.decline.click();
             }
         });
     }
     chipsListener() {
         this.chips.forEach(chipCfg => chipCfg.button.addEventListener('click', () => {
             this.ripple(chipCfg.button);
-            this.betInput.value = (Number(this.betInput.value) + Number(chipCfg.button.value)).toString();
-            this.updateButtons([...this.chips]);
+            ActionButton.betInput.value = (Number(ActionButton.betInput.value) + Number(chipCfg.button.value)).toString();
+            ActionButton.update([...this.chips]);
         }));
     }
     doubleDownListener() {
-        this.doubleDownButton.addEventListener('click', () => {
-            this.ripple(this.doubleDownButton);
+        ActionButton.doubleDown.addEventListener('click', () => {
+            this.ripple(ActionButton.doubleDown);
             this.doubleDown();
         });
         document.addEventListener('keydown', (event) => {
-            if (!this.doubleDownButton.disabled && (event.key.toLocaleLowerCase() === 'd')) {
-                this.doubleDownButton.click();
+            if (!ActionButton.doubleDown.disabled && (event.key.toLocaleLowerCase() === 'd')) {
+                ActionButton.doubleDown.click();
             }
         });
     }
     howToPlayListener() {
-        this.howToPlayOpenButton.addEventListener('click', () => {
-            this.ripple(this.howToPlayOpenButton);
-            this.howToPlayDialog.showModal();
+        ActionButton.howToPlayOpenButton.addEventListener('click', () => {
+            this.ripple(ActionButton.howToPlayOpenButton);
+            ActionButton.howToPlayDialog.showModal();
         });
-        this.howToPlayCloseButton.addEventListener('click', () => this.howToPlayDialog.close());
+        ActionButton.howToPlayCloseButton.addEventListener('click', () => ActionButton.howToPlayDialog.close());
     }
     standListener() {
-        this.standButton.addEventListener('click', () => {
-            this.ripple(this.standButton);
+        ActionButton.stand.addEventListener('click', () => {
+            this.ripple(ActionButton.stand);
             this.stand();
         });
         document.addEventListener('keypress', (event) => {
-            if (!this.standButton.disabled && (event.key === ' ')) {
-                this.standButton.click();
+            if (!ActionButton.stand.disabled && (event.key === ' ')) {
+                ActionButton.stand.click();
             }
         });
     }
     betListener() {
         document.addEventListener('mouseover', () => {
-            if (!this.placeBetButton.disabled) {
-                this.placeBetButton.focus();
+            if (!ActionButton.placeBet.disabled) {
+                ActionButton.placeBet.focus();
             }
         });
-        this.placeBetButton.addEventListener('keydown', (event) => {
+        ActionButton.placeBet.addEventListener('keydown', (event) => {
             event.preventDefault();
             if (event.key === 'Enter') {
-                this.betInput.click();
+                ActionButton.betInput.click();
             }
             else if ((event.key === 'ArrowUp') || (event.key.toLocaleLowerCase() === 'w')) {
-                this.betInput.stepUp();
+                ActionButton.betInput.stepUp();
             }
             else if ((event.key === 'ArrowDown') || (event.key.toLocaleLowerCase() === 's')) {
-                this.betInput.stepDown();
+                ActionButton.betInput.stepDown();
             }
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
         });
-        this.placeBetButton.addEventListener('blur', () => this.placeBetButton.focus());
-        this.placeBetButton.addEventListener('focus', () => this.betInput.step = this.betInputMin);
-        this.placeBetButton.addEventListener('wheel', (event) => {
+        ActionButton.placeBet.addEventListener('blur', () => ActionButton.placeBet.focus());
+        ActionButton.placeBet.addEventListener('focus', () => ActionButton.betInput.step = this.betInputMin);
+        ActionButton.placeBet.addEventListener('wheel', (event) => {
             if (event.deltaY > 0) {
-                this.betInput.stepDown();
+                ActionButton.betInput.stepDown();
             }
             else {
-                this.betInput.stepUp();
+                ActionButton.betInput.stepUp();
             }
-            this.updateButtons([...this.chips]);
+            ActionButton.update([...this.chips]);
         });
-        this.placeBetButton.addEventListener('click', () => {
-            this.ripple(this.placeBetButton);
+        ActionButton.placeBet.addEventListener('click', () => {
+            this.ripple(ActionButton.placeBet);
             if (this.dealer.offerInsurance) {
                 return this.playerInsuranceResponse(true);
             }
@@ -352,21 +334,15 @@ export class Game {
         });
     }
     hitEnterKeyHandler(event) {
-        if (!this.hitButton.disabled && (event.key === 'Enter')) {
-            this.hitButton.click();
+        if (!ActionButton.hit.disabled && (event.key === 'Enter')) {
+            ActionButton.hit.click();
         }
     }
     hitListener() {
-        this.hitButton.addEventListener('click', () => {
+        ActionButton.hit.addEventListener('click', () => {
             document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
-            this.ripple(this.hitButton);
+            this.ripple(ActionButton.hit);
             this.hit();
-        });
-    }
-    updateButtons(config) {
-        config.forEach(cfg => {
-            cfg.button.style.display = cfg.visible ? 'block' : 'none';
-            cfg.button.disabled = cfg.disabled;
         });
     }
 }
