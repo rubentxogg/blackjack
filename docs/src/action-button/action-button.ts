@@ -1,4 +1,7 @@
 export class ActionButton {
+
+    private constructor() { }
+
     static readonly betInput = document.getElementById('bet') as HTMLInputElement;
     static readonly howToPlayOpenButton = document.getElementById('open-how-to-play') as HTMLButtonElement;
     static readonly howToPlayDialog = document.getElementById('how-to-play-dialog') as HTMLDialogElement;
@@ -20,6 +23,11 @@ export class ActionButton {
     static readonly chip500 = document.getElementById('chip-500') as HTMLButtonElement;
     static readonly chip1k = document.getElementById('chip-1k') as HTMLButtonElement;
     static readonly chip5k = document.getElementById('chip-5k') as HTMLButtonElement;
+
+    static ripple(button: HTMLButtonElement): void {
+        button.classList.add('ripple');
+        setTimeout(() => button.classList.remove('ripple'), 200);
+    }
 
     static update(config: ButtonConfig[]): void {
         config.forEach(cfg => {

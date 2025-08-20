@@ -109,10 +109,6 @@ export class Game {
             this.hitEnterKeyListener();
         });
     }
-    ripple(button) {
-        button.classList.add('ripple');
-        setTimeout(() => button.classList.remove('ripple'), 200);
-    }
     endRound() {
         let playerResult = null;
         const isInsuranceWin = this.player.isPlayingInsurance && this.dealer.blackjack;
@@ -230,7 +226,7 @@ export class Game {
     declineListener() {
         ActionButton.decline.addEventListener('click', () => {
             var _a;
-            this.ripple(ActionButton.decline);
+            ActionButton.ripple(ActionButton.decline);
             (_a = document.getElementById('dealer-message')) === null || _a === void 0 ? void 0 : _a.remove();
             ActionButton.update([
                 { button: ActionButton.placeBet, visible: false, disabled: true },
@@ -253,14 +249,14 @@ export class Game {
     }
     chipsListener() {
         this.chips.forEach(chipCfg => chipCfg.button.addEventListener('click', () => {
-            this.ripple(chipCfg.button);
+            ActionButton.ripple(chipCfg.button);
             ActionButton.betInput.value = (Number(ActionButton.betInput.value) + Number(chipCfg.button.value)).toString();
             ActionButton.update([...this.chips]);
         }));
     }
     doubleDownListener() {
         ActionButton.doubleDown.addEventListener('click', () => {
-            this.ripple(ActionButton.doubleDown);
+            ActionButton.ripple(ActionButton.doubleDown);
             this.doubleDown();
         });
         document.addEventListener('keydown', (event) => {
@@ -271,14 +267,14 @@ export class Game {
     }
     howToPlayListener() {
         ActionButton.howToPlayOpenButton.addEventListener('click', () => {
-            this.ripple(ActionButton.howToPlayOpenButton);
+            ActionButton.ripple(ActionButton.howToPlayOpenButton);
             ActionButton.howToPlayDialog.showModal();
         });
         ActionButton.howToPlayCloseButton.addEventListener('click', () => ActionButton.howToPlayDialog.close());
     }
     standListener() {
         ActionButton.stand.addEventListener('click', () => {
-            this.ripple(ActionButton.stand);
+            ActionButton.ripple(ActionButton.stand);
             this.stand();
         });
         document.addEventListener('keypress', (event) => {
@@ -318,7 +314,7 @@ export class Game {
             ActionButton.update([...this.chips]);
         });
         ActionButton.placeBet.addEventListener('click', () => {
-            this.ripple(ActionButton.placeBet);
+            ActionButton.ripple(ActionButton.placeBet);
             if (this.dealer.offerInsurance) {
                 return this.playerInsuranceResponse(true);
             }
@@ -341,7 +337,7 @@ export class Game {
     hitListener() {
         ActionButton.hit.addEventListener('click', () => {
             document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
-            this.ripple(ActionButton.hit);
+            ActionButton.ripple(ActionButton.hit);
             this.hit();
         });
     }

@@ -120,11 +120,6 @@ export class Game {
         this.hitEnterKeyListener();
     }
 
-    private ripple(button: HTMLButtonElement): void {
-        button.classList.add('ripple');
-        setTimeout(() => button.classList.remove('ripple'), 200);
-    }
-
     private endRound(): void {
         let playerResult = null;
 
@@ -254,7 +249,7 @@ export class Game {
 
     private declineListener(): void {
         ActionButton.decline.addEventListener('click', () => {
-            this.ripple(ActionButton.decline);
+            ActionButton.ripple(ActionButton.decline);
             document.getElementById('dealer-message')?.remove();
             ActionButton.update([
                 { button: ActionButton.placeBet, visible: false, disabled: true },
@@ -281,7 +276,7 @@ export class Game {
 
     private chipsListener(): void {
         this.chips.forEach(chipCfg => chipCfg.button.addEventListener('click', () => {
-            this.ripple(chipCfg.button);
+            ActionButton.ripple(chipCfg.button);
             ActionButton.betInput.value = (Number(ActionButton.betInput.value) + Number(chipCfg.button.value)).toString();
             ActionButton.update([...this.chips]);
         }));
@@ -289,7 +284,7 @@ export class Game {
 
     private doubleDownListener(): void {
         ActionButton.doubleDown.addEventListener('click', () => {
-            this.ripple(ActionButton.doubleDown);
+            ActionButton.ripple(ActionButton.doubleDown);
             this.doubleDown();
         });
 
@@ -302,7 +297,7 @@ export class Game {
 
     private howToPlayListener(): void {
         ActionButton.howToPlayOpenButton.addEventListener('click', () => {
-            this.ripple(ActionButton.howToPlayOpenButton);
+            ActionButton.ripple(ActionButton.howToPlayOpenButton);
             ActionButton.howToPlayDialog.showModal();
         });
 
@@ -311,7 +306,7 @@ export class Game {
 
     private standListener(): void {
         ActionButton.stand.addEventListener('click', () => {
-            this.ripple(ActionButton.stand);
+            ActionButton.ripple(ActionButton.stand);
             this.stand();
         });
 
@@ -354,7 +349,7 @@ export class Game {
             ActionButton.update([...this.chips]);
         });
         ActionButton.placeBet.addEventListener('click', () => {
-            this.ripple(ActionButton.placeBet);
+            ActionButton.ripple(ActionButton.placeBet);
 
             if (this.dealer.offerInsurance) {
                 return this.playerInsuranceResponse(true);
@@ -382,7 +377,7 @@ export class Game {
     private hitListener(): any {
         ActionButton.hit.addEventListener('click', () => {
             document.removeEventListener('keypress', this.hitEnterKeyHandler, true);
-            this.ripple(ActionButton.hit);
+            ActionButton.ripple(ActionButton.hit);
             this.hit();
         });
     }

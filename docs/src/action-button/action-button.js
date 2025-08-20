@@ -1,4 +1,9 @@
 export class ActionButton {
+    constructor() { }
+    static ripple(button) {
+        button.classList.add('ripple');
+        setTimeout(() => button.classList.remove('ripple'), 200);
+    }
     static update(config) {
         config.forEach(cfg => {
             cfg.button.style.display = cfg.visible ? 'block' : 'none';
