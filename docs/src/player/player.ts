@@ -44,13 +44,17 @@ export class Player extends Role {
     placeBet(): void {
         this.isDoublingDown = false;
 
-        const bet = (document.getElementById('bet') as HTMLInputElement).value;
+        const bet = Number((document.getElementById('bet') as HTMLInputElement).value);
+
+        if(bet <= 0) {
+            return;
+        }
 
         if(this.isPlayingInsurance) {
-            this.insuranceBet = Number(bet);
+            this.insuranceBet = bet;
             this.money -= this.insuranceBet;
         } else {
-            this.bet = Number(bet);
+            this.bet = bet;
             this.money -= this.bet;
         }
         

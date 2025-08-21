@@ -12,7 +12,7 @@
 
 <body>
     <header>
-        <button id="open-how-to-play" class="how-to-play"></button> 
+        <button id="open-how-to-play" class="how-to-play"></button>
         <span>Blackjack</span>
 
         <dialog id="how-to-play-dialog">
@@ -38,13 +38,14 @@
                     <div class="info-container">
                         <div class="info-container-item">
                             <h3>Hit</h3>
-                            <p>The player requests an additional card from the dealer. If, when requesting a card, the player obtains a score equal to 21, they automatically stand.</p>
+                            <p>The player requests an additional card from the dealer. If, when requesting a card, the
+                                player obtains a score equal to 21, they automatically stand.</p>
                         </div>
 
                         <div class="info-container-item">
                             <h3>Bet</h3>
                             <p>The player can bet any amount they want from the total money they have available.</p>
-                        </div>                        
+                        </div>
 
                         <div class="info-container-item">
                             <h3>Stand</h3>
@@ -53,12 +54,13 @@
 
                         <div class="info-container-item">
                             <h3>Double Down</h3>
-                            <p>Double the initial bet in exchange for receiving exactly one more card and then standing, regardless of the card's value.</p>
+                            <p>Double the initial bet in exchange for receiving exactly one more card and then standing,
+                                regardless of the card's value.</p>
                         </div>
 
                         <div class="info-container-item">
                             <h3>Insurance Bet</h3>
-                            <p>Check insurance in special situations section</p>
+                            <p>Check insurance in special situations section.</p>
                         </div>
                     </div>
                 </article>
@@ -71,7 +73,8 @@
                             <h3>Win</h3>
                             <p>
                                 Player must have a hand value higher than the dealer's hand, without exceeding 21.
-                                Standard hand pays out 1:1, but the payout for blackjack is 3:2 (see special situations section).
+                                Standard hand pays out 1:1, but the payout for blackjack is 3:2 (see special situations
+                                section).
                             </p>
                         </div>
 
@@ -82,7 +85,8 @@
 
                         <div class="info-container-item">
                             <h3>Push</h3>
-                            <p>The player and the dealer have the same value for their hands at the end of a round and the player's original bet is returned.</p>
+                            <p>The player and the dealer have the same value for their hands at the end of a round and
+                                the player's original bet is returned.</p>
                         </div>
                     </div>
                 </article>
@@ -94,8 +98,10 @@
                         <div class="info-container-item">
                             <h3>Blackjack</h3>
                             <p>
-                                Is a hand consisting of an Ace and any 10-point card (10, Jack, Queen, or King) dealt as the
-                                first two cards. It is the highest possible hand in the game and the player automatically wins unless
+                                Is a hand consisting of an Ace and any 10-point card (10, Jack, Queen, or King) dealt as
+                                the
+                                first two cards. It is the highest possible hand in the game and the player
+                                automatically wins unless
                                 the dealer also has a blackjack.
                             </p>
                         </div>
@@ -103,8 +109,10 @@
                         <div class="info-container-item">
                             <h3>Insurance</h3>
                             <p>
-                                Is a side bet that the dealer has a blackjack. The dealer asks for insurance bets before the first player plays. 
-                                Insurance bets of up to half the player's current bet are placed on the "insurance bar" above the player's cards. 
+                                Is a side bet that the dealer has a blackjack. The dealer asks for insurance bets before
+                                the first player plays.
+                                Insurance bets of up to half the player's current bet are placed on the "insurance bar"
+                                above the player's cards.
                                 If the dealer has a blackjack, insurance pays 2 to 1.
                             </p>
                         </div>
@@ -117,18 +125,24 @@
     </header>
 
     <main>
-        <h2>Dealer <span id="dealer-score" class="score"></span></h2>
-        <section id="dealer" class="hand"></section>
-        <hr>
-        <h2>Player <span id="player-score" class="score"></span></h2>
-        <section id="player" class="hand"></section>
-
-        <div id="result-display">
-            <span id="result-type"></span>
-            <span id="result-money"></span>
-            <div id="blackjack-display">
-                <span>B</span><span>L</span><span>A</span><span>C</span><span>K</span><span>J</span><span>A</span><span>C</span><span>K</span><span>!</span>
+        <div class="play-area">
+            <section class="dealer">
+                <h2>Dealer <span id="dealer-score" class="score"></span></h2>
+                <div id="dealer" class="hand"></div>
+            </section>
+            <hr>
+            <!-- Hidden -->
+            <div id="result-display">
+                <span id="result-type"></span>
+                <span id="result-money"></span>
+                <div id="blackjack-display">
+                    <span>B</span><span>L</span><span>A</span><span>C</span><span>K</span><span>J</span><span>A</span><span>C</span><span>K</span><span>!</span>
+                </div>
             </div>
+            <section class="player">
+                <h2>Player <span id="player-score" class="score"></span></h2>
+                <div id="player" class="hand"></div>
+            </section>
         </div>
 
         <div class="actions">
