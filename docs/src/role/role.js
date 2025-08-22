@@ -15,6 +15,7 @@ import { Game } from "../game/game.js";
 export class Role {
     constructor(role) {
         this.hand = [];
+        this.addCardDelay = Rules.ADD_CARD_DELAY;
         this.role = document.getElementById(role);
         this.scoreBox = document.getElementById(`${role}-score`);
     }
@@ -32,7 +33,7 @@ export class Role {
             if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
                 return this.addCard();
             }
-            const card = new Card(suit, rank);
+            const card = new Card(suit, Rank.ACE);
             Game.cardsDealt.push(card);
             this.hand.push(card);
             if ((this.score > Rules.BLACKJACK)) {
@@ -40,13 +41,13 @@ export class Role {
             }
             this.writeCard(card);
             this.writeScore();
-            return new Promise(resolve => setTimeout(resolve, Rules.ADD_CARD_DELAY));
+            return new Promise(resolve => setTimeout(resolve, this.addCardDelay));
         });
     }
     writeScore(score) {
         this.scoreBox.classList.add('refresh-value');
         this.scoreBox.innerText = score !== null && score !== void 0 ? score : this.score.toString();
-        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), Rules.ADD_CARD_DELAY);
+        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), 6e2);
     }
     writeCard(card, isHidden) {
         var _a, _b;

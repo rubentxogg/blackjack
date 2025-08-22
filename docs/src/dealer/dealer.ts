@@ -6,6 +6,8 @@ import { Role } from "../role/role.js";
 
 export class Dealer extends Role {
 
+    protected addCardDelay = 1e3;
+
     constructor() {
         super(Dealer.name.toLocaleLowerCase());
     }
@@ -64,9 +66,9 @@ export class Dealer extends Role {
 
             this.role.parentNode?.append(checkMessage);
 
-            return new Promise(resolve => setTimeout(resolve, 4500))
+            return new Promise(resolve => setTimeout(resolve, 4e3))
                 .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
-                .then(() => new Promise(resolve => setTimeout(resolve, 4500)))
+                .then(() => new Promise(resolve => setTimeout(resolve, 4e3)))
                 .then(() => this.role.parentNode?.removeChild(checkMessage))
                 .then(() => this.hiddenCard.style.opacity = '1')
                 .then(() => true)

@@ -588,7 +588,7 @@ hr {
 
 .result-display {
     animation: result-display;
-    animation-duration: 4s;
+    animation-duration: 3.5s;
 }
 
 #result-type[class$='push'] {
@@ -606,19 +606,19 @@ hr {
 #result-money[class$='push'] {
     color: var(--gray);
     animation-name: slide-in;
-    animation-duration: 4s;
+    animation-duration: 3.5s;
 }
 
 #result-money[class$='win'] {
     color: var(--green);
     animation-name: slide-in;
-    animation-duration: 4s;
+    animation-duration: 3.5s;
 }
 
 #result-money[class$='bust'] {
     color: var(--red);
     animation-name: slide-in;
-    animation-duration: 4s;
+    animation-duration: 3.5s;
 }
 
 .refresh {

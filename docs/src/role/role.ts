@@ -8,6 +8,7 @@ export abstract class Role {
     protected readonly role: HTMLDivElement;
     private readonly scoreBox: HTMLSpanElement;
     protected hand: Card[] = [];
+    protected addCardDelay = Rules.ADD_CARD_DELAY;
 
     constructor(role: string) {
         this.role = document.getElementById(role) as HTMLDivElement;
@@ -30,7 +31,7 @@ export abstract class Role {
             return this.addCard();
         }
 
-        const card = new Card(suit, rank);
+        const card = new Card(suit, Rank.ACE);
 
         Game.cardsDealt.push(card);
         this.hand.push(card);
@@ -42,13 +43,13 @@ export abstract class Role {
         this.writeCard(card);
         this.writeScore();
 
-        return new Promise(resolve => setTimeout(resolve, Rules.ADD_CARD_DELAY));
+        return new Promise(resolve => setTimeout(resolve, this.addCardDelay));
     }
 
     protected writeScore(score?: string) {
         this.scoreBox.classList.add('refresh-value');
         this.scoreBox.innerText = score ?? this.score.toString();
-        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), Rules.ADD_CARD_DELAY);
+        setTimeout(() => this.scoreBox.classList.remove('refresh-value'), 6e2);
     }
 
     protected writeCard(card: Card, isHidden?: boolean): void {
