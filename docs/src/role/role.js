@@ -33,7 +33,7 @@ export class Role {
             if (Game.cardsDealt.some(card => (card.suit === suit) && (card.rank === rank))) {
                 return this.addCard();
             }
-            const card = new Card(suit, Rank.ACE);
+            const card = new Card(suit, rank);
             Game.cardsDealt.push(card);
             this.hand.push(card);
             if ((this.score > Rules.BLACKJACK)) {

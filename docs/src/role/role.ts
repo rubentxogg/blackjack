@@ -31,7 +31,7 @@ export abstract class Role {
             return this.addCard();
         }
 
-        const card = new Card(suit, Rank.ACE);
+        const card = new Card(suit, rank);
 
         Game.cardsDealt.push(card);
         this.hand.push(card);
