@@ -89,7 +89,7 @@ export class Player extends Role {
         }, 5e2);
     }
 
-    displayResult(resultFunc: Function): void {
+    displayResult(resultFunc: Function): Promise<void> {
         const type = resultFunc.name;
         this.resultType.innerText = `${type}!`;
 
@@ -112,6 +112,8 @@ export class Player extends Role {
             this.resultDisplay.className = '';
             this.refreshDisplay(resultFunc);
         }, 3e3);
+
+        return new Promise(resolve => setTimeout(resolve, 3e3));
     }
 
     bust(): void {

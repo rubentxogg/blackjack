@@ -92,10 +92,8 @@ export class Game {
             ]);
             yield this.player.addCard();
             if (this.player.score > Rules.BLACKJACK) {
-                setTimeout(() => {
-                    this.player.displayResult(this.player.bust);
-                    setTimeout(() => this.newRound(), Rules.NEW_ROUND_DELAY_MS);
-                }, Rules.ADD_CARD_DELAY);
+                yield this.player.displayResult(this.player.bust);
+                yield this.newRound();
                 return;
             }
             if ((this.player.score === Rules.BLACKJACK) || this.player.isDoublingDown) {
@@ -110,18 +108,20 @@ export class Game {
         });
     }
     endRound() {
-        let playerResult = null;
-        const isInsuranceWin = this.player.isPlayingInsurance && this.dealer.blackjack;
-        if (((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) || isInsuranceWin) {
-            playerResult = this.player.win;
-        }
-        else if (this.player.score < this.dealer.score) {
-            playerResult = this.player.bust;
-        }
-        else {
-            playerResult = this.player.push;
-        }
-        this.player.displayResult(playerResult);
+        return __awaiter(this, void 0, void 0, function* () {
+            let playerResult = null;
+            const isInsuranceWin = this.player.isPlayingInsurance && this.dealer.blackjack;
+            if (((this.player.score <= Rules.BLACKJACK) && ((this.player.score > this.dealer.score) || (this.dealer.score > Rules.BLACKJACK))) || isInsuranceWin) {
+                playerResult = this.player.win;
+            }
+            else if (this.player.score < this.dealer.score) {
+                playerResult = this.player.bust;
+            }
+            else {
+                playerResult = this.player.push;
+            }
+            yield this.player.displayResult(playerResult);
+        });
     }
     stand() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -140,8 +140,7 @@ export class Game {
                 yield this.dealer.addCard();
                 return this.startDealersTurn();
             }
-            this.endRound();
-            setTimeout(() => this.newRound(), Rules.NEW_ROUND_DELAY_MS);
+            this.endRound().then(() => this.newRound());
         });
     }
     bet() {

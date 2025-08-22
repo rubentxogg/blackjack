@@ -283,12 +283,6 @@ h2 {
     text-align: center;
 }
 
-.clear-hand {
-    animation-name: clear-hand;
-    animation-duration: 1.1s;
-    opacity: 0;
-}
-
 .flip {
     animation-name: flip !important;
     animation-duration: 500ms !important;
@@ -813,12 +807,19 @@ hr {
     margin: auto;
 }
 
-img[class$='card'],
-.clear-hand {
+img[class$='card'] {
     max-width: 150px;
     min-width: 75px;
     animation-name: add-card;
     animation-duration: 1s;
+}
+
+.clear-hand {
+    max-width: 150px;
+    min-width: 75px;
+    animation-name: clear-hand;
+    animation-duration: 1.1s;
+    opacity: 0;
 }
 
 .actions {

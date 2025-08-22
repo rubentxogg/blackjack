@@ -18,13 +18,13 @@ export class Game {
     }
 
     get chips(): ButtonConfig[] {
-        const isVisible = (chipValue: string) => (ActionButton.placeBet.style.display !== 'none') 
-            && (!this.dealer.offerInsurance && (this.player.money >= Number(chipValue)) 
-            || (this.dealer.offerInsurance && (Number(ActionButton.betInput.max) >= Number(chipValue))));
+        const isVisible = (chipValue: string) => (ActionButton.placeBet.style.display !== 'none')
+            && (!this.dealer.offerInsurance && (this.player.money >= Number(chipValue))
+                || (this.dealer.offerInsurance && (Number(ActionButton.betInput.max) >= Number(chipValue))));
 
         const isDisabled = (chipValue: string) => ActionButton.placeBet.disabled
             || ((!this.dealer.offerInsurance && ((this.player.money - Number(ActionButton.betInput.value)) < Number(chipValue)))
-            || (this.dealer.offerInsurance && ((Number(ActionButton.betInput.max) - Number(ActionButton.betInput.value)) < Number(chipValue))));
+                || (this.dealer.offerInsurance && ((Number(ActionButton.betInput.max) - Number(ActionButton.betInput.value)) < Number(chipValue))));
 
         return [
             { button: ActionButton.chip1, visible: isVisible(ActionButton.chip1.value), disabled: isDisabled(ActionButton.chip1.value) },
@@ -100,10 +100,8 @@ export class Game {
         await this.player.addCard();
 
         if (this.player.score > Rules.BLACKJACK) {
-            setTimeout(() => {
-                this.player.displayResult(this.player.bust);
-                setTimeout(() => this.newRound(), Rules.NEW_ROUND_DELAY_MS);
-            }, Rules.ADD_CARD_DELAY);
+            await this.player.displayResult(this.player.bust);
+            await this.newRound();
             return;
         }
 
@@ -120,7 +118,7 @@ export class Game {
         this.hitEnterKeyListener();
     }
 
-    private endRound(): void {
+    private async endRound(): Promise<void> {
         let playerResult = null;
 
         const isInsuranceWin = this.player.isPlayingInsurance && this.dealer.blackjack;
@@ -133,7 +131,7 @@ export class Game {
             playerResult = this.player.push;
         }
 
-        this.player.displayResult(playerResult);
+        await this.player.displayResult(playerResult);
     }
 
     private async stand(): Promise<void> {
@@ -153,8 +151,7 @@ export class Game {
             return this.startDealersTurn();
         }
 
-        this.endRound();
-        setTimeout(() => this.newRound(), Rules.NEW_ROUND_DELAY_MS);
+        this.endRound().then(() => this.newRound());
     }
 
     private async bet(): Promise<void> {

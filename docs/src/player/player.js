@@ -93,6 +93,7 @@ export class Player extends Role {
             this.resultDisplay.className = '';
             this.refreshDisplay(resultFunc);
         }, 3e3);
+        return new Promise(resolve => setTimeout(resolve, 3e3));
     }
     bust() {
         if (this.money <= 0) {
