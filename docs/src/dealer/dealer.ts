@@ -62,12 +62,12 @@ export class Dealer extends Role {
             checkMessage.className = 'dealer-check';
             this.hiddenCard.style.opacity = '0.5';
 
-            this.role.append(checkMessage);
+            this.role.parentNode?.append(checkMessage);
 
             return new Promise(resolve => setTimeout(resolve, 4500))
                 .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
                 .then(() => new Promise(resolve => setTimeout(resolve, 4500)))
-                .then(() => this.role.removeChild(checkMessage))
+                .then(() => this.role.parentNode?.removeChild(checkMessage))
                 .then(() => this.hiddenCard.style.opacity = '1')
                 .then(() => true)
         }
@@ -86,7 +86,7 @@ export class Dealer extends Role {
         checkMessage.textContent = 'The dealer offers you insurance';
         checkMessage.className = 'dealer-check';
         this.hiddenCard.style.opacity = '0.5';
-        this.role.append(checkMessage);
+        this.role.parentNode?.append(checkMessage);
 
         return true;
     }

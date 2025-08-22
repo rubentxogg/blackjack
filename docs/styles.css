@@ -776,7 +776,13 @@ hr {
     background-color: rgba(255, 255, 255, 0.250);
     animation: blowUpModal .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
     border-radius: 2px;
-    bottom: -5%;
+    bottom: -2%;
+    right: 0;
+    left: 0;
+}
+
+#dealer-message {
+    bottom: -4%;
 }
 
 .play-area {
@@ -795,6 +801,7 @@ hr {
     flex-direction: column;
     justify-content: center;
     min-width: 0;
+    position: relative;
 }
 
 .hand {

@@ -92,8 +92,7 @@ export class Game {
             ]);
             yield this.player.addCard();
             if (this.player.score > Rules.BLACKJACK) {
-                yield this.player.displayResult(this.player.bust);
-                yield this.newRound();
+                this.player.displayResult(this.player.bust).then(() => this.newRound());
                 return;
             }
             if ((this.player.score === Rules.BLACKJACK) || this.player.isDoublingDown) {

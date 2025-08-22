@@ -100,8 +100,7 @@ export class Game {
         await this.player.addCard();
 
         if (this.player.score > Rules.BLACKJACK) {
-            await this.player.displayResult(this.player.bust);
-            await this.newRound();
+            this.player.displayResult(this.player.bust).then(() => this.newRound());
             return;
         }
 

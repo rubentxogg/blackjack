@@ -52,6 +52,7 @@ export class Dealer extends Role {
     }
     checkBlackjack() {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             this.hiddenCard.style.opacity = '1';
             const card = this.hand[0];
             if ((Rank.ACE === card.rank) || (card.dictionary.get(card.rank) === 10)) {
@@ -59,11 +60,11 @@ export class Dealer extends Role {
                 checkMessage.textContent = 'The dealer is checking if he has blackjack...';
                 checkMessage.className = 'dealer-check';
                 this.hiddenCard.style.opacity = '0.5';
-                this.role.append(checkMessage);
+                (_a = this.role.parentNode) === null || _a === void 0 ? void 0 : _a.append(checkMessage);
                 return new Promise(resolve => setTimeout(resolve, 4500))
                     .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
                     .then(() => new Promise(resolve => setTimeout(resolve, 4500)))
-                    .then(() => this.role.removeChild(checkMessage))
+                    .then(() => { var _a; return (_a = this.role.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(checkMessage); })
                     .then(() => this.hiddenCard.style.opacity = '1')
                     .then(() => true);
             }
@@ -71,6 +72,7 @@ export class Dealer extends Role {
         });
     }
     askForInsurance() {
+        var _a;
         if (!this.offerInsurance) {
             return false;
         }
@@ -79,7 +81,7 @@ export class Dealer extends Role {
         checkMessage.textContent = 'The dealer offers you insurance';
         checkMessage.className = 'dealer-check';
         this.hiddenCard.style.opacity = '0.5';
-        this.role.append(checkMessage);
+        (_a = this.role.parentNode) === null || _a === void 0 ? void 0 : _a.append(checkMessage);
         return true;
     }
 }
