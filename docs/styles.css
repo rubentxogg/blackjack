@@ -432,13 +432,20 @@ hr {
 .player-money {
     background: url('./assets/dollar.png') no-repeat;
     background-size: 22px;
-    padding-left: 30px;
+    padding-left: 28px;
 }
 
 .player-bet {
     background: url('./assets/bet.png') no-repeat;
     background-size: 25px;
-    padding-left: 33px;
+    padding-left: 32px;
+}
+
+.insurance-bet {
+    background: url('./assets/insurance.png') no-repeat;
+    background-size: 21px;
+    padding-left: 28px;
+    display: none;
 }
 
 #how-to-play-dialog:modal {
@@ -812,11 +819,12 @@ hr {
     gap: 20px;
     position: relative;
     margin: auto;
+    width: 100%;
 }
 
 img[class$='card'] {
     max-width: 150px;
-    min-width: 75px;
+    min-width: 40px;
     animation-name: add-card;
     animation-duration: 1s;
 }
