@@ -62,9 +62,9 @@ export class Dealer extends Role {
                 checkMessage.className = 'dealer-check';
                 this.hiddenCard.style.opacity = '0.5';
                 (_a = this.role.parentNode) === null || _a === void 0 ? void 0 : _a.append(checkMessage);
-                return new Promise(resolve => setTimeout(resolve, 35e2))
+                return new Promise(resolve => setTimeout(resolve, 3e3))
                     .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
-                    .then(() => new Promise(resolve => setTimeout(resolve, 35e2)))
+                    .then(() => new Promise(resolve => setTimeout(resolve, 3e3)))
                     .then(() => { var _a; return (_a = this.role.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(checkMessage); })
                     .then(() => this.hiddenCard.style.opacity = '1')
                     .then(() => true);

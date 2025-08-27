@@ -53,6 +53,7 @@ export class Player extends Role {
         if(this.isPlayingInsurance) {
             this.insuranceBet = Number(bet);
             this.money -= this.insuranceBet;
+            this.isPlayingInsurance = false;
         } else {
             this.bet = Number(bet);
             this.money -= this.bet;
