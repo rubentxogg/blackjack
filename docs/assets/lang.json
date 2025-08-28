@@ -1,0 +1,62 @@
+{
+    "en": {
+        "role": {
+            "player": "Player",
+            "dealer": "Dealer"
+        },
+        "action": {
+            "hit": "Hit",
+            "stand": "Stand",
+            "doubleDown": "Double Down",
+            "decline": "Decline",
+            "placeBet": "Place Bet $"
+        },
+        "footer": {
+            "playerBet": "Current bet:",
+            "totalMoney": "Total money:"
+        },
+        "dealer": {
+            "checking": "The dealer is checking if he has blackjack...",
+            "checked": {
+                "blackjackYes": "The dealer has blackjack",
+                "blackjackNo": "The dealer doesn't have blackjack"
+            },
+            "insurance": "The dealer offers you insurance"
+        },
+        "result": {
+            "win": "Win",
+            "bust": "Bust",
+            "push": "Push"
+        }
+    },
+    "es": {
+        "role": {
+            "player": "Jugador",
+            "dealer": "Crupier"
+        },
+        "action": {
+            "hit": "Pedir",
+            "stand": "Plantarse",
+            "doubleDown": "Doblar",
+            "decline": "Rechazar",
+            "placeBet": "Apostar $"
+        },
+        "footer": {
+            "currentBet": "Apuesta actual:",
+            "totalMoney": "Dinero total:"
+        },
+        "dealer": {
+            "checking": "El crupier está comprobando si tiene blackjack...",
+            "checked": {
+                "blackjackYes": "El crupier tiene blackjack",
+                "blackjackNo": "El crupier no tiene blackjack"
+            },
+            "insurance": "El crupier te ofrece un seguro"
+        },
+        "result": {
+            "win": "Ganas",
+            "bust": "Pierdes",
+            "push": "Empate"
+        }
+    }
+}

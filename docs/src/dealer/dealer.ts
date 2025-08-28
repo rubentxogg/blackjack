@@ -1,6 +1,7 @@
 import { Card } from "../card/card.js";
 import { Rank } from "../card/rank.enum.js";
 import { Game } from "../game/game.constants.js";
+import { Lang } from "../lang/lang.js";
 import { Role } from "../role/role.js";
 
 
@@ -60,14 +61,14 @@ export class Dealer extends Role {
         if ((Rank.ACE === card.rank) || (card.dictionary.get(card.rank) === 10)) {
             const checkMessage = document.createElement('span');
 
-            checkMessage.textContent = 'The dealer is checking if he has blackjack...'
+            checkMessage.textContent = Lang.data.dealer.checking;
             checkMessage.className = 'dealer-check';
             this.hiddenCard.style.opacity = '0.5';
 
             this.role.parentNode?.append(checkMessage);
 
             return new Promise(resolve => setTimeout(resolve, 3e3))
-                .then(() => checkMessage.textContent = this.blackjack ? 'The dealer has blackjack' : 'The dealer doesn\'t have blackjack')
+                .then(() => checkMessage.textContent = this.blackjack ? Lang.data.dealer.checked.blackjackYes : Lang.data.dealer.checked.blackjackNo)
                 .then(() => new Promise(resolve => setTimeout(resolve, 3e3)))
                 .then(() => this.role.parentNode?.removeChild(checkMessage))
                 .then(() => this.hiddenCard.style.opacity = '1')
@@ -85,7 +86,7 @@ export class Dealer extends Role {
         const checkMessage = document.createElement('span');
 
         checkMessage.id = 'dealer-message';
-        checkMessage.textContent = 'The dealer offers you insurance';
+        checkMessage.textContent = Lang.data.dealer.insurance;
         checkMessage.className = 'dealer-check';
         this.hiddenCard.style.opacity = '0.5';
         this.role.parentNode?.append(checkMessage);

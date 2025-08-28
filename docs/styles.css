@@ -786,10 +786,12 @@ hr {
     bottom: -2%;
     right: 0;
     left: 0;
+    z-index: 1;
 }
 
 #dealer-message {
     bottom: -4%;
+    z-index: 1;
 }
 
 .play-area {

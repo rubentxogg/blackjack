@@ -127,7 +127,10 @@
     <main>
         <div class="play-area">
             <section class="dealer">
-                <h2>Dealer <span id="dealer-score" class="score"></span></h2>
+                <h2>
+                    <span id="dealer-text">Dealer</span>
+                    <span id="dealer-score" class="score"></span>
+                </h2>
                 <div id="dealer" class="hand"></div>
             </section>
             <hr>
@@ -140,7 +143,10 @@
                 </div>
             </div>
             <section class="player">
-                <h2>Player <span id="player-score" class="score"></span></h2>
+                <h2>
+                    <span id="player-text">Player</span> 
+                    <span id="player-score" class="score"></span>
+                </h2>
                 <div id="player" class="hand"></div>
             </section>
         </div>
@@ -171,14 +177,16 @@
 
     <footer>
         <div class="player-bet">
-            Player bet: <span id="player-bet"></span>
+            <span id="current-bet-text">Current bet:</span> 
+            <span id="player-bet"></span>
         </div>
         <span>-</span>
         <div class="player-money">
-            Total money: <span id="player-money"></span>
+            <span id="total-money-text">Total money:</span> 
+            <span id="player-money"></span>
         </div>
 
-        <span id="version">v1.4.1</span>
+        <span id="version">v1.4.2</span>
     </footer>
 
     <script type="module" src="./src/index.js"></script>
