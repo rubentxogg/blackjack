@@ -17,104 +17,85 @@
 
         <dialog id="how-to-play-dialog">
             <button id="close-how-to-play"></button>
-            <h2>How to play</h2>
+            <h2 id="how-to-play-title">How to play</h2>
 
             <section id="how-to-play">
                 <article>
-                    <h2>Goal</h2>
-                    <p>The goal is to have a hand value higher than the dealer's hand, without exceeding 21.</p>
+                    <h2 id="goal-title">Goal</h2>
+                    <p id="goal-text"></p>
                 </article>
 
                 <article>
-                    <h2>Card Values</h2>
-                    <p>- Number cards (2-10) are worth their face value.</p>
-                    <p>- Face cards (Jack, Queen, King) are worth 10.</p>
-                    <p>- Aces can be worth either 1 or 11, depending on what's more advantageous for the hand.</p>
+                    <h2 id="card-values-title">Card Values</h2>
+                    <p id="card-values-number-text"></p>
+                    <p id="card-values-face-text"></p>
+                    <p id="card-values-aces-text"></p>
                 </article>
 
                 <article>
-                    <h2>Player actions</h2>
+                    <h2 id="player-actions-title">Player actions</h2>
 
                     <div class="info-container">
                         <div class="info-container-item">
-                            <h3>Hit</h3>
-                            <p>The player requests an additional card from the dealer. If, when requesting a card, the
-                                player obtains a score equal to 21, they automatically stand.</p>
+                            <h3 id="player-actions-hit-title">Hit</h3>
+                            <p id="player-actions-hit-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Bet</h3>
-                            <p>The player can bet any amount they want from the total money they have available.</p>
+                            <h3 id="player-actions-bet-title">Bet</h3>
+                            <p id="player-actions-bet-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Stand</h3>
-                            <p>The player chooses to stop taking cards and ends their turn.</p>
+                            <h3 id="player-actions-stand-title">Stand</h3>
+                            <p id="player-actions-stand-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Double Down</h3>
-                            <p>Double the initial bet in exchange for receiving exactly one more card and then standing,
-                                regardless of the card's value.</p>
+                            <h3 id="player-actions-double-down-title">Double Down</h3>
+                            <p id="player-actions-double-down-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Insurance Bet</h3>
-                            <p>Check insurance in special situations section.</p>
+                            <h3 id="player-actions-insurance-bet-title">Insurance Bet</h3>
+                            <p id="player-actions-insurance-bet-text"></p>
                         </div>
                     </div>
                 </article>
 
                 <article>
-                    <h2>Round result</h2>
+                    <h2 id="round-result-title">Round result</h2>
 
                     <div class="info-container">
                         <div class="info-container-item">
-                            <h3>Win</h3>
-                            <p>
-                                Player must have a hand value higher than the dealer's hand, without exceeding 21.
-                                Standard hand pays out 1:1, but the payout for blackjack is 3:2 (see special situations
-                                section).
-                            </p>
+                            <h3 id="round-result-win-title">Win</h3>
+                            <p id="round-result-win-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Bust</h3>
-                            <p>The player exceeds a total value of 21</p>
+                            <h3 id="round-result-bust-title">Bust</h3>
+                            <p id="round-result-bust-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Push</h3>
-                            <p>The player and the dealer have the same value for their hands at the end of a round and
-                                the player's original bet is returned.</p>
+                            <h3 id="round-result-push-title">Push</h3>
+                            <p id="round-result-push-text"></p>
                         </div>
                     </div>
                 </article>
 
                 <article>
-                    <h2>Special situations</h2>
+                    <h2 id="special-situations-title">Special situations</h2>
 
                     <div class="info-container">
                         <div class="info-container-item">
-                            <h3>Blackjack</h3>
-                            <p>
-                                Is a hand consisting of an Ace and any 10-point card (10, Jack, Queen, or King) dealt as
-                                the
-                                first two cards. It is the highest possible hand in the game and the player
-                                automatically wins unless
-                                the dealer also has a blackjack.
-                            </p>
+                            <h3 id="special-situations-blackjack-title">Blackjack</h3>
+                            <p id="special-situations-blackjack-text"></p>
                         </div>
 
                         <div class="info-container-item">
-                            <h3>Insurance</h3>
-                            <p>
-                                Is a side bet that the dealer has a blackjack. The dealer asks for insurance bets before
-                                the first player plays.
-                                Insurance bets of up to half the player's current bet are placed on the "insurance bar"
-                                above the player's cards.
-                                If the dealer has a blackjack, insurance pays 2 to 1.
-                            </p>
+                            <h3 id="special-situations-insurance-title">Insurance</h3>
+                            <p id="special-situations-insurance-text"></p>
                         </div>
 
                         <div class="info-container-item"><!-- FIX grid position --></div>
@@ -144,7 +125,7 @@
             </div>
             <section class="player">
                 <h2>
-                    <span id="player-text">Player</span> 
+                    <span id="player-text">Player</span>
                     <span id="player-score" class="score"></span>
                 </h2>
                 <div id="player" class="hand"></div>
@@ -177,12 +158,12 @@
 
     <footer>
         <div class="player-bet">
-            <span id="current-bet-text">Current bet:</span> 
+            <span id="current-bet-text">Current bet:</span>
             <span id="player-bet"></span>
         </div>
         <span>-</span>
         <div class="player-money">
-            <span id="total-money-text">Total money:</span> 
+            <span id="total-money-text">Total money:</span>
             <span id="player-money"></span>
         </div>
 
