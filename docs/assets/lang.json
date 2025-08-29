@@ -175,7 +175,7 @@
                     "text": "Es una mano compuesta por un as y cualquier carta de 10 puntos (10, jota, reina o rey) repartida como las dos primeras cartas. Es la mano más alta posible en el juego y el jugador gana automáticamente a menos que el crupier también tenga un blackjack."
                 },
                 "insurance": {
-                    "title": "Insurance",
+                    "title": "Seguro",
                     "text": "Es una apuesta adicional a que el crupier tiene un blackjack. El crupier solicita las apuestas de seguro antes de que juegue el primer jugador. Las apuestas de seguro de hasta la mitad de la apuesta actual del jugador se colocan en la «barra de seguro» situada encima de las cartas del jugador. Si el crupier tiene un blackjack, el seguro paga 2 a 1."
                 }
             }
