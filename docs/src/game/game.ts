@@ -1,6 +1,7 @@
 import { ActionButton } from "../action-button/action-button.js";
 import { Card } from "../card/card.js";
 import { Dealer } from "../dealer/dealer.js";
+import { Lang } from "../lang/lang.js";
 import { Player } from "../player/player.js";
 import { Game as Rules } from "./game.constants.js";
 
@@ -47,6 +48,7 @@ export class Game {
     }
 
     start(): void {
+        Lang.translateAll();
         this.initEventListener();
         this.newRound();
     }

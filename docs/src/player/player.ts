@@ -1,5 +1,6 @@
 import { Role } from "../role/role.js";
 import { Game } from "../game/game.constants.js";
+import { Lang } from "../lang/lang.js";
 
 export class Player extends Role {
     private readonly moneyDisplay: HTMLSpanElement;
@@ -92,7 +93,7 @@ export class Player extends Role {
 
     displayResult(resultFunc: Function): Promise<void> {
         const type = resultFunc.name;
-        this.resultType.innerText = `${type}!`;
+        this.resultType.innerText = `${Lang.data.result[type]}!`;
 
         let money = '';
 
@@ -119,7 +120,7 @@ export class Player extends Role {
 
     bust(): void {
         if (this.money <= 0) {
-            alert("You've run out of money. \nGame will restart, good luck!");
+            alert("You've run out of money. \nGame will restart");
             location.reload();
         }
     }

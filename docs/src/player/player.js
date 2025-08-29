@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Role } from "../role/role.js";
 import { Game } from "../game/game.constants.js";
+import { Lang } from "../lang/lang.js";
 export class Player extends Role {
     constructor() {
         const PLAYER = Player.name.toLocaleLowerCase();
@@ -76,7 +77,7 @@ export class Player extends Role {
     }
     displayResult(resultFunc) {
         const type = resultFunc.name;
-        this.resultType.innerText = `${type}!`;
+        this.resultType.innerText = `${Lang.data.result[type]}!`;
         let money = '';
         if (type === this.win.name) {
             money = `+$${this.payment.toString()}`;
@@ -98,7 +99,7 @@ export class Player extends Role {
     }
     bust() {
         if (this.money <= 0) {
-            alert("You've run out of money. \nGame will restart, good luck!");
+            alert("You've run out of money. \nGame will restart");
             location.reload();
         }
     }

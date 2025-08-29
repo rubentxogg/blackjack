@@ -1,0 +1,184 @@
+{
+    "en": {
+        "role": {
+            "player": "Player",
+            "dealer": "Dealer"
+        },
+        "action": {
+            "hit": "Hit",
+            "stand": "Stand",
+            "doubleDown": "Double Down",
+            "decline": "Decline",
+            "placeBet": "Place Bet $"
+        },
+        "footer": {
+            "playerBet": "Current bet:",
+            "totalMoney": "Total money:"
+        },
+        "dealer": {
+            "checking": "The dealer is checking if he has blackjack...",
+            "checked": {
+                "blackjackYes": "The dealer has blackjack",
+                "blackjackNo": "The dealer doesn't have blackjack"
+            },
+            "insurance": "The dealer offers you insurance"
+        },
+        "result": {
+            "win": "Win",
+            "bust": "Bust",
+            "push": "Push"
+        },
+        "howToPlay": {
+            "title": "How to play",
+            "goal": {
+                "title": "Goal",
+                "text": "The goal is to have a hand value higher than the dealer's hand, without exceeding 21."
+            },
+            "cardValues": {
+                "title": "Card Values",
+                "number": "- Number cards (2-10) are worth their face value.",
+                "face": "- Face cards (Jack, Queen, King) are worth 10.",
+                "aces": "- Aces can be worth either 1 or 11, depending on what's more advantageous for the hand."
+            },
+            "playerActions": {
+                "title": "Player Actions",
+                "hit": {
+                    "title": "Hit",
+                    "text": "The player requests an additional card from the dealer. If, when requesting a card, the player obtains a score equal to 21, they automatically stand."
+                },
+                "bet": {
+                    "title": "Bet",
+                    "text": "The player can bet any amount they want from the total money they have available."
+                },
+                "stand": {
+                    "title": "Stand",
+                    "text": "The player chooses to stop taking cards and ends their turn."
+                },
+                "doubleDown": {
+                    "title": "Double Down",
+                    "text": "Double the initial bet in exchange for receiving exactly one more card and then standing, regardless of the card's value."
+                },
+                "insuranceBet": {
+                    "title": "Insurance Bet",
+                    "text": "Check insurance in special situations section."
+                }
+            },
+            "roundResult": {
+                "title": "Round Result",
+                "win": {
+                    "title": "Win",
+                    "text": "Player must have a hand value higher than the dealer's hand, without exceeding 21. Standard hand pays out 1:1, but the payout for blackjack is 3:2 (see special situations section)."
+                },
+                "bust": {
+                    "title": "Bust",
+                    "text": "The player exceeds a total value of 21."
+                },
+                "push": {
+                    "title": "Push",
+                    "text": "The player and the dealer have the same value for their hands at the end of a round and the player's original bet is returned."
+                }
+            },
+            "specialSituations": {
+                "blackjack": {
+                    "title": "Blackjack",
+                    "text": "Is a hand consisting of an Ace and any 10-point card (10, Jack, Queen, or King) dealt as the first two cards. It is the highest possible hand in the game and the player automatically wins unless the dealer also has a blackjack."
+                },
+                "insurance": {
+                    "title": "Insurance",
+                    "text": "Is a side bet that the dealer has a blackjack. The dealer asks for insurance bets before the first player plays. Insurance bets of up to half the player's current bet are placed on the 'insurance bar' above the player's cards. If the dealer has a blackjack, insurance pays 2 to 1"
+                }
+            }
+        }
+    },
+    "es": {
+        "role": {
+            "player": "Jugador",
+            "dealer": "Crupier"
+        },
+        "action": {
+            "hit": "Pedir",
+            "stand": "Plantarse",
+            "doubleDown": "Doblar",
+            "decline": "Rechazar",
+            "placeBet": "Apostar $"
+        },
+        "footer": {
+            "currentBet": "Apuesta actual:",
+            "totalMoney": "Dinero total:"
+        },
+        "dealer": {
+            "checking": "El crupier está comprobando si tiene blackjack...",
+            "checked": {
+                "blackjackYes": "El crupier tiene blackjack",
+                "blackjackNo": "El crupier no tiene blackjack"
+            },
+            "insurance": "El crupier te ofrece un seguro"
+        },
+        "result": {
+            "win": "¡Ganas",
+            "bust": "¡Pierdes",
+            "push": "¡Empate"
+        },
+        "howToPlay": {
+            "title": "Cómo Jugar",
+            "goal": {
+                "title": "Objetivo",
+                "text": "El objetivo es tener una mano con un valor superior al del crupier, sin superar los 21 puntos."
+            },
+            "cardValues": {
+                "title": "Valores de las Cartas",
+                "number": "- Las cartas numéricas (2-10) valen su valor nominal.",
+                "face": "- Las cartas con figuras (Jota, Reina, Rey) valen 10.",
+                "aces": "- Los ases pueden valer 1 u 11, dependiendo de lo que sea más ventajoso para la mano."
+            },
+            "playerActions": {
+                "title": "Acciones del Jugador",
+                "hit": {
+                    "title": "Pedir",
+                    "text": "El jugador solicita una carta adicional al crupier. Si, al solicitar una carta, el jugador obtiene una puntuación igual a 21, automáticamente se planta."
+                },
+                "bet": {
+                    "title": "Apostar",
+                    "text": "El jugador puede apostar cualquier cantidad que desee del dinero total del que dispone."
+                },
+                "stand": {
+                    "title": "Plantarse",
+                    "text": "El jugador decide dejar de robar cartas y termina su turno."
+                },
+                "doubleDown": {
+                    "title": "Doblar",
+                    "text": "Duplicar la apuesta inicial a cambio de recibir exactamente una carta más y luego plantarse, independientemente del valor de la carta."
+                },
+                "insuranceBet": {
+                    "title": "Apuesta Segura",
+                    "text": "Consulte la sección sobre situaciones especiales."
+                }
+            },
+            "roundResult": {
+                "title": "Resultado de la Ronda",
+                "win": {
+                    "title": "Ganas",
+                    "text": "El jugador debe tener una mano con un valor superior al del crupier, sin superar los 21 puntos. Las manos estándar se pagan 1:1, pero el pago por un blackjack es de 3:2 (véase la sección de situaciones especiales)."
+                },
+                "bust": {
+                    "title": "Pierdes",
+                    "text": "El jugador supera un valor total de 21."
+                },
+                "push": {
+                    "title": "Empatas",
+                    "text": "El jugador y el crupier tienen el mismo valor en sus manos al final de una ronda y se devuelve la apuesta original del jugador."
+                }
+            },
+            "specialSituations": {
+                "blackjack": {
+                    "title": "Blackjack",
+                    "text": "Es una mano compuesta por un as y cualquier carta de 10 puntos (10, jota, reina o rey) repartida como las dos primeras cartas. Es la mano más alta posible en el juego y el jugador gana automáticamente a menos que el crupier también tenga un blackjack."
+                },
+                "insurance": {
+                    "title": "Seguro",
+                    "text": "Es una apuesta adicional a que el crupier tiene un blackjack. El crupier solicita las apuestas de seguro antes de que juegue el primer jugador. Las apuestas de seguro de hasta la mitad de la apuesta actual del jugador se colocan en la «barra de seguro» situada encima de las cartas del jugador. Si el crupier tiene un blackjack, el seguro paga 2 a 1."
+                }
+            }
+        }
+    }
+}
