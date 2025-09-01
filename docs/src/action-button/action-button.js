@@ -22,7 +22,9 @@ ActionButton.stand = document.getElementById('stand');
 ActionButton.doubleDown = document.getElementById('double-down');
 ActionButton.decline = document.getElementById('decline');
 ActionButton.allIn = document.getElementById('all-in');
+ActionButton.reset = document.getElementById('reset-bet');
 // Betting chips
+ActionButton.chip05 = document.getElementById('chip-05');
 ActionButton.chip1 = document.getElementById('chip-1');
 ActionButton.chip5 = document.getElementById('chip-5');
 ActionButton.chip10 = document.getElementById('chip-10');

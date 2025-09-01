@@ -67,9 +67,9 @@ export class Dealer extends Role {
 
             this.role.parentNode?.append(checkMessage);
 
-            return new Promise(resolve => setTimeout(resolve, 3e3))
+            return new Promise(resolve => setTimeout(resolve, 27e2))
                 .then(() => checkMessage.textContent = this.blackjack ? Lang.data.dealer.checked.blackjackYes : Lang.data.dealer.checked.blackjackNo)
-                .then(() => new Promise(resolve => setTimeout(resolve, 3e3)))
+                .then(() => new Promise(resolve => setTimeout(resolve, 2e3)))
                 .then(() => this.role.parentNode?.removeChild(checkMessage))
                 .then(() => this.hiddenCard.style.opacity = '1')
                 .then(() => true)
@@ -79,7 +79,7 @@ export class Dealer extends Role {
     }
 
     askForInsurance(): boolean {
-        if(!this.offerInsurance) {
+        if (!this.offerInsurance) {
             return false;
         }
 

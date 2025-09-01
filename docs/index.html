@@ -139,6 +139,7 @@
 
             <div class="bet-container">
                 <div class="chips">
+                    <button id="chip-05" disabled value="0.5"></button>
                     <button id="chip-1" disabled value="1"></button>
                     <button id="chip-5" disabled value="5"></button>
                     <button id="chip-10" disabled value="10"></button>
@@ -149,12 +150,17 @@
                     <button id="chip-5k" disabled value="5000"></button>
                 </div>
                 <button id="decline">Decline</button>
+
+                <button id="reset-bet" disabled>
+                    <span>Reset</span>
+                </button>
+
                 <button id="place-bet" disabled>
                     <span>Place Bet $</span><input id="bet" type="number" readonly>
                 </button>
 
                 <button id="all-in" disabled>
-                    <span>All in</span>
+                    <span>All-in</span>
                 </button>
             </div>
         </div>
@@ -171,7 +177,7 @@
             <span id="player-money"></span>
         </div>
 
-        <span id="version">v1.4.2</span>
+        <span id="version">v1.5.0</span>
     </footer>
 
     <script type="module" src="./src/index.js"></script>

@@ -28,6 +28,7 @@ export class Game {
                 || (this.dealer.offerInsurance && ((Number(ActionButton.betInput.max) - Number(ActionButton.betInput.value)) < Number(chipValue))));
 
         return [
+            { button: ActionButton.chip05, visible: isVisible(ActionButton.chip05.value), disabled: isDisabled(ActionButton.chip05.value) },
             { button: ActionButton.chip1, visible: isVisible(ActionButton.chip1.value), disabled: isDisabled(ActionButton.chip1.value) },
             { button: ActionButton.chip5, visible: isVisible(ActionButton.chip5.value), disabled: isDisabled(ActionButton.chip5.value) },
             { button: ActionButton.chip10, visible: isVisible(ActionButton.chip10.value), disabled: isDisabled(ActionButton.chip10.value) },
@@ -69,6 +70,7 @@ export class Game {
             { button: ActionButton.placeBet, visible: true, disabled: true },
             { button: ActionButton.doubleDown, visible: false, disabled: true },
             { button: ActionButton.allIn, visible: true, disabled: true },
+            { button: ActionButton.reset, visible: true, disabled: true },
         ]);
         ActionButton.update([...this.chips]);
 
@@ -80,6 +82,7 @@ export class Game {
         ActionButton.update([
             { button: ActionButton.placeBet, visible: true, disabled: false },
             { button: ActionButton.allIn, visible: true, disabled: false },
+            { button: ActionButton.reset, visible: true, disabled: false },
         ]);
         ActionButton.update([...this.chips]);
         ActionButton.placeBet.focus();
@@ -169,6 +172,7 @@ export class Game {
         ActionButton.update([
             { button: ActionButton.placeBet, visible: false, disabled: true },
             { button: ActionButton.allIn, visible: false, disabled: true },
+            { button: ActionButton.reset, visible: false, disabled: true },
             { button: ActionButton.hit, visible: true, disabled: true },
             { button: ActionButton.stand, visible: true, disabled: true },
             { button: ActionButton.doubleDown, visible: this.player.canDoubleDown, disabled: true }
@@ -207,6 +211,7 @@ export class Game {
         ActionButton.update([
             { button: ActionButton.placeBet, visible: true, disabled: false },
             { button: ActionButton.allIn, visible: false, disabled: true },
+            { button: ActionButton.reset, visible: false, disabled: true },
             { button: ActionButton.decline, visible: true, disabled: false },
             { button: ActionButton.hit, visible: false, disabled: true },
             { button: ActionButton.stand, visible: false, disabled: true },
@@ -248,6 +253,25 @@ export class Game {
         this.chipsListener();
         this.declineListener();
         this.allInListener();
+        this.resetBetListener();
+    }
+
+    private resetBetListener(): void {
+        ActionButton.reset.addEventListener('click', () => {
+            ActionButton.ripple(ActionButton.reset);
+            this.resetBet();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (!ActionButton.reset.disabled && (event.key.toLocaleLowerCase() === 'r')) {
+                ActionButton.reset.click();
+            }
+        });
+    }
+
+    private resetBet(): void {
+        ActionButton.betInput.value = '0';
+        ActionButton.update([...this.chips]);
     }
 
     private allInListener(): void {

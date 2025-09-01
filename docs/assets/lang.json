@@ -9,7 +9,8 @@
             "stand": "Stand",
             "doubleDown": "Double Down",
             "decline": "Decline",
-            "placeBet": "Place Bet $"
+            "placeBet": "Place Bet $",
+            "reset": "Reset"
         },
         "footer": {
             "playerBet": "Current bet:",
@@ -100,7 +101,8 @@
             "stand": "Plantarse",
             "doubleDown": "Doblar",
             "decline": "Rechazar",
-            "placeBet": "Apostar $"
+            "placeBet": "Apostar $",
+            "reset": "Limpiar"
         },
         "footer": {
             "currentBet": "Apuesta actual:",

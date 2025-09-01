@@ -5,10 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [UNRELEASED]
+## [1.5.0] - 01/09/2025
 
 ### Added
 - All in feature.
+- Reset bet feature.
+- 0.5 betting chip.
+
+### Changed
+- Reduced dealer blackjack checking delay.
 
 ## [1.4.2] - 29/08/2025
 

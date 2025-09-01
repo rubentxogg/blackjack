@@ -23,6 +23,7 @@ export class Lang {
         ActionButton.stand.innerText = data.stand;
         ActionButton.doubleDown.innerText = data.doubleDown;
         ActionButton.decline.innerText = data.decline;
+        ActionButton.reset.innerText = data.reset;
     }
 
     static translateRoles(): void {

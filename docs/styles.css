@@ -375,6 +375,17 @@ input::-webkit-inner-spin-button {
     display: none;
 }
 
+#reset-bet {
+    background: url('./assets/r-key.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: right;
+    padding-right: 50px;
+    color: var(--baby-powder);
+    background-color: rgba(255, 255, 255, 0.055);
+    display: none;
+}
+
 .ripple {
     animation: ripple;
     animation-duration: 200ms;
@@ -739,48 +750,54 @@ hr {
 }
 
 .chips button:nth-child(1) {
-    background: url('./assets/chips/chip1.png') no-repeat;
+    background: url('./assets/chips/chip05.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(2) {
-    background: url('./assets/chips/chip5.png') no-repeat;
+    background: url('./assets/chips/chip1.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(3) {
-    background: url('./assets/chips/chip10.png') no-repeat;
+    background: url('./assets/chips/chip5.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(4) {
-    background: url('./assets/chips/chip25.png') no-repeat;
+    background: url('./assets/chips/chip10.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(5) {
-    background: url('./assets/chips/chip100.png') no-repeat;
+    background: url('./assets/chips/chip25.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(6) {
-    background: url('./assets/chips/chip500.png') no-repeat;
+    background: url('./assets/chips/chip100.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(7) {
-    background: url('./assets/chips/chip1k.png') no-repeat;
+    background: url('./assets/chips/chip500.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(8) {
+    background: url('./assets/chips/chip1k.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(9) {
     background: url('./assets/chips/chip5k.png') no-repeat;
     background-size: contain;
     background-position-y: center;
