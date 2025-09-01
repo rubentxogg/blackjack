@@ -36,19 +36,19 @@ export class Player extends Role {
     get canDoubleDown() {
         return this.bet <= this.money;
     }
-    placeBet() {
+    placeBet(customBet) {
         this.isDoublingDown = false;
-        const bet = document.getElementById('bet').value;
-        if (Number(bet) <= 0) {
+        const bet = customBet !== null && customBet !== void 0 ? customBet : Number(document.getElementById('bet').value);
+        if (bet <= 0) {
             return;
         }
         if (this.isPlayingInsurance) {
-            this.insuranceBet = Number(bet);
+            this.insuranceBet = bet;
             this.money -= this.insuranceBet;
             this.isPlayingInsurance = false;
         }
         else {
-            this.bet = Number(bet);
+            this.bet = bet;
             this.money -= this.bet;
         }
         this.refreshDisplay();

@@ -364,6 +364,17 @@ input::-webkit-inner-spin-button {
     display: none;
 }
 
+#all-in {
+    background: url('./assets/a-key.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: right;
+    padding-right: 50px;
+    color: var(--baby-powder);
+    background-color: rgba(255, 255, 255, 0.055);
+    display: none;
+}
+
 .ripple {
     animation: ripple;
     animation-duration: 200ms;
