@@ -194,7 +194,7 @@ export class Game {
             ActionButton.update([
                 { button: ActionButton.placeBet, visible: true, disabled: false },
                 { button: ActionButton.allIn, visible: false, disabled: true },
-                { button: ActionButton.reset, visible: false, disabled: true },
+                { button: ActionButton.reset, visible: true, disabled: false },
                 { button: ActionButton.decline, visible: true, disabled: false },
                 { button: ActionButton.hit, visible: false, disabled: true },
                 { button: ActionButton.stand, visible: false, disabled: true },
@@ -206,6 +206,7 @@ export class Game {
                 (_a = document.getElementById('dealer-message')) === null || _a === void 0 ? void 0 : _a.remove();
                 ActionButton.update([
                     { button: ActionButton.placeBet, visible: false, disabled: true },
+                    { button: ActionButton.reset, visible: false, disabled: true },
                     { button: ActionButton.hit, visible: true, disabled: true },
                     { button: ActionButton.stand, visible: true, disabled: true },
                     { button: ActionButton.doubleDown, visible: this.player.canDoubleDown, disabled: true },
