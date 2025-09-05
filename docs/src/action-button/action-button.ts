@@ -13,8 +13,11 @@ export class ActionButton {
     static readonly stand = document.getElementById('stand') as HTMLButtonElement;
     static readonly doubleDown = document.getElementById('double-down') as HTMLButtonElement;
     static readonly decline = document.getElementById('decline') as HTMLButtonElement;
+    static readonly allIn = document.getElementById('all-in') as HTMLButtonElement;
+    static readonly reset = document.getElementById('reset-bet') as HTMLButtonElement;
 
     // Betting chips
+    static readonly chip05 = document.getElementById('chip-05') as HTMLButtonElement;
     static readonly chip1 = document.getElementById('chip-1') as HTMLButtonElement;
     static readonly chip5 = document.getElementById('chip-5') as HTMLButtonElement;
     static readonly chip10 = document.getElementById('chip-10') as HTMLButtonElement;

@@ -42,21 +42,21 @@ export class Player extends Role {
         return this.bet <= this.money;
     }
 
-    placeBet(): void {
+    placeBet(customBet?: number): void {
         this.isDoublingDown = false;
 
-        const bet = (document.getElementById('bet') as HTMLInputElement).value;
+        const bet = customBet ?? Number((document.getElementById('bet') as HTMLInputElement).value);
 
-        if(Number(bet) <= 0) {
+        if(bet <= 0) {
             return;
         }
 
         if(this.isPlayingInsurance) {
-            this.insuranceBet = Number(bet);
+            this.insuranceBet = bet;
             this.money -= this.insuranceBet;
             this.isPlayingInsurance = false;
         } else {
-            this.bet = Number(bet);
+            this.bet = bet;
             this.money -= this.bet;
         }
         

@@ -23,56 +23,48 @@
 @keyframes money-win {
     0% {
         opacity: 0;
-        color: var(--baby-powder);
-    }
-
-    25% {
-        color: var(--green);
     }
 
     50% {
-        color: var(--green);
+        border-radius: 100%;
+        box-shadow: inset 300px 0 0 0 var(--green);
+        opacity: 0;
     }
 
     100% {
-        color: var(--baby-powder);
+        opacity: 1;
     }
 }
 
 @keyframes money-lose {
     0% {
-        color: var(--baby-powder);
-    }
-
-    25% {
-        color: var(--red);
+        opacity: 0;
     }
 
     50% {
-        color: var(--red);
+        border-radius: 100%;
+        box-shadow: inset 300px 0 0 0 var(--red);
+        opacity: 0;
     }
 
     100% {
-        color: var(--baby-powder);
+        opacity: 1;
     }
 }
 
 @keyframes money-push {
     0% {
         opacity: 0;
-        color: var(--baby-powder);
-    }
-
-    25% {
-        color: var(--gray);
     }
 
     50% {
-        color: var(--gray);
+        border-radius: 100%;
+        box-shadow: inset 300px 0 0 0 var(--gray);
+        opacity: 0;
     }
 
     100% {
-        color: var(--baby-powder);
+        opacity: 1;
     }
 }
 
@@ -355,6 +347,28 @@ input::-webkit-inner-spin-button {
 
 #decline {
     background: url('./assets/backward.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: right;
+    padding-right: 50px;
+    color: var(--baby-powder);
+    background-color: rgba(255, 255, 255, 0.055);
+    display: none;
+}
+
+#all-in {
+    background: url('./assets/a-key.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+    background-position-x: right;
+    padding-right: 50px;
+    color: var(--baby-powder);
+    background-color: rgba(255, 255, 255, 0.055);
+    display: none;
+}
+
+#reset-bet {
+    background: url('./assets/r-key.png') no-repeat;
     background-size: contain;
     background-position-y: center;
     background-position-x: right;
@@ -728,48 +742,54 @@ hr {
 }
 
 .chips button:nth-child(1) {
-    background: url('./assets/chips/chip1.png') no-repeat;
+    background: url('./assets/chips/chip05.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(2) {
-    background: url('./assets/chips/chip5.png') no-repeat;
+    background: url('./assets/chips/chip1.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(3) {
-    background: url('./assets/chips/chip10.png') no-repeat;
+    background: url('./assets/chips/chip5.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(4) {
-    background: url('./assets/chips/chip25.png') no-repeat;
+    background: url('./assets/chips/chip10.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(5) {
-    background: url('./assets/chips/chip100.png') no-repeat;
+    background: url('./assets/chips/chip25.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(6) {
-    background: url('./assets/chips/chip500.png') no-repeat;
+    background: url('./assets/chips/chip100.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(7) {
-    background: url('./assets/chips/chip1k.png') no-repeat;
+    background: url('./assets/chips/chip500.png') no-repeat;
     background-size: contain;
     background-position-y: center;
 }
 
 .chips button:nth-child(8) {
+    background: url('./assets/chips/chip1k.png') no-repeat;
+    background-size: contain;
+    background-position-y: center;
+}
+
+.chips button:nth-child(9) {
     background: url('./assets/chips/chip5k.png') no-repeat;
     background-size: contain;
     background-position-y: center;
@@ -849,10 +869,10 @@ img[class$='card'] {
     width: 100%;
 }
 
-/* Screens that are 400px or less */
-@media screen and (max-width: 400px) {
+/* Screens that are 600px or less */
+@media screen and (max-width: 600px) {
     #result-display {
-        font-size: 2.5em;
+        font-size: 2em;
     }
 
     #blackjack-display {
@@ -863,12 +883,14 @@ img[class$='card'] {
     #stand,
     #place-bet,
     #double-down,
-    #decline {
+    #decline,
+    #reset-bet,
+    #all-in {
         padding: 5px;
         background-image: none;
     }
 
-    .hand { 
+    .hand {
         gap: 10px;
     }
 
@@ -882,5 +904,9 @@ img[class$='card'] {
 
     .dealer-check {
         bottom: -5%;
+    }
+
+    img[class$='card'] {
+        max-width: 120px;
     }
 }
